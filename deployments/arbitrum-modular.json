@@ -2,17 +2,16 @@
   "network": "arbitrum",
   "chainId": "42161",
   "deployer": "0xAF44A0De1684cBa4511ff539B2b4D2010bc93c6f",
-  "timestamp": "2026-02-21T13:26:34.878Z",
-  "blockNumber": 434447002,
+  "timestamp": "2026-02-21T13:26:21.599Z",
+  "blockNumber": 434446948,
   "modules": {
     "ETour_Core": "0xc39985E520bDcB6c551591a0afE9B76b4B4EEED4",
     "ETour_Matches": "0xa6e29A8C842AC39416be48Ca26F5274b87FB2118",
     "ETour_Prizes": "0x93A4524571AEBCf81e443D8707E8DbDB6Db3C73C",
     "ETour_Raffle": "0xd64CC3B13f71E1D357F83F8A9433D0B31fa28973",
-    "ETour_Escalation": "0x9B59380DDA483F21B6c0E8E778e3ACF47D9E5462",
-    "ChessRulesModule": "0x1CB99D88175f015fB1299B359AFD14f229267921"
+    "ETour_Escalation": "0x9B59380DDA483F21B6c0E8E778e3ACF47D9E5462"
   },
   "contracts": {
-    "ChessOnChain": "0xDD730f00973389DfB1e669c8E024166C96dc1a7d"
+    "TicTacChain": "0x3544bf202b7C1A9111a5F65eaAB6E79E61eec4cA"
   }
 }

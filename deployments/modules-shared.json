@@ -1,0 +1,12 @@
+{
+  "network": "arbitrum",
+  "chainId": null,
+  "timestamp": "2026-02-21T13:26:19.624Z",
+  "modules": {
+    "core": "0xc39985E520bDcB6c551591a0afE9B76b4B4EEED4",
+    "matches": "0xa6e29A8C842AC39416be48Ca26F5274b87FB2118",
+    "prizes": "0x93A4524571AEBCf81e443D8707E8DbDB6Db3C73C",
+    "raffle": "0xd64CC3B13f71E1D357F83F8A9433D0B31fa28973",
+    "escalation": "0x9B59380DDA483F21B6c0E8E778e3ACF47D9E5462"
+  }
+}
