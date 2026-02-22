@@ -1,0 +1,3581 @@
+{
+  "totalPassing": 490,
+  "totalPending": 17,
+  "totalTests": 507,
+  "successRate": "96.6",
+  "suites": [
+    {
+      "name": "All-Draw Prize Distribution Edge Cases",
+      "subsuites": [
+        {
+          "name": "Finals Draw Scenarios",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should split prize equally for finals draw with standard prize pool",
+              "status": "passing"
+            },
+            {
+              "name": "Should update tournament finalsWasDraw flag correctly",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Semi-Finals All-Draw Scenarios",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should split prize among 4 players when both semi-finals draw",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly set allDrawResolution and allDrawRound flags",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "8-Player All-Draw Round 0 Scenario",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should split prize among 8 players if all round 0 matches draw",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Mixed Results Scenarios",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle one draw and three wins in 8-player tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [
+        {
+          "name": "Should update player stats correctly for all-draw tournament",
+          "status": "passing"
+        }
+      ],
+      "passing": 7,
+      "pending": 0
+    },
+    {
+      "name": "ChessOnChain Comprehensive Escalation Tests",
+      "subsuites": [
+        {
+          "name": "EL1: Enrollment Force Start",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow enrolled player to force start after enrollment timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force start before timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force start from non-enrolled player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament immediately if only one player enrolled and force starts",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "EL2: Enrollment External Claim",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow external player to claim abandoned enrollment pool after EL2 delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject claim before EL2 delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should forfeit all enrolled players when pool is claimed",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow new tournament to start after EL2 claim and reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "ML1: Match Timeout Claim",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow opponent to claim timeout after match timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete 2-player tournament after ML1 timeout claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim before timeout period",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim on own turn",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "ML2: Advanced Player Force Eliminate",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow advanced player to force eliminate stalled semi-final",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML2 from non-advanced player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament when finalist uses ML2 on stalled semi-final",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear all player activity after ML2 tournament completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML2 on finals match (both players eliminated)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML2 before escalation delay",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "ML3: External Player Replacement",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow external player to replace stalled match player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete 2-player tournament after ML3 claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear all player activity after ML3 tournament completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow ML3 claimer to advance in tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML3 before escalation delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML3 on non-stalled match",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML3 on finals match properly",
+              "status": "passing"
+            }
+          ],
+          "passing": 7,
+          "pending": 0
+        },
+        {
+          "name": "Cascading Effects: Multi-Level Escalation",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle ML1 -> tournament completion -> reset -> new enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML2 in round 0 -> ML3 in finals",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle EL2 with multiple enrollments -> complete reset",
+              "status": "passing"
+            },
+            {
+              "name": "Should track forfeited amounts correctly across escalation types",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Prize Distribution Verification Across Escalation Types",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should distribute correct prizes for EL1 solo force start",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for EL2 abandoned claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML1 timeout victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML2 force eliminate victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML3 replacement victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should maintain zero contract balance after all escalation type completions",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Reset Verification",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should fully reset tournament state after EL2 completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should fully reset tournament state after ML2 completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should fully reset tournament state after ML3 completion",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 38,
+      "pending": 0
+    },
+    {
+      "name": "Comprehensive Tournament Escalation Flow Tests",
+      "subsuites": [
+        {
+          "name": "8-Player Tournament with Mixed Escalation Scenarios",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "1 normal win",
+              "status": "pending"
+            },
+            {
+              "name": "2 L2 force eliminations",
+              "status": "pending"
+            },
+            {
+              "name": "1 L3 replacement",
+              "status": "pending"
+            },
+            {
+              "name": "Should handle tournament with normal wins, L2 eliminations, and L3 replacements",
+              "status": "passing"
+            },
+            {
+              "name": "Should verify eliminated player can claim L3 in their own round",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 3
+        }
+      ],
+      "tests": [],
+      "passing": 2,
+      "pending": 3
+    },
+    {
+      "name": "ConnectFourOnChain Comprehensive Escalation Tests",
+      "subsuites": [
+        {
+          "name": "EL1: Enrollment Force Start",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow enrolled player to force start after enrollment timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force start before timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force start from non-enrolled player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament immediately if only one player enrolled and force starts",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "EL2: Enrollment External Claim",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow external player to claim abandoned enrollment pool after EL2 delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject claim before EL2 delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should forfeit all enrolled players when pool is claimed",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow new tournament to start after EL2 claim and reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "ML1: Match Timeout Claim",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow opponent to claim timeout after match timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete 2-player tournament after ML1 timeout claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim before timeout period",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim on own turn",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "ML2: Advanced Player Force Eliminate",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow advanced player to force eliminate stalled semi-final",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML2 from non-advanced player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament when finalist uses ML2 on stalled semi-final",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear all player activity after ML2 tournament completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML2 on finals match (both players eliminated)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML2 before escalation delay",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "ML3: External Player Replacement",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow external player to replace stalled match player",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete 2-player tournament after ML3 claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear all player activity after ML3 tournament completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow ML3 claimer to advance in tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML3 before escalation delay",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML3 on non-stalled match",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML3 on finals match properly",
+              "status": "passing"
+            }
+          ],
+          "passing": 7,
+          "pending": 0
+        },
+        {
+          "name": "Cascading Effects: Multi-Level Escalation",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle ML1 -> tournament completion -> reset -> new enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle ML2 in round 0 -> ML3 in finals",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle EL2 with multiple enrollments -> complete reset",
+              "status": "passing"
+            },
+            {
+              "name": "Should track forfeited amounts correctly across escalation types",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Prize Distribution Verification Across Escalation Types",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should distribute correct prizes for EL1 solo force start",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for EL2 abandoned claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML1 timeout victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML2 force eliminate victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute correct prizes for ML3 replacement victory",
+              "status": "passing"
+            },
+            {
+              "name": "Should maintain protocol and owner fees after all escalation type completions",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Reset Verification",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should fully reset tournament state after EL2 completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should fully reset tournament state after ML2 completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should fully reset tournament state after ML3 completion",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 38,
+      "pending": 0
+    },
+    {
+      "name": "TicTacChain (ETour Protocol) Tests",
+      "subsuites": [
+        {
+          "name": "Deployment",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should deploy successfully",
+              "status": "passing"
+            },
+            {
+              "name": "Should have correct owner",
+              "status": "passing"
+            },
+            {
+              "name": "Should have 3 tiers configured",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Enrollment",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should enroll players and auto-start when full (2-player)",
+              "status": "passing"
+            },
+            {
+              "name": "Should split entry fees correctly (90% prize pool, 10% owner)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject duplicate enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject invalid tier",
+              "status": "passing"
+            }
+          ],
+          "passing": 5,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Logic",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should initialize round with correct match count (8-player = 4 matches)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle force start after enrollment timeout",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Game Play",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow players to make moves",
+              "status": "passing"
+            },
+            {
+              "name": "Should switch turns after each move",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject move when not your turn",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject move to occupied cell",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject invalid cell index",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject move from non-player",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "Win Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should detect horizontal win (top row)",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect vertical win (left column)",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect diagonal win (0, 4, 8)",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect draw when board is full with no winner",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Completion",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete 2-player tournament and distribute prizes",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Timeout Functions",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow timeout claim after timeout period",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject early timeout claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim on your own turn",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "View Functions",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return match data correctly",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Gas Optimization",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should have reasonable gas costs for enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should have reasonable gas costs for making a move",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Abandoned Enrollment Pool Claims",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject claim before escalation2 window",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow external player to claim abandoned pool after escalation2",
+              "status": "passing"
+            },
+            {
+              "name": "Should forfeit all enrolled players when pool is claimed",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject claim when no enrollment pool exists",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Force Start Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject force start from non-enrolled player",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle single player force start with immediate win",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "View Functions Coverage",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return correct tournament info via getTournamentInfo",
+              "status": "passing"
+            },
+            {
+              "name": "Should return round info correctly",
+              "status": "passing"
+            },
+            {
+              "name": "Should return player stats correctly",
+              "status": "passing"
+            },
+            {
+              "name": "Should track player earnings on leaderboard - winner has positive, loser negative",
+              "status": "passing"
+            },
+            {
+              "name": "Should return full leaderboard with all players",
+              "status": "passing"
+            }
+          ],
+          "passing": 5,
+          "pending": 0
+        },
+        {
+          "name": "Prize Distribution",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should distribute prizes correctly (2-player)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle draw finals with co-winners",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "8-Player Tournament Full Flow",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete full 8-player bracket tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Timeout Escalation Levels",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should track timeout escalation timestamps",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Invalid Operations",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject invalid instance ID",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject enrollment in full tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force start when tournament already in progress",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Reset and Cleanup",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should properly reset all state after tournament completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow re-enrollment after tournament reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Entry Fee Distribution",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should correctly split fees (90% pool, 7.5% owner, 2.5% protocol)",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Enrollment Timeout State",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should initialize enrollment timeout timestamps on first enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should track forfeit pool during enrollment",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "All-Draw Round Scenarios",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle finals draw with co-winners",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle 8-player tournament with multiple draws in first round",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Advanced Tournament Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle walkover when odd number of players in round",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 53,
+      "pending": 0
+    },
+    {
+      "name": "Transfer Event Tests",
+      "subsuites": [
+        {
+          "name": "TicTacToe Reward Transfer Event",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should emit Transfer event with correct parameters for winner",
+              "status": "passing"
+            },
+            {
+              "name": "Should emit Transfer events for all winners in all-draw scenario",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Chess Transfer Event",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should emit Transfer event with gameName='Chess Reward' for winner",
+              "status": "pending"
+            }
+          ],
+          "passing": 0,
+          "pending": 1
+        },
+        {
+          "name": "ConnectFour Reward Transfer Event",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should emit Transfer event with gameName='ConnectFour Reward' for winner",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Transfer Event Structure",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should have correct indexed parameters for MetaMask filtering",
+              "status": "passing"
+            },
+            {
+              "name": "Should emit prize value matching actual prize distribution",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Transfer Event - No Emission on Failure",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should not emit Transfer event when prize transfer fails",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 6,
+      "pending": 1
+    },
+    {
+      "name": "Enrollment Escalation - TournamentRecord Validation",
+      "subsuites": [
+        {
+          "name": "EL1: Solo Enrollment Force Start",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should create TournamentRecord with SoloEnrollForceStart completion reason",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle EL1 correctly for different tier sizes",
+              "status": "passing"
+            },
+            {
+              "name": "Should update player earnings correctly for EL1",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "EL2: Abandoned Tournament Claim",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should create TournamentRecord with AbandonedTournamentClaimed completion reason",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle EL2 with multiple abandoned players",
+              "status": "passing"
+            },
+            {
+              "name": "Should update claimer earnings correctly for EL2",
+              "status": "passing"
+            },
+            {
+              "name": "Should not allow EL2 claim before escalation2Start",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "EL1 vs EL2 Comparison",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should create different completion reasons for EL1 vs EL2",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "recentInstances Persistence",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should persist TournamentRecord across multiple tournament instances",
+              "status": "passing"
+            },
+            {
+              "name": "Should maintain separate records for different tiers and instances",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle recentInstances query for never-completed tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should preserve TournamentRecord after subsequent enrollments",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 12,
+      "pending": 0
+    },
+    {
+      "name": "Enrollment Window Reset",
+      "subsuites": [
+        {
+          "name": "Test 1: Successful Reset",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow solo player to reset enrollment window after expiry",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 2: Reject if Tournament Not Enrolling",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject reset if tournament not enrolling",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 3: Reject if Multiple Players Enrolled",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject reset if multiple players enrolled",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 4: Reject if Caller Not Enrolled",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject reset if caller not enrolled",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 5: Reject if Window Not Expired",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject reset if enrollment window not expired",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 6: Reset Still Works After Escalation Level 2",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow reset even after escalation level 2 reached",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 7: Second Player Can Enroll After Reset",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow second player to enroll after reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 8: Multiple Resets Allowed",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow player to reset multiple times",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 9: canResetEnrollmentWindow View Function Accuracy",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should accurately report reset eligibility via view function",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 10: Reset Preserves forfeitPool",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should preserve forfeitPool amount after reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 11: Reset Updates Escalation Timestamps",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should update escalation timestamps correctly on reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Test 12: Cannot Reset After Force Start",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should not allow reset after force starting tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 12,
+      "pending": 0
+    },
+    {
+      "name": "Escalation View Functions Tests",
+      "subsuites": [
+        {
+          "name": "isMatchEscL2Available",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return false when tournament status is not InProgress",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when match is not active",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when current player has not timed out",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when timeout occurred but L2 delay has not passed",
+              "status": "passing"
+            },
+            {
+              "name": "Should return true when timeout occurred and L2 delay has passed (not marked stalled)",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false exactly at the L2 delay boundary (edge case)",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "isMatchEscL3Available",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return false when tournament status is not InProgress",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when match is not active",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when current player has not timed out",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false when timeout occurred but L3 delay has not passed",
+              "status": "passing"
+            },
+            {
+              "name": "Should return true when timeout occurred and L3 delay has passed (not marked stalled)",
+              "status": "passing"
+            },
+            {
+              "name": "Should return false exactly at the L3 delay boundary (edge case)",
+              "status": "passing"
+            },
+            {
+              "name": "Should progress from L2 -> L3 availability over time",
+              "status": "passing"
+            }
+          ],
+          "passing": 7,
+          "pending": 0
+        },
+        {
+          "name": "Cross-level consistency checks",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should never have L3 available without L2 being available",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [
+        {
+          "name": "Should return false for all escalation levels after match is completed",
+          "status": "passing"
+        }
+      ],
+      "passing": 15,
+      "pending": 0
+    },
+    {
+      "name": "Finals Data Persistence Bug (TDD)",
+      "subsuites": [
+        {
+          "name": "Scenario 1: Finals Never Completed (InProgress)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Security gap closed",
+              "status": "pending"
+            },
+            {
+              "name": "Historical data available via events",
+              "status": "pending"
+            },
+            {
+              "name": "Should clear incomplete finals match data on first enrollment in new cycle",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 2
+        },
+        {
+          "name": "Scenario 2: Double-Elimination Finals (winner = address(0))",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "winner=0x0 case handled properly",
+              "status": "pending"
+            },
+            {
+              "name": "Security gap closed",
+              "status": "pending"
+            },
+            {
+              "name": "Should clear double-elimination finals on first enrollment in new cycle",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 2
+        },
+        {
+          "name": "Scenario 3: Exploit Attempt After Status Check Fix",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Error: VM Exception while processing transaction: reverted with reason string 'Tournament not in progress'",
+              "status": "pending"
+            },
+            {
+              "name": "Should prevent ML3 claim on stale finals even if not cleared",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 1
+        }
+      ],
+      "tests": [],
+      "passing": 3,
+      "pending": 5
+    },
+    {
+      "name": "TicTacChain - Constructor Initialization",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should have 3 tiers initialized after deployment",
+          "status": "passing"
+        },
+        {
+          "name": "Should have valid tier configurations after deployment",
+          "status": "passing"
+        }
+      ],
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "L2/L3 Ordering Test",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Match time: 120 seconds",
+          "status": "pending"
+        },
+        {
+          "name": "L2 delay: 120 seconds (starts after timeout)",
+          "status": "pending"
+        },
+        {
+          "name": "L3 delay: 240 seconds (starts after timeout)",
+          "status": "pending"
+        },
+        {
+          "name": "Should ensure L3 escalation respects L2 -> L3 ordering",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 3
+    },
+    {
+      "name": "ML2 (Force Eliminate) Comprehensive Tests",
+      "subsuites": [
+        {
+          "name": "Advanced Player Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should correctly identify player who won their match as advanced",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect advanced player even after match is cached",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "ML2 Execution",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow advanced player to force eliminate stalled match",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject ML2 from non-advanced player",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Completion via ML2",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete tournament when finalist uses ML2 on stalled semi-final",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament when ML2 is used on finals (both eliminated)",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Escalation Timing Issues",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reset ML2 timer when a move is made after timeout",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle ML2 when advanced player won via walkover",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "A's prize: 0.00252 ETH",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "EXACT SCENARIO: A beats B, C vs D stalls, A triggers ML2 \u2192 should complete tournament",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "ML3 Finals Match Completion Bug Fix",
+      "subsuites": [
+        {
+          "name": "ML3 Claim on Finals Match",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should properly complete tournament, distribute prizes, and reset when ML3 is claimed on finals",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Match-Level Escalation (Anti-Stalling) Tests",
+      "subsuites": [
+        {
+          "name": "Level 1: Normal Timeout Claim (Baseline)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow opponent to claim timeout when player runs out of time",
+              "status": "passing"
+            },
+            {
+              "name": "Should reflect ML1 timeout as CompletionReason.Timeout in recentInstances",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Level 2: Advanced Player Force Elimination",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should mark match as stalled when player runs out of time",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow advanced player to force eliminate stalled match after escalation window",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force elimination from non-advanced player",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject force elimination before escalation window",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Level 3: External Player Replacement",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow external player to claim match slot after Level 3 escalation window",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject replacement claim before Level 3 window",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject replacement claim on non-stalled match",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Escalation Integration with Tournament Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow tournament to progress after force elimination",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow replacement player to advance in tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases and Security",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should not allow claiming already completed match",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear escalation state after match completion",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 13,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution Failure Fallback",
+      "subsuites": [
+        {
+          "name": "Prize Send Failure - Solo Winner",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should fallback to accumulatedProtocolShare when solo winner rejects prize",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Prize Send Failure - Tournament Winner",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should fallback to accumulatedProtocolShare when winner address rejects",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Accumulated Protocol Share Tracking",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should track accumulated protocol share from failed distributions",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Completion with Failed Prize",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete tournament even if prize distribution fails",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Multi-Player Tournament with Failed Prizes",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle multiple prize distributions in 4-player tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Contract Balance Accounting",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should maintain correct contract balance with accumulated fees",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "Protocol Raffle System",
+      "subsuites": [
+        {
+          "name": "getRaffleInfo() View Function",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return correct raffle info when below threshold",
+              "status": "passing"
+            },
+            {
+              "name": "Should return correct raffle info when at threshold with no players",
+              "status": "passing"
+            },
+            {
+              "name": "Should count enrolled players correctly (DEPRECATED - eligiblePlayerCount calculation changed)",
+              "status": "pending"
+            },
+            {
+              "name": "Should return raffleIndex starting at 0",
+              "status": "passing"
+            },
+            {
+              "name": "Should return correct threshold from _getRaffleThreshold()",
+              "status": "passing"
+            },
+            {
+              "name": "Should return correct reserve from _getRaffleReserve()",
+              "status": "passing"
+            }
+          ],
+          "passing": 5,
+          "pending": 1
+        },
+        {
+          "name": "Access Control",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject non-enrolled players when threshold not met",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject non-enrolled players even when threshold met",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow enrolled players to trigger raffle (Enrolling status)",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow enrolled players to trigger raffle (InProgress status)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject players only enrolled in Completed tournaments",
+              "status": "passing"
+            }
+          ],
+          "passing": 5,
+          "pending": 0
+        },
+        {
+          "name": "Raffle Mechanics (Integration with Failed Prizes)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should accumulate protocol share from failed prize distributions",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle multiple enrollment counts correctly (DEPRECATED - eligiblePlayerCount calculation changed)",
+              "status": "pending"
+            }
+          ],
+          "passing": 1,
+          "pending": 1
+        },
+        {
+          "name": "Raffle Distribution",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should calculate 5% owner / 90% winner correctly",
+              "status": "passing"
+            },
+            {
+              "name": "Should maintain 5% reserve after raffle",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle exactly 3 ETH threshold",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle large amounts (10 ETH)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle single enrolled player (100% chance) (DEPRECATED - eligiblePlayerCount calculation changed)",
+              "status": "pending"
+            },
+            {
+              "name": "Should handle player enrolled in many tournaments (DEPRECATED - eligiblePlayerCount calculation changed)",
+              "status": "pending"
+            }
+          ],
+          "passing": 2,
+          "pending": 2
+        },
+        {
+          "name": "Security Considerations",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should use nonReentrant modifier on executeProtocolRaffle",
+              "status": "passing"
+            },
+            {
+              "name": "Should follow CEI pattern (Checks-Effects-Interactions)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle failed owner send",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle failed winner send",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Randomness Quality",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should use block.prevrandao for randomness",
+              "status": "passing"
+            },
+            {
+              "name": "Should produce different results with different block data",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Gas Efficiency",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle reasonable number of enrolled players",
+              "status": "passing"
+            },
+            {
+              "name": "Should document max capacity (1000 players)",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Integration with Prize Distribution",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should accumulate protocol share from entry fees (2.5%)",
+              "status": "passing"
+            },
+            {
+              "name": "Should accumulate from both protocol fees AND failed prize distributions",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 25,
+      "pending": 4
+    },
+    {
+      "name": "Raffle Results Storage - Historic Data Validation",
+      "subsuites": [
+        {
+          "name": "Single Raffle Execution Storage",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should store complete raffle result data after execution",
+              "status": "pending"
+            },
+            {
+              "name": "Should store different winner when randomness changes",
+              "status": "pending"
+            },
+            {
+              "name": "Should handle weighted participants correctly when player enrolled in multiple tournaments",
+              "status": "pending"
+            }
+          ],
+          "passing": 0,
+          "pending": 3
+        },
+        {
+          "name": "Multiple Consecutive Raffles Storage",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should store separate results for 3 consecutive raffles with correct data",
+              "status": "pending"
+            },
+            {
+              "name": "Should maintain independent storage for each raffle index",
+              "status": "pending"
+            },
+            {
+              "name": "Should correctly track progressive threshold increases across raffles",
+              "status": "pending"
+            }
+          ],
+          "passing": 0,
+          "pending": 3
+        },
+        {
+          "name": "Edge Cases and Data Integrity",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle raffle with single participant",
+              "status": "pending"
+            },
+            {
+              "name": "Should ensure participants and weights arrays have same length",
+              "status": "pending"
+            },
+            {
+              "name": "Should preserve exact ETH amounts without rounding errors",
+              "status": "pending"
+            },
+            {
+              "name": "Should query non-existent raffle index safely",
+              "status": "pending"
+            }
+          ],
+          "passing": 0,
+          "pending": 4
+        },
+        {
+          "name": "Storage Gas Costs",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should document gas cost for storing raffle results",
+              "status": "pending"
+            },
+            {
+              "name": "Should handle storage for raffle with many participants",
+              "status": "pending"
+            }
+          ],
+          "passing": 0,
+          "pending": 2
+        }
+      ],
+      "tests": [],
+      "passing": 0,
+      "pending": 12
+    },
+    {
+      "name": "Basic Deployment Test",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should deploy all contracts successfully",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Delegatecall Direct",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should test delegatecall behavior via enrollment",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test ETour_Storage Access",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should access tierCount from ETour_Storage",
+          "status": "passing"
+        },
+        {
+          "name": "Should access owner from ETour_Storage",
+          "status": "passing"
+        },
+        {
+          "name": "Should verify contract is initialized by checking tiers",
+          "status": "passing"
+        }
+      ],
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Enrollment Debug Test",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should enroll player in tier 0",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Player Activity Counts",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should verify enrollment status works (replaces activity counts)",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Simple Tracking",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should test that player tracking storage exists in game contract",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "TicTacChain Enrollment Quick Test",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should enroll player1",
+          "status": "passing"
+        },
+        {
+          "name": "Should enroll player2 and start",
+          "status": "passing"
+        }
+      ],
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Time Bank System (Chess Clock) Tests",
+      "subsuites": [
+        {
+          "name": "Time Bank Initialization",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should initialize both players with configured match time at match start",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Time Bank Mechanics",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should deduct time from player's bank after making a move",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow multiple moves with cumulative time deduction",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT allow opponent to claim timeout before time runs out",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow opponent to claim timeout after time runs out",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT allow player to claim timeout on their own turn",
+              "status": "passing"
+            },
+            {
+              "name": "Should accurately track time after turn switches",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle time bank reaching exactly zero",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT allow timeout claim while opponent still has time",
+              "status": "passing"
+            }
+          ],
+          "passing": 8,
+          "pending": 0
+        },
+        {
+          "name": "Time Bank Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle rapid successive moves without time manipulation",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly handle match completion before timeout",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Integration with Time Banks",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle 4-player tournament with time banks properly",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow timeout claim in semifinal and winner advances to finals",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Time Increment (Future Feature)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should have zero increment by default",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 14,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Reset - Basic 4-Player Tournaments",
+      "subsuites": [
+        {
+          "name": "Basic Tournament Reset with Normal Gameplay",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle 2 consecutive 4-player tournaments with 2 and 3 players respectively",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Reset and Enrollment Edge Cases",
+      "subsuites": [
+        {
+          "name": "Tournament Reset State Management",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow enrollment after tournament completes and resets",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear all round data on tournament reset",
+              "status": "passing"
+            },
+            {
+              "name": "Should clear player enrollment status on reset",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Enrollment State Protection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject enrollment during active tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject duplicate enrollment in same tournament",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow same player in different instances",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow same player in different tiers",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Prize Pool Reset",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reset prize pool to zero after distribution",
+              "status": "passing"
+            },
+            {
+              "name": "Should accumulate new prize pool for second tournament",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "CRITICAL BUG: Match Data Persistence Across Tournaments",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle 3 consecutive 8-player tier tournaments with varying player counts and escalation scenarios",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 10,
+      "pending": 0
+    },
+    {
+      "name": "View Functions - All Games",
+      "subsuites": [
+        {
+          "name": "TicTacChain View Functions",
+          "subsuites": [
+            {
+              "name": "isMatchEscL2Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L2 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isMatchEscL3Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L3 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isPlayerInAdvancedRound",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-enrolled player",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false for enrolled player who hasn't won any matches yet",
+                  "status": "passing"
+                }
+              ],
+              "passing": 2,
+              "pending": 0
+            }
+          ],
+          "tests": [],
+          "passing": 8,
+          "pending": 0
+        },
+        {
+          "name": "ConnectFourOnChain View Functions",
+          "subsuites": [
+            {
+              "name": "isMatchEscL2Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L2 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isMatchEscL3Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L3 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isPlayerInAdvancedRound",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-enrolled player",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false for enrolled player who hasn't won any matches yet",
+                  "status": "passing"
+                }
+              ],
+              "passing": 2,
+              "pending": 0
+            }
+          ],
+          "tests": [],
+          "passing": 8,
+          "pending": 0
+        },
+        {
+          "name": "ChessOnChain View Functions",
+          "subsuites": [
+            {
+              "name": "isMatchEscL2Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L2 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isMatchEscL3Available",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-existent match",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false when player has not timed out",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return true after timeout + L3 delay",
+                  "status": "passing"
+                }
+              ],
+              "passing": 3,
+              "pending": 0
+            },
+            {
+              "name": "isPlayerInAdvancedRound",
+              "subsuites": [],
+              "tests": [
+                {
+                  "name": "Should return false for non-enrolled player",
+                  "status": "passing"
+                },
+                {
+                  "name": "Should return false for enrolled player who hasn't won any matches yet",
+                  "status": "passing"
+                }
+              ],
+              "passing": 2,
+              "pending": 0
+            }
+          ],
+          "tests": [],
+          "passing": 8,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 24,
+      "pending": 0
+    },
+    {
+      "name": "Wei Precision and Rounding in Prize Distribution",
+      "subsuites": [
+        {
+          "name": "Wei Rounding in Prize Splits",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle indivisible prize pool in finals draw (2 co-winners)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle wei remainder in 4-way all-draw split",
+              "status": "passing"
+            },
+            {
+              "name": "Should not lose wei in 8-player tournament prize distribution",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Contract Balance Verification",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should maintain zero contract balance after prize distribution",
+              "status": "passing"
+            },
+            {
+              "name": "Should accumulate protocol fees correctly across multiple tournaments",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Prize Distribution Precision",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle standard entry fee precision correctly",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle entry fee calculations with precision",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 7,
+      "pending": 0
+    },
+    {
+      "name": "Chess Checkmate & Match Completion Tests",
+      "subsuites": [
+        {
+          "name": "Checkmate Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should detect Scholar's Mate and mark match as completed",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect Back Rank Mate",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect checkmate and emit MatchCompleted event",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Timeout Victory Match Completion",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete match after timeout claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should update player stats after timeout victory",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "4-Player Tournament Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should advance winners to finals after round 0 completion",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete tournament after finals match",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [
+        {
+          "name": "Should mark round as complete when all matches finish",
+          "status": "passing"
+        },
+        {
+          "name": "Should increment completed matches count for each finished match",
+          "status": "passing"
+        }
+      ],
+      "passing": 9,
+      "pending": 0
+    },
+    {
+      "name": "ChessOnChain 8-Tier System Tests",
+      "subsuites": [
+        {
+          "name": "Boundary Tier Enrollment Tests",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should accept correct entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should auto-start when last slot fills",
+              "status": "passing"
+            },
+            {
+              "name": "Should split entry fees correctly (90/7.5/2.5)",
+              "status": "passing"
+            },
+            {
+              "name": "Should accept correct entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should auto-start when last slot fills",
+              "status": "passing"
+            },
+            {
+              "name": "Should split entry fees correctly (90/7.5/2.5)",
+              "status": "passing"
+            },
+            {
+              "name": "Should accept correct entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should auto-start when last slot fills",
+              "status": "passing"
+            },
+            {
+              "name": "Should split entry fees correctly (90/7.5/2.5)",
+              "status": "passing"
+            },
+            {
+              "name": "Should accept correct entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should auto-start when last slot fills",
+              "status": "passing"
+            },
+            {
+              "name": "Should split entry fees correctly (90/7.5/2.5)",
+              "status": "passing"
+            }
+          ],
+          "passing": 16,
+          "pending": 0
+        },
+        {
+          "name": "2-Player Tier Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete Tier 0 tournament via checkmate",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete Tier 3 tournament via checkmate",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete Tier 0 tournament via timeout",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete Tier 3 tournament via timeout",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "4-Player Tier Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete Tier 4 semi-finals and finals via checkmate",
+              "status": "passing"
+            },
+            {
+              "name": "Should complete Tier 7 semi-finals and finals via checkmate",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle mixed completion methods (timeout + checkmate)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle Tier 7 mixed completion methods",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Prize Distribution Validation",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should distribute winner-takes-all correctly in Tier 0",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute winner-takes-all correctly in Tier 3",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute winner-takes-all correctly in Tier 4",
+              "status": "passing"
+            },
+            {
+              "name": "Should distribute winner-takes-all correctly in Tier 7",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Cross-Tier Independence",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow player to enroll in multiple tiers simultaneously",
+              "status": "passing"
+            },
+            {
+              "name": "Should track prizes independently per tier",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow player in different instances of same tier",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Elite Matches Storage (Tier 3 and Tier 7)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should store Tier 3 finals match in eliteMatches array",
+              "status": "passing"
+            },
+            {
+              "name": "Should store Tier 7 finals match in eliteMatches array",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT store non-elite tier matches (Tier 1)",
+              "status": "passing"
+            },
+            {
+              "name": "Should store complete move history in moves string for Tier 3",
+              "status": "passing"
+            },
+            {
+              "name": "Should store multiple elite matches sequentially",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle draw in elite finals correctly",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        }
+      ],
+      "tests": [
+        {
+          "name": "Should have exactly 8 tiers configured",
+          "status": "passing"
+        }
+      ],
+      "passing": 38,
+      "pending": 0
+    },
+    {
+      "name": "ChessOnChain Tests",
+      "subsuites": [
+        {
+          "name": "Deployment",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should deploy successfully",
+              "status": "passing"
+            },
+            {
+              "name": "Should have correct owner",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Check Status Bug Fix",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should clear check status when player escapes check",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly track check status throughout a game",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Basic Game Flow",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow a basic game to start",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "1v1 Duel Match Initialization",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should start match immediately after 2 players enroll in 1v1 duel",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow immediate gameplay after match starts in 1v1 duel",
+              "status": "passing"
+            },
+            {
+              "name": "Should return correct status from all view functions after 1v1 duel starts",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Pawn Promotion",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow pawn promotion to Queen",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject promotion with PieceType.None",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Castling",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow kingside castling",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Timeout Claims",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow timeout claim after timeout period",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject early timeout claim",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject timeout claim on your own turn",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "View Functions",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return chess match data",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Scholar's Mate (Checkmate)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should detect checkmate (Scholar's Mate)",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "4-Player Tournament",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle 4-player tournament bracket",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 17,
+      "pending": 0
+    },
+    {
+      "name": "Chess Fifty-Move Rule",
+      "subsuites": [
+        {
+          "name": "ChessRulesModule - Half-Move Clock Unit Tests",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should start with half-move clock at 0",
+              "status": "passing"
+            },
+            {
+              "name": "Should increment half-move clock on non-pawn, non-capture moves",
+              "status": "passing"
+            },
+            {
+              "name": "Should reset half-move clock on pawn moves",
+              "status": "passing"
+            },
+            {
+              "name": "Should reset half-move clock on captures",
+              "status": "passing"
+            },
+            {
+              "name": "Should return gameEnd=3 when half-move clock reaches 100",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT trigger fifty-move rule at 99 half-moves",
+              "status": "passing"
+            }
+          ],
+          "passing": 6,
+          "pending": 0
+        },
+        {
+          "name": "ChessOnChain - Fifty-Move Rule Integration Tests",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should track half-move clock during actual gameplay",
+              "status": "passing"
+            },
+            {
+              "name": "Should end game as draw via threefold repetition before fifty-move (expected behavior)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reset half-move clock on pawn move",
+              "status": "passing"
+            },
+            {
+              "name": "Should verify fifty-move rule logic at module level with high clock value",
+              "status": "passing"
+            }
+          ],
+          "passing": 4,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should correctly handle half-move clock with promotions (pawn move resets)",
+              "status": "passing"
+            },
+            {
+              "name": "Should handle en passant captures (both pawn move AND capture - resets clock)",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 12,
+      "pending": 0
+    },
+    {
+      "name": "Chess Threefold Repetition Rule",
+      "subsuites": [
+        {
+          "name": "Position Tracking Basics",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should not trigger draw after first occurrence of position",
+              "status": "passing"
+            },
+            {
+              "name": "Should not trigger draw after second occurrence of position",
+              "status": "passing"
+            },
+            {
+              "name": "Should track different positions without false positives",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Threefold Repetition Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should trigger draw on third repetition of starting position",
+              "status": "passing"
+            },
+            {
+              "name": "Should trigger draw on third repetition of non-starting position",
+              "status": "passing"
+            },
+            {
+              "name": "Should NOT trigger draw after only two repetitions",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Position Hash Differentiation",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should distinguish positions by side to move",
+              "status": "passing"
+            },
+            {
+              "name": "Should distinguish positions by castling rights",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Edge Cases",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle rapid threefold with minimum moves",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow pawn moves without resetting position counts",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly handle en passant affecting position uniqueness",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Integration with Other Draw Conditions",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should prioritize checkmate over threefold repetition",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly track positions alongside fifty-move clock",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 13,
+      "pending": 0
+    },
+    {
+      "name": "ConnectFour Edge Cases",
+      "subsuites": [
+        {
+          "name": "Column Full Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should reject move to column that is full (6 pieces)",
+              "status": "passing"
+            },
+            {
+              "name": "Should allow moves to other columns when one column is full",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "ConnectFourOnChain ETour Compatibility Tests",
+      "subsuites": [
+        {
+          "name": "Deployment and Tier Configuration",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should deploy successfully as ETour implementation",
+              "status": "passing"
+            },
+            {
+              "name": "Should have 3 tiers configured",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Enrollment (ETour Integration)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow player enrollment",
+              "status": "passing"
+            },
+            {
+              "name": "Should auto-start 2-player tournament when full",
+              "status": "passing"
+            },
+            {
+              "name": "Should correctly split entry fees (90% prize pool)",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject incorrect entry fee",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject duplicate enrollment",
+              "status": "passing"
+            }
+          ],
+          "passing": 5,
+          "pending": 0
+        },
+        {
+          "name": "Game Play (Connect Four Logic)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow first player to make move",
+              "status": "passing"
+            },
+            {
+              "name": "Should place piece at bottom of column (gravity)",
+              "status": "passing"
+            },
+            {
+              "name": "Should stack pieces correctly",
+              "status": "passing"
+            },
+            {
+              "name": "Should switch turns after each move",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject move when not your turn",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject move to full column",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject invalid column",
+              "status": "passing"
+            }
+          ],
+          "passing": 7,
+          "pending": 0
+        },
+        {
+          "name": "Win Detection",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should detect horizontal win",
+              "status": "passing"
+            },
+            {
+              "name": "Should detect vertical win",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Tournament Completion (ETour Integration)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should complete tournament and distribute prizes",
+              "status": "passing"
+            },
+            {
+              "name": "Should update player stats after match",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "4-Player Tournament (Multi-Round)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should handle 4-player tournament bracket",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Timeout Functions (ETour Integration)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should allow timeout claim after timeout period",
+              "status": "passing"
+            },
+            {
+              "name": "Should reject early timeout claim",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "View Functions",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should return match data correctly",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Round-Based Prize Distribution (8-Player Tournament)",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should start 8-player tournament with correct bracket structure",
+              "status": "passing"
+            },
+            {
+              "name": "Should award 0% to semi-final losers (3rd and 4th place)",
+              "status": "passing"
+            },
+            {
+              "name": "Should award 0% to round 0 losers (5th-8th place)",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "ABI Compatibility with ETour",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should have all ETour required functions",
+              "status": "passing"
+            },
+            {
+              "name": "Should have Connect Four specific functions",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        }
+      ],
+      "tests": [
+        {
+          "name": "Should create match when tournament starts",
+          "status": "passing"
+        },
+        {
+          "name": "Should initialize empty board",
+          "status": "passing"
+        },
+        {
+          "name": "Should set random first player",
+          "status": "passing"
+        }
+      ],
+      "passing": 30,
+      "pending": 0
+    },
+    {
+      "name": "TicTacChain Progressive Raffle Thresholds",
+      "subsuites": [
+        {
+          "name": "Progressive Threshold Configuration",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should have 0.001 ETH threshold for raffle #1 (index 0)",
+              "status": "passing"
+            },
+            {
+              "name": "Should have 5% reserve for TicTacChain",
+              "status": "passing"
+            },
+            {
+              "name": "Should calculate raffle amount correctly with 5% reserve",
+              "status": "passing"
+            }
+          ],
+          "passing": 3,
+          "pending": 0
+        },
+        {
+          "name": "Threshold Progression",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should progress from 0.001 to 0.005 ETH after first raffle",
+              "status": "passing"
+            },
+            {
+              "name": "Should cap at 1.0 ETH for raffle #8 and beyond",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Raffle Index Tracking",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should start with currentRaffleIndex = 0",
+              "status": "passing"
+            },
+            {
+              "name": "Should show raffleIndex in getRaffleInfo",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Protocol Fee Accumulation with Low Threshold",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should accumulate protocol fees toward 0.001 ETH threshold",
+              "status": "passing"
+            },
+            {
+              "name": "Should show accurate progress toward threshold",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Distribution with 5% Reserve",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should calculate 95% distribution with 5% reserve",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        },
+        {
+          "name": "Comparison with Base ETour",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "TicTacChain should have lower threshold than base ETour default",
+              "status": "passing"
+            },
+            {
+              "name": "Both should use 5% proportional reserve",
+              "status": "passing"
+            }
+          ],
+          "passing": 2,
+          "pending": 0
+        },
+        {
+          "name": "Threshold Scaling Examples",
+          "subsuites": [],
+          "tests": [
+            {
+              "name": "Should document threshold and reserve progression",
+              "status": "passing"
+            }
+          ],
+          "passing": 1,
+          "pending": 0
+        }
+      ],
+      "tests": [],
+      "passing": 13,
+      "pending": 0
+    },
+    {
+      "name": "Threshold Scaling Examples",
+      "subsuites": [],
+      "tests": [
+        {
+          "name": "Should document threshold and reserve progression",
+          "status": "passing"
+        }
+      ],
+      "passing": 1,
+      "pending": 0
+    }
+  ]
+}

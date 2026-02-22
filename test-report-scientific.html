@@ -1,0 +1,3809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Test Report - ETour Protocol</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0e1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header .subtitle {
+            color: #93c5fd;
+            font-size: 1.1em;
+        }
+
+        .summary-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .summary-card h3 {
+            color: #94a3b8;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+
+        .summary-card.passed .value { color: #10b981; }
+        .summary-card.failed .value { color: #ef4444; }
+        .summary-card.gas .value { color: #f59e0b; }
+
+        .controls {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .controls button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .controls button:hover {
+            background: #2563eb;
+        }
+
+        .controls input {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #e0e0e0;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .test-scenario {
+            background: #1e293b;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            border-left: 4px solid transparent;
+        }
+
+        .test-scenario[data-status="passed"] { border-left-color: #10b981; }
+        .test-scenario[data-status="failed"] { border-left-color: #ef4444; }
+        .test-scenario[data-status="pending"] { border-left-color: #f59e0b; }
+
+        .test-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background 0.2s;
+        }
+
+        .test-header:hover {
+            background: #2d3748;
+        }
+
+        .status-icon {
+            font-size: 1.5em;
+            width: 30px;
+            text-align: center;
+        }
+
+        .test-scenario[data-status="passed"] .status-icon { color: #10b981; }
+        .test-scenario[data-status="failed"] .status-icon { color: #ef4444; }
+        .test-scenario[data-status="pending"] .status-icon { color: #f59e0b; }
+
+        .test-header h3 {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 1.1em;
+        }
+
+        .test-meta {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        .expand-icon {
+            color: #3b82f6;
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+
+        .test-scenario.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .test-detail {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s;
+        }
+
+        .test-scenario.expanded .test-detail {
+            max-height: 100000px;
+            padding: 20px;
+        }
+
+        .timeline {
+            margin: 20px 0;
+        }
+
+        .timeline-entry {
+            position: relative;
+            padding-left: 40px;
+            padding-bottom: 30px;
+            border-left: 2px solid #475569;
+        }
+
+        .timeline-entry:last-child {
+            border-left-color: transparent;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -13px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .timeline-content {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-name {
+            font-weight: bold;
+            color: #3b82f6;
+            font-size: 1.1em;
+        }
+
+        .block-info {
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        .gas-badge {
+            background: #f59e0b;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .state-diff {
+            margin: 15px 0;
+        }
+
+        .state-diff h4 {
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .state-diff table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .state-diff td {
+            padding: 8px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .diff-label {
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+        }
+
+        .diff-before {
+            color: #ef4444;
+        }
+
+        .diff-arrow {
+            color: #3b82f6;
+            text-align: center;
+        }
+
+        .diff-after {
+            color: #10b981;
+        }
+
+        .events-section {
+            margin: 15px 0;
+        }
+
+        .events-section h4 {
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .event {
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .event-name {
+            color: #fbbf24;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .event pre {
+            color: #94a3b8;
+            font-size: 0.85em;
+            overflow-x: auto;
+        }
+
+        details {
+            margin: 15px 0;
+        }
+
+        details summary {
+            cursor: pointer;
+            color: #3b82f6;
+            padding: 10px;
+            background: #1e293b;
+            border-radius: 4px;
+        }
+
+        details summary:hover {
+            background: #2d3748;
+        }
+
+        details pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 0.85em;
+            color: #94a3b8;
+            margin-top: 10px;
+        }
+
+        .gas-analysis-summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: #0f172a;
+            border-radius: 8px;
+        }
+
+        .gas-analysis-summary h4, .gas-analysis-summary h5 {
+            color: #fbbf24;
+            margin-bottom: 15px;
+        }
+
+        .gas-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .gas-table thead {
+            background: #1e293b;
+        }
+
+        .gas-table th {
+            padding: 12px;
+            text-align: left;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .gas-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .gas-table tbody tr:hover {
+            background: #1e293b;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔬 Scientific Test Report</h1>
+            <p class="subtitle">ETour Protocol - Comprehensive State & Gas Analysis</p>
+            <p class="subtitle">Generated: 1/4/2026, 4:05:34 PM | Status: In Progress (25/104 tests) | Duration: 249.8s</p>
+        </header>
+    <div class="summary-dashboard">
+            <div class="summary-card">
+                <h3>Total Tests</h3>
+                <div class="value">25</div>
+            </div>
+            <div class="summary-card passed">
+                <h3>Passed</h3>
+                <div class="value">3</div>
+            </div>
+            <div class="summary-card failed">
+                <h3>Failed</h3>
+                <div class="value">21</div>
+            </div>
+            <div class="summary-card">
+                <h3>Pass Rate</h3>
+                <div class="value">12.0%</div>
+            </div>
+            <div class="summary-card gas">
+                <h3>Total Gas</h3>
+                <div class="value">24.92M</div>
+            </div>
+            <div class="summary-card">
+                <h3>Transactions</h3>
+                <div class="value">25</div>
+            </div>
+            
+        </div>
+    <div class="controls">
+            <button onclick="expandAll()">Expand All</button>
+            <button onclick="collapseAll()">Collapse All</button>
+            <button onclick="filterStatus('passed')">Show Passed</button>
+            <button onclick="filterStatus('failed')">Show Failed</button>
+            <button onclick="filterStatus('all')">Show All</button>
+            <input type="text" id="searchInput" placeholder="Search tests..." onkeyup="searchTests()">
+        </div>
+    <div id="testList"><div class="test-scenario" data-status="passed" data-test-id="test-1562351326">
+            <div class="test-header" onclick="toggleTest('test-1562351326')">
+                <span class="status-icon">✓</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should deploy successfully</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.69s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #282 | 4:01:34 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">281</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">282</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 281,
+    &quot;timestamp&quot;: 1767560493,
+    &quot;blockHash&quot;: &quot;0xa05c96694f57b39de0c6b20b44f4ba621b09bbaa1d39a276e9993764f1a821e0&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 282,
+    &quot;timestamp&quot;: 1767560494,
+    &quot;blockHash&quot;: &quot;0x649af8a25719daca20475b32a4a26477c72e407f6b6cdc6da1961356ff316762&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="passed" data-test-id="test-1054983637">
+            <div class="test-header" onclick="toggleTest('test-1054983637')">
+                <span class="status-icon">✓</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should have correct owner</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 8.99s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #292 | 4:01:43 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">291</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">292</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 291,
+    &quot;timestamp&quot;: 1767560623,
+    &quot;blockHash&quot;: &quot;0x5a1abee33cebdc8ec06c0065e54b403e592fa7594d03d1230e6b224350b67d99&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 292,
+    &quot;timestamp&quot;: 1767560624,
+    &quot;blockHash&quot;: &quot;0xc8276a8e6cfaba767fca1b79ad4c9a8042e52bbeba5ee1cb42d77b32e8ff43b9&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="passed" data-test-id="test-913198704">
+            <div class="test-header" onclick="toggleTest('test-913198704')">
+                <span class="status-icon">✓</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should have 3 tiers configured</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.03s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #302 | 4:01:53 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">301</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">302</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 301,
+    &quot;timestamp&quot;: 1767560633,
+    &quot;blockHash&quot;: &quot;0xd8ea6ba45427a2787feb70582b01ff504df0850a2890dc1180502293fedbe4cf&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 302,
+    &quot;timestamp&quot;: 1767560634,
+    &quot;blockHash&quot;: &quot;0xa9f88328274615b9a8dada55ffb720b274b1f260fb36086e39beaf03eae0be7f&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1591347211">
+            <div class="test-header" onclick="toggleTest('test-1591347211')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should have correct tier 0 configuration (2-player)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.00s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #312 | 4:02:03 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">311</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">312</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 311,
+    &quot;timestamp&quot;: 1767560643,
+    &quot;blockHash&quot;: &quot;0xb22f649c99f44a1bc50986b244d402df1c3529188fd0ee2b54155bf5ae29681e&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 312,
+    &quot;timestamp&quot;: 1767560644,
+    &quot;blockHash&quot;: &quot;0x430186fb8d313803901108f07a6fcf76e432220e8cfa539d7a7937faeebc3f2c&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-526237930">
+            <div class="test-header" onclick="toggleTest('test-526237930')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should have correct tier 1 configuration (4-player)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.02s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #322 | 4:02:13 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">321</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">322</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 321,
+    &quot;timestamp&quot;: 1767560653,
+    &quot;blockHash&quot;: &quot;0xd729397d4969730501e742ad7727e6c62b0be3571daf8eb4421b2941f7817a91&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 322,
+    &quot;timestamp&quot;: 1767560654,
+    &quot;blockHash&quot;: &quot;0xcb0f6b4e4c599fb8bb7f13780deef756095e8a0e6458a12a8f6b0a81d8ee6a6d&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-231862215">
+            <div class="test-header" onclick="toggleTest('test-231862215')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Deployment Should have correct tier 2 configuration (8-player)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.96s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #332 | 4:02:23 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">331</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">332</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 331,
+    &quot;timestamp&quot;: 1767560663,
+    &quot;blockHash&quot;: &quot;0xa709b567380b687946c7e441b92b91990c9b1a90e574120f716b3fb2205a57d7&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 332,
+    &quot;timestamp&quot;: 1767560664,
+    &quot;blockHash&quot;: &quot;0xdf2b43e789be00162be7f92ff5f6b906881c35dd64c5ee7355fea8ef2612f02a&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-336781971">
+            <div class="test-header" onclick="toggleTest('test-336781971')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Enrollment Should enroll players and auto-start when full (2-player)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.04s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #342 | 4:02:33 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">341</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">342</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 341,
+    &quot;timestamp&quot;: 1767560673,
+    &quot;blockHash&quot;: &quot;0xfa7409acf17aa8c04a65049b71173ff44fe7b223f98778d325fbacdec7f282fa&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 342,
+    &quot;timestamp&quot;: 1767560674,
+    &quot;blockHash&quot;: &quot;0x6212e15a37306036cfac7af99565b6cb0aa818f017fe42513b416d378aaa8390&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1510672664">
+            <div class="test-header" onclick="toggleTest('test-1510672664')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Enrollment Should split entry fees correctly (90% prize pool, 10% owner)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.97s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #352 | 4:02:43 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">351</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">352</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 351,
+    &quot;timestamp&quot;: 1767560683,
+    &quot;blockHash&quot;: &quot;0x492b44ffd46f7e7ff5c13bf56aa3fb327522e80da0fca2506cbdd76eacedcfc3&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 352,
+    &quot;timestamp&quot;: 1767560684,
+    &quot;blockHash&quot;: &quot;0x34f00f5467787f197eefa189f8b25bff16c8b5653ebda6f7fcf0c5697fc0f614&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-166599148">
+            <div class="test-header" onclick="toggleTest('test-166599148')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Enrollment Should reject incorrect entry fee</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.05s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #362 | 4:02:53 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">361</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">362</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 361,
+    &quot;timestamp&quot;: 1767560693,
+    &quot;blockHash&quot;: &quot;0xc2ad7232e6c3d6ab82909897e8fb40661106fbab4f4c6d0bf5e1c8b11bff97aa&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 362,
+    &quot;timestamp&quot;: 1767560694,
+    &quot;blockHash&quot;: &quot;0x053616126e28fca8502041b0a68fd7d05f960938a4ff291527016f7e4b07db96&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1100096870">
+            <div class="test-header" onclick="toggleTest('test-1100096870')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Enrollment Should reject duplicate enrollment</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.94s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #372 | 4:03:03 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">371</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">372</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 371,
+    &quot;timestamp&quot;: 1767560703,
+    &quot;blockHash&quot;: &quot;0x74a6ff67ba847fec3b8931af4cd673d3b508368d8e805064926c52d2c1e2b3c0&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 372,
+    &quot;timestamp&quot;: 1767560704,
+    &quot;blockHash&quot;: &quot;0x8085a10c4bb6bf30727161d57d33bbf4312d541ac2f72c0a14f657ecc6d1064a&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-971172456">
+            <div class="test-header" onclick="toggleTest('test-971172456')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Enrollment Should reject invalid tier</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.04s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #382 | 4:03:13 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">381</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">382</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 381,
+    &quot;timestamp&quot;: 1767560713,
+    &quot;blockHash&quot;: &quot;0xb436ceb07d8c4c2ee1d6aeffaf09c659c650c4301657f59160002a99a3956f30&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 382,
+    &quot;timestamp&quot;: 1767560714,
+    &quot;blockHash&quot;: &quot;0xcad4d17f53fae4c64599d4bb086f724a45d80ddc74963278ae682278701d632a&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-290731735">
+            <div class="test-header" onclick="toggleTest('test-290731735')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Logic Should initialize round with correct match count (8-player = 4 matches)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.02s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #392 | 4:03:23 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">391</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">392</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 391,
+    &quot;timestamp&quot;: 1767560723,
+    &quot;blockHash&quot;: &quot;0x3805e9c111410379c1792392ba9794cf5d9ba96968a92377b341b37d03e1c07d&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 392,
+    &quot;timestamp&quot;: 1767560724,
+    &quot;blockHash&quot;: &quot;0x8b763d8f9d4dda45a9a540844818f9c6e23342790d30a9f75651a41994f21b19&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1839972144">
+            <div class="test-header" onclick="toggleTest('test-1839972144')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Logic Should handle force start after enrollment timeout</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.01s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #402 | 4:03:33 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">401</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">402</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 401,
+    &quot;timestamp&quot;: 1767560733,
+    &quot;blockHash&quot;: &quot;0x06b016820b0d69a2d8388f4bcc0dcd2b65c547d4c977a4edd07b4519d41e3f49&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 402,
+    &quot;timestamp&quot;: 1767560734,
+    &quot;blockHash&quot;: &quot;0x7182b5d1c2bcd9dcbad7620118e3f9fefba9d82a7ae6f250260baf7942a70a2e&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-22108725">
+            <div class="test-header" onclick="toggleTest('test-22108725')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should allow players to make moves</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.93s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #412 | 4:03:43 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">411</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">412</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 411,
+    &quot;timestamp&quot;: 1767560743,
+    &quot;blockHash&quot;: &quot;0x821311b50d624dae8ad294034200826221cf4e4331f88b11e29dcee10352b1ed&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 412,
+    &quot;timestamp&quot;: 1767560744,
+    &quot;blockHash&quot;: &quot;0xb7b5fd00fc4a0a4f469bdf53366720f38864026fb96c8f56cdc0f66ba928d0d3&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1323827243">
+            <div class="test-header" onclick="toggleTest('test-1323827243')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should switch turns after each move</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.13s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #422 | 4:03:53 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">421</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">422</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 421,
+    &quot;timestamp&quot;: 1767560753,
+    &quot;blockHash&quot;: &quot;0xb2a5958a92bb0b964a95c9f3b4171f2c8889d0744d0d07ea3785f2a525cc51fc&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 422,
+    &quot;timestamp&quot;: 1767560754,
+    &quot;blockHash&quot;: &quot;0xe87e5819dbc3a328dce7e18fff2aee20a9da422e16b488f1b29079e6c7fa69bf&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1646901700">
+            <div class="test-header" onclick="toggleTest('test-1646901700')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should reject move when not your turn</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.02s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #432 | 4:04:03 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">431</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">432</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 431,
+    &quot;timestamp&quot;: 1767560763,
+    &quot;blockHash&quot;: &quot;0x7d6e8e82eeb93715d97a13c70beff3bc8fa26c8aa53e8f72255b29a19dff2e82&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 432,
+    &quot;timestamp&quot;: 1767560764,
+    &quot;blockHash&quot;: &quot;0x2c840e8349e989a0230ad5af7a4d794bf7b3ec721095bf47fc8b1046ec76505d&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1734677612">
+            <div class="test-header" onclick="toggleTest('test-1734677612')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should reject move to occupied cell</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.99s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #442 | 4:04:13 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">441</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">442</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 441,
+    &quot;timestamp&quot;: 1767560773,
+    &quot;blockHash&quot;: &quot;0x8a10f2a5c5a74904351e67aae9740693a19b337496d75d79ab941811e8ba2d52&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 442,
+    &quot;timestamp&quot;: 1767560774,
+    &quot;blockHash&quot;: &quot;0x0b855ca97ce909839a6185b3c936ab66e05dc844bbae4d4a8e0379e5f6955baf&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-2142789085">
+            <div class="test-header" onclick="toggleTest('test-2142789085')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should reject invalid cell index</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.94s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #452 | 4:04:23 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">451</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">452</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 451,
+    &quot;timestamp&quot;: 1767560783,
+    &quot;blockHash&quot;: &quot;0x02245ae754e3568e87386c08fa00e2a1ac06ee225516e189f100a87d308e9439&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 452,
+    &quot;timestamp&quot;: 1767560784,
+    &quot;blockHash&quot;: &quot;0xe551cf7408925c9fe05c457f9e2da02a6b8c701be0e5b009900e3f6187fe7725&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1782117746">
+            <div class="test-header" onclick="toggleTest('test-1782117746')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Game Play Should reject move from non-player</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.01s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #462 | 4:04:33 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">461</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">462</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 461,
+    &quot;timestamp&quot;: 1767560793,
+    &quot;blockHash&quot;: &quot;0xa330704515fd64ef6e1398412dfb80d3f5f268dcf5fca6cac0f98dc8cf664138&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 462,
+    &quot;timestamp&quot;: 1767560794,
+    &quot;blockHash&quot;: &quot;0x847b6e400802cffa0c6f9939368b810861f797b7a7dd659c9342071464a78011&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1696859291">
+            <div class="test-header" onclick="toggleTest('test-1696859291')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Win Detection Should detect horizontal win (top row)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.01s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #472 | 4:04:43 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">471</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">472</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 471,
+    &quot;timestamp&quot;: 1767560803,
+    &quot;blockHash&quot;: &quot;0x1686f74ec012cc35f45adfaf57410f41d58e67f04f9b654505e7807d8937f3cb&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 472,
+    &quot;timestamp&quot;: 1767560804,
+    &quot;blockHash&quot;: &quot;0xf53ebea090402e09c3ff790b6b68aed5c9652b1be2afca93ae34276255bf9095&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-418533623">
+            <div class="test-header" onclick="toggleTest('test-418533623')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Win Detection Should detect vertical win (left column)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.12s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #482 | 4:04:53 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">481</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">482</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 481,
+    &quot;timestamp&quot;: 1767560813,
+    &quot;blockHash&quot;: &quot;0x949c881408126b737eaec5f1e62b206f2d1a7ec0a909c9805413faa8bd580ab9&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 482,
+    &quot;timestamp&quot;: 1767560814,
+    &quot;blockHash&quot;: &quot;0x701a4f6e737729c5c4dd385bf0bd4cafbfa6e2f28207b1c7b9916e45935f9990&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-2075438351">
+            <div class="test-header" onclick="toggleTest('test-2075438351')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Win Detection Should detect diagonal win (0, 4, 8)</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 9.90s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #492 | 4:05:03 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">491</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">492</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 491,
+    &quot;timestamp&quot;: 1767560823,
+    &quot;blockHash&quot;: &quot;0x908d468586748648b34cf33294f09690f1f839b93c4c17a2ebc12f7939acbaaf&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 492,
+    &quot;timestamp&quot;: 1767560824,
+    &quot;blockHash&quot;: &quot;0xb28abe0ca1ae3b449d5a5444b313a56e3c2254d1be0b00d118e73609a8901767&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-125284454">
+            <div class="test-header" onclick="toggleTest('test-125284454')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Win Detection Should detect draw when board is full with no winner</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.93s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #502 | 4:05:13 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">501</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">502</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 501,
+    &quot;timestamp&quot;: 1767560833,
+    &quot;blockHash&quot;: &quot;0x759828ccee365db4e234785c9c58560167599e7f570591c26a3b1dcfdff95fcf&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 502,
+    &quot;timestamp&quot;: 1767560834,
+    &quot;blockHash&quot;: &quot;0x67fd7804d64cc2b24fc25571f4256ea0c331a9271774c7a00e77cbf7439a72d9&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="failed" data-test-id="test-1950698541">
+            <div class="test-header" onclick="toggleTest('test-1950698541')">
+                <span class="status-icon">✗</span>
+                <h3>TicTacChain (ETour Protocol) Tests Tournament Completion Should complete 2-player tournament and distribute prizes</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 10.07s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #513 | 4:05:24 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">512</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">513</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 512,
+    &quot;timestamp&quot;: 1767560844,
+    &quot;blockHash&quot;: &quot;0x62cd4e34b9d81cada58cc2a24d20f79952bb3f3a369b7036150c362acd7de726&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 513,
+    &quot;timestamp&quot;: 1767560845,
+    &quot;blockHash&quot;: &quot;0x8723f0b982fefb6e919b0c2f1448d4d4571ad0fd98d6248485d9b70a7c8c2c8a&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div><div class="test-scenario" data-status="running" data-test-id="test-1723472361">
+            <div class="test-header" onclick="toggleTest('test-1723472361')">
+                <span class="status-icon">⚠</span>
+                <h3>TicTacChain (ETour Protocol) Tests Timeout Functions Should allow timeout claim after timeout period</h3>
+                <span class="test-meta">/Users/karim/Documents/workspace/zero-trust/e-tour/test/ETourIntegration.test.js | 0s | 1 actions | 996.8k gas</span>
+                <span class="expand-icon">▶</span>
+            </div>
+            <div class="test-detail">
+                <div class="timeline"><div class="timeline-entry">
+            <div class="timeline-marker">1</div>
+            <div class="timeline-content">
+                <div class="action-header">
+                    <span class="action-name">initializeAllInstances()</span>
+                    <span class="block-info">Block #523 | 4:05:34 PM</span>
+                    <span class="gas-badge">996.8k gas | $89.7150 (ETH)</span>
+                </div>
+                <div class="state-diff"><h4>State Changes</h4><table><tr>
+                <td class="diff-label">timeState.blockNumber</td>
+                <td class="diff-before">522</td>
+                <td class="diff-arrow">→</td>
+                <td class="diff-after">523</td>
+              </tr></table></div>
+                <div class="events-section"><h4>Events Emitted (4)</h4><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;0&quot;,
+  &quot;playerCount&quot;: &quot;2&quot;,
+  &quot;instanceCount&quot;: &quot;100&quot;,
+  &quot;entryFee&quot;: &quot;1000000000000000&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;1&quot;,
+  &quot;playerCount&quot;: &quot;4&quot;,
+  &quot;instanceCount&quot;: &quot;40&quot;,
+  &quot;entryFee&quot;: &quot;0.002 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">TierRegistered</span>
+                <pre>{
+  &quot;tierId&quot;: &quot;2&quot;,
+  &quot;playerCount&quot;: &quot;8&quot;,
+  &quot;instanceCount&quot;: &quot;20&quot;,
+  &quot;entryFee&quot;: &quot;0.004 ETH&quot;
+}</pre>
+              </div><div class="event">
+                <span class="event-name">AllInstancesInitialized</span>
+                <pre>{
+  &quot;caller&quot;: &quot;0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266&quot;,
+  &quot;tierCount&quot;: &quot;3&quot;
+}</pre>
+              </div></div>
+                <details class="full-state">
+            <summary>Full Contract State (Before → After)</summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <h5 style="color: #ef4444; margin-bottom: 10px;">Before</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 522,
+    &quot;timestamp&quot;: 1767560854,
+    &quot;blockHash&quot;: &quot;0x302a08b1e284aa72ba63bd3f7e7a72812f1771980d62817b1fab8f58e5b838de&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+                <div>
+                    <h5 style="color: #10b981; margin-bottom: 10px;">After</h5>
+                    <pre>{
+  &quot;timeState&quot;: {
+    &quot;blockNumber&quot;: 523,
+    &quot;timestamp&quot;: 1767560855,
+    &quot;blockHash&quot;: &quot;0xb5f2ff7c851e7f9adc6a8a45d06affeb4489fc43271865cf342bbd33798b5969&quot;
+  },
+  &quot;tournaments&quot;: {},
+  &quot;rounds&quot;: {},
+  &quot;matches&quot;: {},
+  &quot;players&quot;: {},
+  &quot;cache&quot;: {}
+}</pre>
+                </div>
+            </div>
+        </details>
+            </div>
+        </div></div>
+                <div class="gas-analysis-summary"><h4>Gas Analysis for This Test</h4><table class="gas-table">
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>Count</th>
+                    <th>Avg Gas</th>
+                    <th>Min Gas</th>
+                    <th>Max Gas</th>
+                    <th>ETH Mainnet</th>
+                    <th>Arbitrum</th>
+                    <th>Polygon</th>
+                </tr>
+            </thead>
+            <tbody><tr>
+                <td>initializeAllInstances</td>
+                <td>1</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>996.8k</td>
+                <td>$89.7150</td>
+                <td>$0.1495</td>
+                <td>$0.0399</td>
+              </tr></tbody></table><h5>Player Journey Costs</h5><table class="gas-table">
+              <thead>
+                  <tr>
+                      <th>Player</th>
+                      <th>Transactions</th>
+                      <th>Total Gas</th>
+                      <th>ETH</th>
+                      <th>Arbitrum</th>
+                      <th>Polygon</th>
+                  </tr>
+              </thead>
+              <tbody><tr>
+                  <td>0xf39F...2266</td>
+                  <td>1</td>
+                  <td>996.8k</td>
+                  <td>$89.7150</td>
+                  <td>$0.1495</td>
+                  <td>$0.0399</td>
+                </tr></tbody></table></div>
+                
+            </div>
+        </div></div>
+    <footer>
+            <p>Generated by Scientific Reporter for ETour Protocol</p>
+            <p>Comprehensive state capture and gas analysis powered by Hardhat & ethers.js</p>
+        </footer>
+    </div>
+    <script>
+        function toggleTest(testId) {
+            const scenario = document.querySelector('[data-test-id="' + testId + '"]');
+            scenario.classList.toggle('expanded');
+        }
+
+        function expandAll() {
+            document.querySelectorAll('.test-scenario').forEach(el => {
+                el.classList.add('expanded');
+            });
+        }
+
+        function collapseAll() {
+            document.querySelectorAll('.test-scenario').forEach(el => {
+                el.classList.remove('expanded');
+            });
+        }
+
+        function filterStatus(status) {
+            document.querySelectorAll('.test-scenario').forEach(el => {
+                if (status === 'all') {
+                    el.classList.remove('hidden');
+                } else {
+                    if (el.dataset.status === status) {
+                        el.classList.remove('hidden');
+                    } else {
+                        el.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function searchTests() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            document.querySelectorAll('.test-scenario').forEach(el => {
+                const testName = el.querySelector('h3').textContent.toLowerCase();
+                if (testName.includes(query)) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+[dotenv@17.2.3] injecting env (1) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+Error HH305: Unrecognized param --reporter
+
+For more info go to https://v2.hardhat.org/HH305 or run Hardhat with --show-stack-traces

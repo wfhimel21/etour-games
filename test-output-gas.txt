@@ -1,0 +1,131 @@
+WARNING: You are currently using Node.js v23.7.0, which is not supported by Hardhat. This can lead to unexpected behavior. See https://v2.hardhat.org/nodejs-versions
+
+
+[dotenv@17.2.3] injecting env (1) from .env -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+
+
+  Arbitrum Storage Gas Cost Analysis - playerMatches Growth
+
+==========================================
+ARBITRUM STORAGE GAS COST ANALYSIS
+🚨 EXTREME STRESS TEST 🚨
+==========================================
+Wallets (requested): 20
+Matches per wallet: 200
+Total matches (requested): 4,000
+Total MatchRecords (requested): 8,000 (2 per match)
+
+⚠️  WARNING: This test will take HOURS to complete!
+⚠️  Each wallet will accumulate 10,000 MatchRecords
+⚠️  Testing unbounded array growth at extreme scale
+==========================================
+
+✓ Loaded 20 wallets
+
+Measurement points: 1, 10, 25, 50, 100, 200
+
+Deploying modules...
+✓ Modules deployed
+
+Deploying ChessOnChain...
+✓ ChessOnChain deployed
+
+
+🚀 Starting mass match simulation...
+
+
+📊 Wallet 1/20 (0xf39Fd6e5...)
+  Match 1/200: Total gas = 4,421,586, Move4 (w/ MatchRecord) = 2,657,450
+  Match 10/200: Total gas = 4,375,158, Move4 (w/ MatchRecord) = 2,628,062
+  Match 25/200: Total gas = 4,293,543, Move4 (w/ MatchRecord) = 2,546,405
+  Match 50/200: Total gas = 4,293,543, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,083,843, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,998, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 200 MatchRecords in storage
+
+📊 Wallet 2/20 (0x70997970...)
+  Match 1/200: Total gas = 4,131,743, Move4 (w/ MatchRecord) = 2,418,305
+  Match 10/200: Total gas = 4,089,401, Move4 (w/ MatchRecord) = 2,378,505
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,293,501, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,083,801, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,091,198, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 220 MatchRecords in storage
+
+📊 Wallet 3/20 (0x3C44CdDd...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,343, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  ✓ Wallet now has 220 MatchRecords in storage
+
+📊 Wallet 4/20 (0x90F79bf6...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,094,701, Move4 (w/ MatchRecord) = 2,381,305
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,093,698, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 240 MatchRecords in storage
+
+📊 Wallet 5/20 (0x15d34AAf...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,091,901, Move4 (w/ MatchRecord) = 2,378,505
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 240 MatchRecords in storage
+
+📊 Wallet 6/20 (0x9965507D...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,091,901, Move4 (w/ MatchRecord) = 2,378,505
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 260 MatchRecords in storage
+
+📊 Wallet 7/20 (0x976EA740...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 260 MatchRecords in storage
+
+📊 Wallet 8/20 (0x14dC7996...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 280 MatchRecords in storage
+
+📊 Wallet 9/20 (0x23618e81...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,343, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 280 MatchRecords in storage
+
+📊 Wallet 10/20 (0xa0Ee7A14...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,056, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 300 MatchRecords in storage
+
+📊 Wallet 11/20 (0xBcd4042D...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,099,256, Move4 (w/ MatchRecord) = 2,385,860
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405

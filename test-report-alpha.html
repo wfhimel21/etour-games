@@ -1,0 +1,3177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ETour Protocol - Test Report (Alpha)</title>
+  <style>
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1e293b;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0 Q300,80 600,50 T1200,70 L1200,0 Z" fill="rgba(255,255,255,0.05)"/></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            margin: 5px 0;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 12px 24px;
+            border-radius: 30px;
+            margin-top: 20px;
+            font-weight: 700;
+            font-size: 1.1em;
+            border: 2px solid #10b981;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            padding: 40px;
+            background: #0f172a;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 30px 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #667eea;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card .number {
+            font-size: 3.5em;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .stat-card .label {
+            color: #94a3b8;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .stat-card .sublabel {
+            color: #64748b;
+            font-size: 0.75em;
+            margin-top: 5px;
+        }
+
+        .stat-card.passing .number { color: #10b981; }
+        .stat-card.failing .number { color: #ef4444; }
+        .stat-card.pending .number { color: #f59e0b; }
+        .stat-card.total .number { color: #667eea; }
+        .stat-card.time .number { font-size: 2.8em; color: #06b6d4; }
+        .stat-card.coverage .number { color: #8b5cf6; }
+
+        .section {
+            padding: 50px 40px;
+            border-top: 1px solid #334155;
+        }
+
+        .section h2 {
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 3px;
+        }
+
+        .test-suite {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #334155;
+            transition: all 0.3s;
+        }
+
+        .test-suite:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+
+        .test-suite h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .badge.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .info-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card h4 {
+            color: #e2e8f0;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            color: #94a3b8;
+            font-size: 0.95em;
+            line-height: 1.7;
+        }
+
+        .gas-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .gas-table thead {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .gas-table th {
+            padding: 18px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .gas-table td {
+            padding: 16px 18px;
+            color: #cbd5e1;
+            border-top: 1px solid #334155;
+        }
+
+        .gas-table tr:hover {
+            background: rgba(102, 126, 234, 0.08);
+        }
+
+        .gas-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #06b6d4;
+        }
+
+        .cost-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .highlight-box h4 {
+            color: #667eea;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .highlight-box p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        .checkmark-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .checkmark-list li {
+            padding: 12px 0 12px 35px;
+            position: relative;
+            color: #cbd5e1;
+            font-size: 1.05em;
+        }
+
+        .checkmark-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.4em;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #1e293b;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .metric-label {
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+
+        .footer {
+            padding: 40px;
+            text-align: center;
+            color: #64748b;
+            border-top: 1px solid #334155;
+            background: #0f172a;
+        }
+
+        .footer-highlight {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.3em;
+            margin: 15px 0;
+        }
+
+        .edge-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .edge-case-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            transition: all 0.3s;
+        }
+
+        .edge-case-card:hover {
+            border-color: #10b981;
+            transform: translateY(-3px);
+        }
+
+        .edge-case-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .edge-case-card h5 {
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .edge-case-card p {
+            color: #94a3b8;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+
+        .status-ok {
+            color: #10b981;
+            font-weight: 700;
+        }
+
+        .gas-comparison-chart {
+            margin: 30px 0;
+            padding: 25px;
+            background: #1e293b;
+            border-radius: 12px;
+        }
+
+        details {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-top: 18px;
+        }
+        details summary {
+            cursor: pointer;
+            color: #93c5fd;
+            font-weight: 700;
+        }
+        details pre {
+            margin-top: 12px;
+            white-space: pre-wrap;
+            color: #cbd5e1;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .scenario-box {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 28px;
+            margin: 22px 0;
+            border: 1px solid #334155;
+            border-left: 4px solid #06b6d4;
+        }
+        .scenario-box h3 {
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            font-size: 1.5em;
+            font-weight: 800;
+        }
+        .small-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 0 0;
+            background: #1e293b;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .small-table thead {
+            background: rgba(102, 126, 234, 0.18);
+            color: white;
+        }
+        .small-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .small-table td {
+            padding: 12px 16px;
+            color: #cbd5e1;
+            border-top: 1px solid #334155;
+        }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-content">
+        <h1>ETour Protocol Test Report (Alpha)</h1>
+        <p class="subtitle">Scenario-oriented report hydrated from console output</p>
+        <p class="subtitle">Generated February 4, 2026 at 07:10</p>
+        <div class="confidence-badge">96.6% SUCCESS • 490 PASSING • 17 PENDING</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card total">
+        <div class="number">507</div>
+        <div class="label">Total Tests</div>
+        <div class="sublabel">Pass + Pending</div>
+      </div>
+      <div class="stat-card passing">
+        <div class="number">490</div>
+        <div class="label">Passing</div>
+        <div class="sublabel">Validated behavior</div>
+      </div>
+      <div class="stat-card failing">
+        <div class="number">0</div>
+        <div class="label">Failing</div>
+        <div class="sublabel">No regressions</div>
+      </div>
+      <div class="stat-card pending">
+        <div class="number">17</div>
+        <div class="label">Pending</div>
+        <div class="sublabel">Future work</div>
+      </div>
+      <div class="stat-card time">
+        <div class="number">5m</div>
+        <div class="label">Duration</div>
+        <div class="sublabel">Full run</div>
+      </div>
+      <div class="stat-card coverage">
+        <div class="number">96.6%</div>
+        <div class="label">Success Rate</div>
+        <div class="sublabel">Passing / Total</div>
+      </div>
+    </div>
+
+    <div class="section" style="background: #0f172a;">
+      <h2>Scenario Walkthroughs</h2>
+
+      <div class="scenario-box">
+        <h3>Comprehensive Escalation Tournament</h3>
+        <p style="color: #94a3b8; margin-bottom: 15px;">
+          Extracted from the console logs printed during the end-to-end escalation flow test.
+        </p>
+        <div class="info-grid">
+          <div class="info-card">
+            <h4>Round 0 Summary</h4>
+            <ul class="checkmark-list"><li>✓ All 4 matches completed:</li>
+<li>- 1 normal win</li>
+<li>- 2 L2 force eliminations</li>
+<li>- 1 L3 replacement</li></ul>
+          </div>
+          <div class="info-card" style="border-left-color: #10b981;">
+            <h4>Validated</h4>
+            <p style="color: #94a3b8;">(No scenario output captured.)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="scenario-box" style="border-left-color: #8b5cf6;">
+        <h3>Multi-Tournament Data Isolation</h3>
+        <p style="color: #94a3b8; margin-bottom: 15px;">
+          Extracted from the comprehensive multi-tournament isolation test summary.
+        </p>
+        <ul class="checkmark-list"><li>Tournament 1: 3 players with draw scenario</li>
+<li>Tournament 2: 7 players (WIN, DRAW scenarios)</li>
+<li>Tournament 3: 8 players (ML2 timeout tested)</li>
+<li>• QF: 1 normal win, 1 ML2 timeout, 2 normal wins</li>
+<li>• SF: 2 normal wins</li>
+<li>• Finals: Normal win (ML3 testing skipped for now)</li>
+<li>Match-ending scenarios tested: WIN, DRAW, ML2 (ML3 to be tested later)</li>
+<li>Match data properly isolated across all 3 tournaments</li>
+<li>Prize distribution verified for all tournaments</li>
+<li>Earnings accumulation working correctly</li>
+<li>Data cleanup confirmed after each tournament</li>
+<li>RecentMatches entries verified for all players</li></ul>
+      </div>
+    </div>
+
+    <div class="section" style="background: #0f172a;">
+      <h2>Gas & Performance (Captured Console Reports)</h2>
+
+      <div class="highlight-box">
+        <h4>ConnectFour Maximum Capacity Report</h4>
+        <p>
+          The following metrics and tables are extracted from the printed report in the capacity/gas suite.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card" style="border-left-color: #10b981;">
+          <h4>Saturation</h4>
+          <p>
+            <strong class="gas-value">128 players</strong><br>
+            <strong class="cost-value">30 active tournaments</strong>
+          </p>
+        </div>
+        <div class="info-card" style="border-left-color: #06b6d4;">
+          <h4>Auto-Start (Capacity Trigger)</h4>
+          <p>
+            <strong class="gas-value">914,094 gas</strong><br>
+            <strong class="cost-value">0.000914094006398658 ETH</strong>
+            <span style="color: #64748b;">($2.74)</span>
+          </p>
+        </div>
+        <div class="info-card" style="border-left-color: #8b5cf6;">
+          <h4>Avg Player Cost</h4>
+          <p>
+            <strong class="gas-value">260,394 gas</strong><br>
+            <strong class="cost-value">0.0000130197 ETH</strong>
+            <span style="color: #64748b;">($0.04)</span>
+          </p>
+        </div>
+        <div class="info-card" style="border-left-color: #ef4444;">
+          <h4>Max Cost Player</h4>
+          <p>
+            <strong class="gas-value">1,021,157 gas</strong><br>
+            <span style="color: #94a3b8; font-family: monospace;">0x011bD5423C5F77b5a0789E27f922535fd76B688F</span><br>
+            <span style="color: #64748b;">11 txs</span>
+          </p>
+        </div>
+      </div>
+
+      <h3 style="color: #e2e8f0; margin: 35px 0 20px 0;">Network Cost Estimates (L2)</h3>
+      <table class="gas-table">
+        <thead>
+          <tr>
+            <th>Gas Price</th>
+            <th>Avg Player Cost</th>
+            <th>Max Player Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>0.03 gwei</strong></td><td><span class="cost-value">0.00000781182 ETH</span> <span style="color:#64748b;">($0.02)</span></td><td><span class="cost-value">0.00003063471 ETH</span> <span style="color:#64748b;">($0.09)</span></td></tr>
+<tr><td><strong>0.1 gwei</strong></td><td><span class="cost-value">0.0000260394 ETH</span> <span style="color:#64748b;">($0.08)</span></td><td><span class="cost-value">0.0001021157 ETH</span> <span style="color:#64748b;">($0.31)</span></td></tr>
+<tr><td><strong>0.5 gwei</strong></td><td><span class="cost-value">0.000130197 ETH</span> <span style="color:#64748b;">($0.39)</span></td><td><span class="cost-value">0.0005105785 ETH</span> <span style="color:#64748b;">($1.53)</span></td></tr>
+<tr><td><strong>1 gwei</strong></td><td><span class="cost-value">0.000260394 ETH</span> <span style="color:#64748b;">($0.78)</span></td><td><span class="cost-value">0.001021157 ETH</span> <span style="color:#64748b;">($3.06)</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="info-grid">
+        <div class="info-card" style="border-left-color: #06b6d4;">
+          <h4>Long Game Checkpoints</h4>
+          <p>Gas sampled during the long-game scenario.</p>
+          <table class="small-table">
+            <thead><tr><th>Move</th><th>Gas</th></tr></thead>
+            <tbody>
+              <tr><td>5/20</td><td><span class="gas-value">76898</span></td></tr>
+<tr><td>10/20</td><td><span class="gas-value">79142</span></td></tr>
+<tr><td>15/20</td><td><span class="gas-value">79018</span></td></tr>
+<tr><td>20/20</td><td><span class="gas-value">78573</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="info-card" style="border-left-color: #10b981;">
+          <h4>Operation Breakdown</h4>
+          <p>Aggregated counts and averages from the report.</p>
+          <table class="small-table">
+            <thead><tr><th>Type</th><th>Count</th><th>Avg Gas</th><th>Total Gas</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Enrollments</strong></td><td>1</td><td><span class="gas-value">914,094</span></td><td><span class="gas-value">914,094</span></td></tr>
+<tr><td><strong>Moves</strong></td><td>20</td><td><span class="gas-value">80,202</span></td><td><span class="gas-value">1,604,046</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top: 35px;">
+        <h4>Arbitrum Storage Growth Gas Stability</h4>
+        <p>Extracted from the Arbitrum storage growth gas report printed during the run.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card" style="border-left-color: #06b6d4;">
+          <h4>Total Matches Simulated</h4>
+          <p><strong class="gas-value">4000</strong></p>
+        </div>
+        <div class="info-card" style="border-left-color: #10b981;">
+          <h4>Avg Total Gas (First)</h4>
+          <p><strong class="gas-value">4,126,838</strong></p>
+        </div>
+        <div class="info-card" style="border-left-color: #10b981;">
+          <h4>Avg Total Gas (Last)</h4>
+          <p>
+            <strong class="gas-value">4,095,592</strong><br>
+            <span style="color:#64748b;">match 200</span>
+          </p>
+        </div>
+        <div class="info-card" style="border-left-color: #8b5cf6;">
+          <h4>Storage Size</h4>
+          <p>
+            <strong class="gas-value">2,048,640 bytes</strong><br>
+            <span style="color:#64748b;">1.95 MB</span>
+          </p>
+        </div>
+      </div>
+
+      <table class="gas-table">
+        <thead>
+          <tr>
+            <th>Match#</th>
+            <th>Enrollment</th>
+            <th>Move 1</th>
+            <th>Move 2</th>
+            <th>Move 3</th>
+            <th>Move 4*</th>
+            <th>Total</th>
+            <th>Delta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="gas-value">1</span></td><td><span class="gas-value">221,192</span></td><td>373,748</td><td>356,617</td><td>365,322</td><td><span class="gas-value">2,411,001</span></td><td><span class="gas-value">4,126,838</span></td><td>0</td></tr>
+<tr><td><span class="gas-value">10</span></td><td><span class="gas-value">220,338</span></td><td>373,749</td><td>356,618</td><td>365,323</td><td><span class="gas-value">2,401,952</span></td><td><span class="gas-value">4,116,935</span></td><td>-9,903 (-0.24%)</td></tr>
+<tr><td><span class="gas-value">25</span></td><td><span class="gas-value">220,338</span></td><td>373,749</td><td>356,618</td><td>365,323</td><td><span class="gas-value">2,412,277</span></td><td><span class="gas-value">4,127,265</span></td><td>+427 (0.01%)</td></tr>
+<tr><td><span class="gas-value">50</span></td><td><span class="gas-value">236,583</span></td><td>373,749</td><td>356,618</td><td>365,323</td><td><span class="gas-value">2,546,405</span></td><td><span class="gas-value">4,295,772</span></td><td>+168,934 (4.09%)</td></tr>
+<tr><td><span class="gas-value">100</span></td><td><span class="gas-value">219,483</span></td><td>373,749</td><td>356,618</td><td>365,323</td><td><span class="gas-value">2,389,435</span></td><td><span class="gas-value">4,102,596</span></td><td>-24,242 (-0.59%)</td></tr>
+<tr><td><span class="gas-value">200</span></td><td><span class="gas-value">219,483</span></td><td>373,749</td><td>356,618</td><td>365,323</td><td><span class="gas-value">2,382,427</span></td><td><span class="gas-value">4,095,592</span></td><td>-31,246 (-0.76%)</td></tr>
+        </tbody>
+      </table>
+
+      <p style="color:#94a3b8;">* Move 4 includes MatchRecord creation (as printed in the report).</p>
+
+      <h3 style="color: #e2e8f0; margin: 35px 0 20px 0;">Scaling Projections</h3>
+      <table class="gas-table">
+        <thead>
+          <tr>
+            <th>Players</th>
+            <th>Matches Each</th>
+            <th>Total Records</th>
+            <th>Storage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>1,000</strong></td><td>200</td><td><span class="gas-value">400,000</span></td><td><span class="cost-value">97.66 MB</span></td></tr>
+<tr><td><strong>10,000</strong></td><td>200</td><td><span class="gas-value">4,000,000</span></td><td><span class="cost-value">976.56 MB</span></td></tr>
+<tr><td><strong>100,000</strong></td><td>200</td><td><span class="gas-value">40,000,000</span></td><td><span class="cost-value">9.54 GB</span></td></tr>
+        </tbody>
+      </table>
+
+      <div class="highlight-box" style="margin-top: 35px;">
+        <h4>TicTacChain Gas Checks</h4>
+        <p>Captured from the console logs in <code>Gas Optimization</code> tests.</p>
+        <div class="metric-row"><span class="metric-label">Enrollment Gas</span><span class="metric-value">253,905</span></div><div class="metric-row"><span class="metric-label">Move Gas</span><span class="metric-value">103,527</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Test Suite Breakdown</h2>
+      
+            <div class="test-suite">
+                <h3>
+                    <span>ConnectFourOnChain</span>
+                    <span class="badge success">79 PASSING</span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100.0%;"></div>
+                </div>
+                <p style="color: #cbd5e1; margin-top: 10px;">
+                    <strong>79 tests</strong> (grouped by suite/test names)
+                </p>
+                <div class="info-grid">
+                <div class="info-card">
+                    <h4>Escalation &amp; Timeouts (42 tests)</h4>
+                    <p>Anti-stalling flows (EL*/ML*) and all timing/eligibility boundary checks.<br><span class="status-ok">42 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Game &amp; Tournament Logic (20 tests)</h4>
+                    <p>Core gameplay, enrollment, bracket progression, and correctness of state transitions.<br><span class="status-ok">20 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Views &amp; Data Integrity (8 tests)</h4>
+                    <p>View functions used by UIs: match/tournament data, leaderboards, stats, and persistence.<br><span class="status-ok">8 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Economics &amp; Prizes (6 tests)</h4>
+                    <p>Entry fee splits, prize distribution, rounding/wei integrity, raffles, and earnings.<br><span class="status-ok">6 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Edge Cases &amp; Regression (2 tests)</h4>
+                    <p>Known bugs/edge cases prevented from regressing (cache, finals persistence, etc.).<br><span class="status-ok">2 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Events &amp; Records (1 tests)</h4>
+                    <p>Event emissions and record-keeping correctness (e.g., Transfer, records/mappings).<br><span class="status-ok">1 passing</span></p>
+                </div>
+                </div>
+            </div>
+            
+            <div class="test-suite">
+                <h3>
+                    <span>ChessOnChain</span>
+                    <span class="badge success">149 PASSING</span> <span class="badge warning">1 PENDING</span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 99.3%;"></div>
+                </div>
+                <p style="color: #cbd5e1; margin-top: 10px;">
+                    <strong>150 tests</strong> (grouped by suite/test names)
+                </p>
+                <div class="info-grid">
+                <div class="info-card">
+                    <h4>Escalation &amp; Timeouts (59 tests)</h4>
+                    <p>Anti-stalling flows (EL*/ML*) and all timing/eligibility boundary checks.<br><span class="status-ok">59 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Game &amp; Tournament Logic (51 tests)</h4>
+                    <p>Core gameplay, enrollment, bracket progression, and correctness of state transitions.<br><span class="status-ok">51 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Economics &amp; Prizes (17 tests)</h4>
+                    <p>Entry fee splits, prize distribution, rounding/wei integrity, raffles, and earnings.<br><span class="status-ok">17 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Edge Cases &amp; Regression (8 tests)</h4>
+                    <p>Known bugs/edge cases prevented from regressing (cache, finals persistence, etc.).<br><span class="status-ok">8 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Views &amp; Data Integrity (7 tests)</h4>
+                    <p>View functions used by UIs: match/tournament data, leaderboards, stats, and persistence.<br><span class="status-ok">7 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Gas &amp; Performance (6 tests)</h4>
+                    <p>Gas measurements, capacity testing, storage growth, and scale/stress behaviors.<br><span class="status-ok">6 passing</span></p>
+                </div>
+                </div>
+            </div>
+            
+            <div class="test-suite">
+                <h3>
+                    <span>TicTacChain</span>
+                    <span class="badge success">80 PASSING</span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100.0%;"></div>
+                </div>
+                <p style="color: #cbd5e1; margin-top: 10px;">
+                    <strong>80 tests</strong> (grouped by suite/test names)
+                </p>
+                <div class="info-grid">
+                <div class="info-card">
+                    <h4>Game &amp; Tournament Logic (25 tests)</h4>
+                    <p>Core gameplay, enrollment, bracket progression, and correctness of state transitions.<br><span class="status-ok">25 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Economics &amp; Prizes (20 tests)</h4>
+                    <p>Entry fee splits, prize distribution, rounding/wei integrity, raffles, and earnings.<br><span class="status-ok">20 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Escalation &amp; Timeouts (18 tests)</h4>
+                    <p>Anti-stalling flows (EL*/ML*) and all timing/eligibility boundary checks.<br><span class="status-ok">18 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Views &amp; Data Integrity (11 tests)</h4>
+                    <p>View functions used by UIs: match/tournament data, leaderboards, stats, and persistence.<br><span class="status-ok">11 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>All-Draw Resolution (3 tests)</h4>
+                    <p>Finals/semi/round-all-draw scenarios and fair payout splitting.<br><span class="status-ok">3 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Gas &amp; Performance (2 tests)</h4>
+                    <p>Gas measurements, capacity testing, storage growth, and scale/stress behaviors.<br><span class="status-ok">2 passing</span></p>
+                </div>
+                </div>
+            </div>
+            
+            <div class="test-suite">
+                <h3>
+                    <span>Protocol Core</span>
+                    <span class="badge success">131 PASSING</span> <span class="badge warning">15 PENDING</span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 89.7%;"></div>
+                </div>
+                <p style="color: #cbd5e1; margin-top: 10px;">
+                    <strong>146 tests</strong> (grouped by suite/test names)
+                </p>
+                <div class="info-grid">
+                <div class="info-card">
+                    <h4>Escalation &amp; Timeouts (74 tests)</h4>
+                    <p>Anti-stalling flows (EL*/ML*) and all timing/eligibility boundary checks.<br><span class="status-ok">63 passing • 11 pending</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Economics &amp; Prizes (40 tests)</h4>
+                    <p>Entry fee splits, prize distribution, rounding/wei integrity, raffles, and earnings.<br><span class="status-ok">40 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Edge Cases &amp; Regression (11 tests)</h4>
+                    <p>Known bugs/edge cases prevented from regressing (cache, finals persistence, etc.).<br><span class="status-ok">9 passing • 2 pending</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Game &amp; Tournament Logic (10 tests)</h4>
+                    <p>Core gameplay, enrollment, bracket progression, and correctness of state transitions.<br><span class="status-ok">9 passing • 1 pending</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>All-Draw Resolution (8 tests)</h4>
+                    <p>Finals/semi/round-all-draw scenarios and fair payout splitting.<br><span class="status-ok">8 passing</span></p>
+                </div>
+                
+                <div class="info-card">
+                    <h4>Events &amp; Records (2 tests)</h4>
+                    <p>Event emissions and record-keeping correctness (e.g., Transfer, records/mappings).<br><span class="status-ok">1 passing • 1 pending</span></p>
+                </div>
+                </div>
+            </div>
+            
+            <div class="test-suite">
+                <h3>
+                    <span>Gas &amp; Performance</span>
+                    <span class="badge success">5 PASSING</span> <span class="badge warning">12 PENDING</span>
+                </h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 29.4%;"></div>
+                </div>
+                <p style="color: #cbd5e1; margin-top: 10px;">
+                    <strong>17 tests</strong> (grouped by suite/test names)
+                </p>
+                <div class="info-grid">
+                <div class="info-card">
+                    <h4>Gas &amp; Performance (17 tests)</h4>
+                    <p>Gas measurements, capacity testing, storage growth, and scale/stress behaviors.<br><span class="status-ok">5 passing • 12 pending</span></p>
+                </div>
+                </div>
+            </div>
+            
+
+      <h3 style="color: #e2e8f0; margin: 35px 0 20px 0;">Coverage by Category (Heuristic)</h3>
+      <div class="edge-case-grid">
+        
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Escalation &amp; Timeouts</h5>
+                <p><strong>193 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #f59e0b; font-weight: 600;">PASSING: 182 • PENDING: 11</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Game &amp; Tournament Logic</h5>
+                <p><strong>106 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #f59e0b; font-weight: 600;">PASSING: 105 • PENDING: 1</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Economics &amp; Prizes</h5>
+                <p><strong>83 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #10b981; font-weight: 600;">PASSING: 83</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Gas &amp; Performance</h5>
+                <p><strong>26 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #f59e0b; font-weight: 600;">PASSING: 14 • PENDING: 12</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Views &amp; Data Integrity</h5>
+                <p><strong>26 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #10b981; font-weight: 600;">PASSING: 26</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Edge Cases &amp; Regression</h5>
+                <p><strong>21 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #f59e0b; font-weight: 600;">PASSING: 19 • PENDING: 2</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>All-Draw Resolution</h5>
+                <p><strong>11 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #10b981; font-weight: 600;">PASSING: 11</div>
+            </div>
+            
+            <div class="edge-case-card">
+                <div class="icon">•</div>
+                <h5>Events &amp; Records</h5>
+                <p><strong>6 tests</strong> tagged under this category (heuristic).</p>
+                <div style="margin-top: 10px; color: #f59e0b; font-weight: 600;">PASSING: 4 • PENDING: 2</div>
+            </div>
+            
+      </div>
+    </div>
+
+    <div class="section" style="background: #0f172a;">
+      <h2>Pending Tests</h2>
+      <div class="info-grid">
+        
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Raffle Results Storage - Historic Data Validation / Edge Cases and Data Integrity <span class="badge warning">4 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should handle raffle with single participant</li>
+<li>Should ensure participants and weights arrays have same length</li>
+<li>Should preserve exact ETH amounts without rounding errors</li>
+<li>Should query non-existent raffle index safely</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Comprehensive Tournament Escalation Flow Tests / 8-Player Tournament with Mixed Escalation Scenarios <span class="badge warning">3 PENDING</span></h4>
+                <ul class="checkmark-list"><li>1 normal win</li>
+<li>2 L2 force eliminations</li>
+<li>1 L3 replacement</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>L2/L3 Ordering Test <span class="badge warning">3 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Match time: 120 seconds</li>
+<li>L2 delay: 120 seconds (starts after timeout)</li>
+<li>L3 delay: 240 seconds (starts after timeout)</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Raffle Results Storage - Historic Data Validation / Multiple Consecutive Raffles Storage <span class="badge warning">3 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should store separate results for 3 consecutive raffles with correct data</li>
+<li>Should maintain independent storage for each raffle index</li>
+<li>Should correctly track progressive threshold increases across raffles</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Raffle Results Storage - Historic Data Validation / Single Raffle Execution Storage <span class="badge warning">3 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should store complete raffle result data after execution</li>
+<li>Should store different winner when randomness changes</li>
+<li>Should handle weighted participants correctly when player enrolled in multiple tournaments</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Finals Data Persistence Bug (TDD) / Scenario 1: Finals Never Completed (InProgress) <span class="badge warning">2 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Security gap closed</li>
+<li>Historical data available via events</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Finals Data Persistence Bug (TDD) / Scenario 2: Double-Elimination Finals (winner = address(0)) <span class="badge warning">2 PENDING</span></h4>
+                <ul class="checkmark-list"><li>winner=0x0 case handled properly</li>
+<li>Security gap closed</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Protocol Raffle System / Edge Cases <span class="badge warning">2 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should handle single enrolled player (100% chance) (DEPRECATED - eligiblePlayerCount calculation changed)</li>
+<li>Should handle player enrolled in many tournaments (DEPRECATED - eligiblePlayerCount calculation changed)</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Raffle Results Storage - Historic Data Validation / Storage Gas Costs <span class="badge warning">2 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should document gas cost for storing raffle results</li>
+<li>Should handle storage for raffle with many participants</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Finals Data Persistence Bug (TDD) / Scenario 3: Exploit Attempt After Status Check Fix <span class="badge warning">1 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Error: VM Exception while processing transaction: reverted with reason string &#x27;Tournament not in progress&#x27;</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Protocol Raffle System / Raffle Mechanics (Integration with Failed Prizes) <span class="badge warning">1 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should handle multiple enrollment counts correctly (DEPRECATED - eligiblePlayerCount calculation changed)</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Protocol Raffle System / getRaffleInfo() View Function <span class="badge warning">1 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should count enrolled players correctly (DEPRECATED - eligiblePlayerCount calculation changed)</li></ul>
+            </div>
+            
+            <div class="info-card" style="border-left-color: #f59e0b;">
+                <h4>Transfer Event Tests / Chess Transfer Event <span class="badge warning">1 PENDING</span></h4>
+                <ul class="checkmark-list"><li>Should emit Transfer event with gameName=&#x27;Chess Reward&#x27; for winner</li></ul>
+            </div>
+            
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Slowest Tests</h2>
+      <table class="gas-table">
+        <thead><tr><th>Test</th><th>Suite</th><th>Time</th></tr></thead>
+        <tbody>
+          <tr><td>Should store multiple elite matches sequentially</td><td>ChessOnChain 8-Tier System Tests / Elite Matches Storage (Tier 3 and Tier 7)</td><td><span class="gas-value">326ms</span></td></tr>
+<tr><td>Should distribute winner-takes-all correctly in Tier 7</td><td>ChessOnChain 8-Tier System Tests / Prize Distribution Validation</td><td><span class="gas-value">243ms</span></td></tr>
+<tr><td>Should store Tier 7 finals match in eliteMatches array</td><td>ChessOnChain 8-Tier System Tests / Elite Matches Storage (Tier 3 and Tier 7)</td><td><span class="gas-value">242ms</span></td></tr>
+<tr><td>Should complete Tier 7 semi-finals and finals via checkmate</td><td>ChessOnChain 8-Tier System Tests / 4-Player Tier Progression</td><td><span class="gas-value">238ms</span></td></tr>
+<tr><td>Should complete Tier 4 semi-finals and finals via checkmate</td><td>ChessOnChain 8-Tier System Tests / 4-Player Tier Progression</td><td><span class="gas-value">234ms</span></td></tr>
+<tr><td>Should distribute winner-takes-all correctly in Tier 4</td><td>ChessOnChain 8-Tier System Tests / Prize Distribution Validation</td><td><span class="gas-value">233ms</span></td></tr>
+<tr><td>Should end game as draw via threefold repetition before fifty-move (expected behavior)</td><td>Chess Fifty-Move Rule / ChessOnChain - Fifty-Move Rule Integration Tests</td><td><span class="gas-value">210ms</span></td></tr>
+<tr><td>Should track prizes independently per tier</td><td>ChessOnChain 8-Tier System Tests / Cross-Tier Independence</td><td><span class="gas-value">175ms</span></td></tr>
+<tr><td>Should handle mixed completion methods (timeout + checkmate)</td><td>ChessOnChain 8-Tier System Tests / 4-Player Tier Progression</td><td><span class="gas-value">170ms</span></td></tr>
+<tr><td>Should handle 3 consecutive 8-player tier tournaments with varying player counts and escalation scenarios</td><td>Tournament Reset and Enrollment Edge Cases / CRITICAL BUG: Match Data Persistence Across Tournaments</td><td><span class="gas-value">164ms</span></td></tr>
+<tr><td>Should test that player tracking storage exists in game contract</td><td>Test Simple Tracking</td><td><span class="gas-value">144ms</span></td></tr>
+<tr><td>Should handle Tier 7 mixed completion methods</td><td>ChessOnChain 8-Tier System Tests / 4-Player Tier Progression</td><td><span class="gas-value">127ms</span></td></tr>
+<tr><td>Should deploy all contracts successfully</td><td>Basic Deployment Test</td><td><span class="gas-value">119ms</span></td></tr>
+<tr><td>Should handle ML2 on finals match (both players eliminated)</td><td>ChessOnChain Comprehensive Escalation Tests / ML2: Advanced Player Force Eliminate</td><td><span class="gas-value">109ms</span></td></tr>
+<tr><td>Should handle ML3 on finals match properly</td><td>ChessOnChain Comprehensive Escalation Tests / ML3: External Player Replacement</td><td><span class="gas-value">107ms</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section" style="background: #0f172a;">
+      <h2>Raw Console Output</h2>
+      <p style="color: #94a3b8;">
+        This is the full <code>test-output.txt</code> content (HTML-escaped).
+      </p>
+      <details>
+        <summary>Show raw output</summary>
+        <pre>
+&gt; e-tour@1.0.0 test
+&gt; hardhat test
+
+[dotenv@17.2.3] injecting env (1) from .env -- tip: ⚙️  load multiple .env files with { path: [&#x27;.env.local&#x27;, &#x27;.env&#x27;] }
+StateTracker initialized: object
+StateTracker methods: [
+  &#x27;constructor&#x27;,
+  &#x27;startTest&#x27;,
+  &#x27;recordTimelineEntry&#x27;,
+  &#x27;endTest&#x27;,
+  &#x27;isTracking&#x27;,
+  &#x27;getTestData&#x27;,
+  &#x27;getAllTests&#x27;,
+  &#x27;getCurrentTestId&#x27;,
+  &#x27;getSummary&#x27;,
+  &#x27;getTestsByFile&#x27;,
+  &#x27;getTestsByStatus&#x27;,
+  &#x27;clear&#x27;,
+  &#x27;toJSON&#x27;,
+  &#x27;fromJSON&#x27;
+]
+Scientific test reporter setup complete. State capture enabled.
+
+
+  All-Draw Prize Distribution Edge Cases
+    Finals Draw Scenarios
+      ✔ Should split prize equally for finals draw with standard prize pool
+      ✔ Should update tournament finalsWasDraw flag correctly
+    Semi-Finals All-Draw Scenarios
+      ✔ Should split prize among 4 players when both semi-finals draw
+      ✔ Should correctly set allDrawResolution and allDrawRound flags
+    8-Player All-Draw Round 0 Scenario
+      ✔ Should split prize among 8 players if all round 0 matches draw (41ms)
+    Mixed Results Scenarios
+Matches may have been cached after tournament completion
+      ✔ Should handle one draw and three wins in 8-player tournament
+    Player Stats for All-Draw Scenarios
+      ✔ Should update player stats correctly for all-draw tournament
+
+  Arbitrum Storage Gas Cost Analysis - playerMatches Growth
+
+==========================================
+ARBITRUM STORAGE GAS COST ANALYSIS
+🚨 EXTREME STRESS TEST 🚨
+==========================================
+Wallets (requested): 20
+Matches per wallet: 200
+Total matches (requested): 4,000
+Total MatchRecords (requested): 8,000 (2 per match)
+
+⚠️  WARNING: This test will take HOURS to complete!
+⚠️  Each wallet will accumulate 10,000 MatchRecords
+⚠️  Testing unbounded array growth at extreme scale
+==========================================
+
+✓ Loaded 20 wallets
+
+Measurement points: 1, 10, 25, 50, 100, 200
+
+Deploying modules...
+✓ Modules deployed
+
+Deploying ChessOnChain...
+✓ ChessOnChain deployed
+
+
+🚀 Starting mass match simulation...
+
+
+📊 Wallet 1/20 (0xf39Fd6e5...)
+  Match 1/200: Total gas = 4,421,586, Move4 (w/ MatchRecord) = 2,657,450
+  Match 10/200: Total gas = 4,375,158, Move4 (w/ MatchRecord) = 2,628,062
+  Match 25/200: Total gas = 4,293,543, Move4 (w/ MatchRecord) = 2,546,405
+  Match 50/200: Total gas = 4,293,543, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,113,856, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,091,198, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 200 MatchRecords in storage
+
+📊 Wallet 2/20 (0x70997970...)
+  Match 1/200: Total gas = 4,131,743, Move4 (w/ MatchRecord) = 2,418,305
+  Match 10/200: Total gas = 4,092,201, Move4 (w/ MatchRecord) = 2,381,305
+  Match 25/200: Total gas = 4,179,158, Move4 (w/ MatchRecord) = 2,465,762
+  Match 50/200: Total gas = 4,293,501, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,083,801, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,956, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 220 MatchRecords in storage
+
+📊 Wallet 3/20 (0x3C44CdDd...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 220 MatchRecords in storage
+
+📊 Wallet 4/20 (0x90F79bf6...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,091,901, Move4 (w/ MatchRecord) = 2,378,505
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,343, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,656, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 240 MatchRecords in storage
+
+📊 Wallet 5/20 (0x15d34AAf...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,093,656, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 240 MatchRecords in storage
+
+📊 Wallet 6/20 (0x9965507D...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,094,701, Move4 (w/ MatchRecord) = 2,381,305
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 260 MatchRecords in storage
+
+📊 Wallet 7/20 (0x976EA740...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 260 MatchRecords in storage
+
+📊 Wallet 8/20 (0x14dC7996...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,698, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 280 MatchRecords in storage
+
+📊 Wallet 9/20 (0x23618e81...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 280 MatchRecords in storage
+
+📊 Wallet 10/20 (0xa0Ee7A14...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 300 MatchRecords in storage
+
+📊 Wallet 11/20 (0xBcd4042D...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,343, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 300 MatchRecords in storage
+
+📊 Wallet 12/20 (0x71bE63f3...)
+  Match 1/200: Total gas = 4,114,643, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,099,256, Move4 (w/ MatchRecord) = 2,385,860
+  Match 25/200: Total gas = 4,119,498, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  ✓ Wallet now has 320 MatchRecords in storage
+
+📊 Wallet 13/20 (0xFABB0ac9...)
+  Match 1/200: Total gas = 4,114,601, Move4 (w/ MatchRecord) = 2,401,205
+  Match 10/200: Total gas = 4,099,256, Move4 (w/ MatchRecord) = 2,385,860
+  Match 25/200: Total gas = 4,094,701, Move4 (w/ MatchRecord) = 2,381,305
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,498, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 320 MatchRecords in storage
+
+📊 Wallet 14/20 (0x1CBd3b27...)
+  Match 1/200: Total gas = 4,121,956, Move4 (w/ MatchRecord) = 2,408,560
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,094,701, Move4 (w/ MatchRecord) = 2,381,305
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,093,656, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 340 MatchRecords in storage
+
+📊 Wallet 15/20 (0xdF3e18d6...)
+  Match 1/200: Total gas = 4,094,743, Move4 (w/ MatchRecord) = 2,381,305
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,343, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,656, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 340 MatchRecords in storage
+
+📊 Wallet 16/20 (0xcd3B766C...)
+  Match 1/200: Total gas = 4,094,743, Move4 (w/ MatchRecord) = 2,381,305
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,116,398, Move4 (w/ MatchRecord) = 2,402,960
+  ✓ Wallet now has 360 MatchRecords in storage
+
+📊 Wallet 17/20 (0x2546BcD3...)
+  Match 1/200: Total gas = 4,094,743, Move4 (w/ MatchRecord) = 2,381,305
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,093,656, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 360 MatchRecords in storage
+
+📊 Wallet 18/20 (0xbDA5747b...)
+  Match 1/200: Total gas = 4,094,743, Move4 (w/ MatchRecord) = 2,381,305
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,043, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,116,356, Move4 (w/ MatchRecord) = 2,402,960
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 380 MatchRecords in storage
+
+📊 Wallet 19/20 (0xdD2FD458...)
+  Match 1/200: Total gas = 4,121,956, Move4 (w/ MatchRecord) = 2,408,560
+  Match 10/200: Total gas = 4,099,256, Move4 (w/ MatchRecord) = 2,385,860
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,096,456, Move4 (w/ MatchRecord) = 2,383,060
+  ✓ Wallet now has 380 MatchRecords in storage
+
+📊 Wallet 20/20 (0x8626f694...)
+  Match 1/200: Total gas = 4,099,598, Move4 (w/ MatchRecord) = 2,388,660
+  Match 10/200: Total gas = 4,102,098, Move4 (w/ MatchRecord) = 2,388,660
+  Match 25/200: Total gas = 4,121,998, Move4 (w/ MatchRecord) = 2,408,560
+  Match 50/200: Total gas = 4,296,001, Move4 (w/ MatchRecord) = 2,546,405
+  Match 100/200: Total gas = 4,086,301, Move4 (w/ MatchRecord) = 2,372,905
+  Match 200/200: Total gas = 4,093,698, Move4 (w/ MatchRecord) = 2,380,260
+  ✓ Wallet now has 400 MatchRecords in storage
+
+✅ Completed 4000 total matches
+
+    ✔ Should measure gas costs across playerMatches storage growth (195797ms)
+
+==========================================
+GAS ANALYSIS REPORT
+==========================================
+
+Average Gas Costs by Match Number (across all wallets):
+
+Match# | Enrollment | Move 1  | Move 2  | Move 3  | Move 4* | Total   | Δ from 1st
+-------|------------|---------|---------|---------|---------|---------|------------
+     1 |    221,192 | 373,748 | 356,617 | 365,322 | 2,411,001 | 4,126,838 |          0
+    10 |    220,338 | 373,749 | 356,618 | 365,323 | 2,401,952 | 4,116,935 |     -9,903 (-0.24%)
+    25 |    220,338 | 373,749 | 356,618 | 365,323 | 2,412,277 | 4,127,265 |       +427 (0.01%)
+    50 |    236,583 | 373,749 | 356,618 | 365,323 | 2,546,405 | 4,295,772 |   +168,934 (4.09%)
+   100 |    219,483 | 373,749 | 356,618 | 365,323 | 2,389,435 | 4,102,596 |    -24,242 (-0.59%)
+   200 |    219,483 | 373,749 | 356,618 | 365,323 | 2,382,427 | 4,095,592 |    -31,246 (-0.76%)
+
+* Move 4 includes MatchRecord creation for both players
+
+==========================================
+SUMMARY
+==========================================
+First match avg gas:     4,126,838
+200th match avg gas:   4,095,592
+Absolute increase:       -31,246 gas
+Percentage increase:     -0.76%
+
+
+Move 4 Analysis (MatchRecord creation):
+First match Move 4:      2,411,001 gas
+200th match Move 4:    2,382,427 gas
+Increase:                -28,573 gas (-1.19%)
+
+
+Interpretation:
+✓ Gas costs remain stable despite storage growth
+✓ playerMatches[address].push() pattern is efficient
+✓ No significant degradation with unbounded array growth
+✓ Safe to scale beyond 200 matches per player
+
+==========================================
+CONTRACT STORAGE SIZE ANALYSIS
+==========================================
+
+playerMatches Storage Breakdown:
+  Total MatchRecords:        8,000
+  Bytes per MatchRecord:     ~256 bytes (8 storage slots)
+  Array length overhead:     640 bytes (20 wallets × 32 bytes)
+
+Total Storage Size:
+  Bytes:     2,048,640 bytes
+  Kilobytes: 2,000.63 KB
+  Megabytes: 1.95 MB
+
+Arbitrum L2 Storage Notes:
+  • Arbitrum uses calldata compression for L1 storage
+  • playerMatches data is only stored on L2 (not posted to L1)
+  • Storage is cheap on L2, but grows linearly with MatchRecords
+  • 200 matches = ~50.0 KB per player
+
+Per-Player Storage:
+  200 matches = 51,200 bytes
+                     = 50.00 KB
+
+Scaling Projections:
+  1,000 players × 200 matches:
+    Storage: 97.66 MB (400,000 records)
+  10,000 players × 200 matches:
+    Storage: 976.56 MB (4,000,000 records)
+  100,000 players × 200 matches:
+    Storage: 9.54 GB (40,000,000 records)
+
+==========================================
+
+
+  ChessOnChain Comprehensive Escalation Tests
+    EL1: Enrollment Force Start
+      ✔ Should allow enrolled player to force start after enrollment timeout
+      ✔ Should reject force start before timeout
+      ✔ Should reject force start from non-enrolled player
+      ✔ Should complete tournament immediately if only one player enrolled and force starts
+    EL2: Enrollment External Claim
+      ✔ Should allow external player to claim abandoned enrollment pool after EL2 delay
+      ✔ Should reject claim before EL2 delay
+      ✔ Should forfeit all enrolled players when pool is claimed
+      ✔ Should allow new tournament to start after EL2 claim and reset
+    ML1: Match Timeout Claim
+      ✔ Should allow opponent to claim timeout after match timeout
+      ✔ Should complete 2-player tournament after ML1 timeout claim
+      ✔ Should reject timeout claim before timeout period
+      ✔ Should reject timeout claim on own turn
+    ML2: Advanced Player Force Eliminate
+      ✔ Should allow advanced player to force eliminate stalled semi-final (70ms)
+      ✔ Should reject ML2 from non-advanced player
+      ✔ Should complete tournament when finalist uses ML2 on stalled semi-final (66ms)
+      ✔ Should clear all player activity after ML2 tournament completion (65ms)
+      ✔ Should handle ML2 on finals match (both players eliminated) (109ms)
+      ✔ Should reject ML2 before escalation delay (62ms)
+    ML3: External Player Replacement
+      ✔ Should allow external player to replace stalled match player
+      ✔ Should complete 2-player tournament after ML3 claim
+      ✔ Should clear all player activity after ML3 tournament completion
+      ✔ Should allow ML3 claimer to advance in tournament (57ms)
+      ✔ Should reject ML3 before escalation delay
+      ✔ Should reject ML3 on non-stalled match
+      ✔ Should handle ML3 on finals match properly (107ms)
+    Cascading Effects: Multi-Level Escalation
+      ✔ Should handle ML1 -&gt; tournament completion -&gt; reset -&gt; new enrollment
+      ✔ Should handle ML2 in round 0 -&gt; ML3 in finals (61ms)
+      ✔ Should handle EL2 with multiple enrollments -&gt; complete reset
+      ✔ Should track forfeited amounts correctly across escalation types (59ms)
+    Prize Distribution Verification Across Escalation Types
+      ✔ Should distribute correct prizes for EL1 solo force start
+      ✔ Should distribute correct prizes for EL2 abandoned claim
+      ✔ Should distribute correct prizes for ML1 timeout victory
+      ✔ Should distribute correct prizes for ML2 force eliminate victory (88ms)
+      ✔ Should distribute correct prizes for ML3 replacement victory
+      ✔ Should maintain zero contract balance after all escalation type completions
+    Tournament Reset Verification
+      ✔ Should fully reset tournament state after EL2 completion
+      ✔ Should fully reset tournament state after ML2 completion (56ms)
+      ✔ Should fully reset tournament state after ML3 completion
+
+  Comprehensive Tournament Escalation Flow Tests
+    8-Player Tournament with Mixed Escalation Scenarios
+
+=== COMPREHENSIVE ESCALATION TEST ===
+
+✓ 8 players enrolled, tournament started
+
+=== ROUND 0: 4 MATCHES (8 → 4 players) ===
+
+Match 0: Normal completion
+✓ Winner: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (now advanced player)
+
+Match 1: Stalls → L2 force elimination by advanced player
+✓ Outsider correctly blocked from L2
+✓ Match force eliminated via L2 by advanced player
+
+Match 2: Stalls → L3 replacement by outsider
+✓ Advanced player correctly blocked from L3
+✓ Outsider 0xa0Ee7A... claimed via L3
+
+Match 3: Stalls → L2 still works after L3 active (proving L2 never expires)
+Waited 5 minutes (way past L3 activation)
+✓ L2 still worked 5 minutes after L3 became active - L2 NEVER EXPIRES
+
+=== ROUND 0 SUMMARY ===
+✓ All 4 matches completed:
+  - 1 normal win
+  - 2 L2 force eliminations
+  - 1 L3 replacement
+
+=== ROUND 1: 2 MATCHES (Semi-Finals) ===
+
+Round 1 has: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 vs 0x0000000000000000000000000000000000000000
+
+=== TOURNAMENT COMPLETION ===
+Tournament status: 1
+
+✅ COMPREHENSIVE ESCALATION TEST PASSED
+
+Validated:
+✓ Normal match completions work
+✓ L2 (force eliminate) works for advanced players
+✓ L2 blocked for non-advanced players
+✓ L3 (replacement) works for outsiders
+✓ L3 blocked for advanced players
+✓ L2 never expires (works even after L3 active)
+✓ Bracket advancement handles mixed completion types
+      ✔ Should handle tournament with normal wins, L2 eliminations, and L3 replacements (41ms)
+
+=== Testing Eliminated Player L3 Access ===
+
+Match 0: Winner 0x3C44Cd..., Loser 0x709979...
+✓ Advanced player (winner) blocked from L3
+✓ Eliminated (non-advanced) player successfully claimed L3
+
+✅ Eliminated players CAN claim L3 (they&#x27;re not advanced)
+      ✔ Should verify eliminated player can claim L3 in their own round
+
+=== Complex Bracket Test ===
+
+Round 0:
+  Match 0: Normal ✓
+  Match 1: Normal ✓
+  Match 2: L2 elimination ✓
+  Match 3: L3 replacement ✓
+
+✓ Round 0 complete with mixed completion types
+
+Round 1 players: 0x3C44Cd... vs 0x15d34A...
+✓ Bracket advanced correctly
+
+✅ Complex bracket with multiple escalation types handled correctly
+      ✔ Should handle complex bracket with multiple escalation types
+
+  ConnectFourOnChain Comprehensive Escalation Tests
+    EL1: Enrollment Force Start
+      ✔ Should allow enrolled player to force start after enrollment timeout
+      ✔ Should reject force start before timeout
+      ✔ Should reject force start from non-enrolled player
+      ✔ Should complete tournament immediately if only one player enrolled and force starts
+    EL2: Enrollment External Claim
+      ✔ Should allow external player to claim abandoned enrollment pool after EL2 delay
+      ✔ Should reject claim before EL2 delay
+      ✔ Should forfeit all enrolled players when pool is claimed
+      ✔ Should allow new tournament to start after EL2 claim and reset
+    ML1: Match Timeout Claim
+      ✔ Should allow opponent to claim timeout after match timeout
+      ✔ Should complete 2-player tournament after ML1 timeout claim
+      ✔ Should reject timeout claim before timeout period
+      ✔ Should reject timeout claim on own turn
+    ML2: Advanced Player Force Eliminate
+      ✔ Should allow advanced player to force eliminate stalled semi-final
+      ✔ Should reject ML2 from non-advanced player
+      ✔ Should complete tournament when finalist uses ML2 on stalled semi-final
+      ✔ Should clear all player activity after ML2 tournament completion
+      ✔ Should handle ML2 on finals match (both players eliminated)
+      ✔ Should reject ML2 before escalation delay
+    ML3: External Player Replacement
+      ✔ Should allow external player to replace stalled match player
+      ✔ Should complete 2-player tournament after ML3 claim
+      ✔ Should clear all player activity after ML3 tournament completion
+      ✔ Should allow ML3 claimer to advance in tournament
+      ✔ Should reject ML3 before escalation delay
+      ✔ Should reject ML3 on non-stalled match
+      ✔ Should handle ML3 on finals match properly
+    Cascading Effects: Multi-Level Escalation
+      ✔ Should handle ML1 -&gt; tournament completion -&gt; reset -&gt; new enrollment
+
+=== BEFORE PLAYING SEMIFINAL 1-0 ===
+Player1: 0x70997970
+Player2: 0x90F79bf6
+Status: 1
+Round 1: totalMatches=1, completedMatches=0, initialized=true
+
+=== AFTER PLAYING SEMIFINAL 1-0 ===
+Winner: 0x70997970
+Status: 2
+Round 1 after: totalMatches=1, completedMatches=1, initialized=true
+
+=== FINALS 2-0 ===
+Player1: 0x70997970
+Player2: 0x9965507D
+Status: 1
+Round 2: totalMatches=1, completedMatches=0, initialized=true
+      ✔ Should handle ML2 in round 0 -&gt; ML3 in finals (53ms)
+      ✔ Should handle EL2 with multiple enrollments -&gt; complete reset
+      ✔ Should track forfeited amounts correctly across escalation types
+    Prize Distribution Verification Across Escalation Types
+      ✔ Should distribute correct prizes for EL1 solo force start
+      ✔ Should distribute correct prizes for EL2 abandoned claim
+      ✔ Should distribute correct prizes for ML1 timeout victory
+      ✔ Should distribute correct prizes for ML2 force eliminate victory
+      ✔ Should distribute correct prizes for ML3 replacement victory
+      ✔ Should maintain protocol and owner fees after all escalation type completions
+    Tournament Reset Verification
+      ✔ Should fully reset tournament state after EL2 completion
+      ✔ Should fully reset tournament state after ML2 completion
+      ✔ Should fully reset tournament state after ML3 completion
+
+  TicTacChain (ETour Protocol) Tests
+    Deployment
+      ✔ Should deploy successfully
+      ✔ Should have correct owner
+      ✔ Should have 3 tiers configured
+    Tournament Enrollment
+      ✔ Should enroll players and auto-start when full (2-player)
+      ✔ Should split entry fees correctly (90% prize pool, 10% owner)
+      ✔ Should reject incorrect entry fee
+      ✔ Should reject duplicate enrollment
+      ✔ Should reject invalid tier
+    Tournament Logic
+      ✔ Should initialize round with correct match count (8-player = 4 matches)
+      ✔ Should handle force start after enrollment timeout
+    Game Play
+      ✔ Should allow players to make moves
+      ✔ Should switch turns after each move
+      ✔ Should reject move when not your turn
+      ✔ Should reject move to occupied cell
+      ✔ Should reject invalid cell index
+      ✔ Should reject move from non-player
+    Win Detection
+      ✔ Should detect horizontal win (top row)
+      ✔ Should detect vertical win (left column)
+      ✔ Should detect diagonal win (0, 4, 8)
+      ✔ Should detect draw when board is full with no winner
+    Tournament Completion
+      ✔ Should complete 2-player tournament and distribute prizes
+    Timeout Functions
+      ✔ Should allow timeout claim after timeout period
+      ✔ Should reject early timeout claim
+      ✔ Should reject timeout claim on your own turn
+    View Functions
+      ✔ Should return match data correctly
+    Gas Optimization
+      Gas used for enrollment: 253905
+      ✔ Should have reasonable gas costs for enrollment
+      Gas used for move: 103527
+      ✔ Should have reasonable gas costs for making a move
+    Abandoned Enrollment Pool Claims
+      ✔ Should reject claim before escalation2 window
+      ✔ Should allow external player to claim abandoned pool after escalation2
+      ✔ Should forfeit all enrolled players when pool is claimed
+      ✔ Should reject claim when no enrollment pool exists
+    Force Start Edge Cases
+      ✔ Should reject force start from non-enrolled player
+      ✔ Should handle single player force start with immediate win
+    View Functions Coverage
+      ✔ Should return correct tournament info via getTournamentInfo
+      ✔ Should return round info correctly
+      ✔ Should return player stats correctly
+      ✔ Should track player earnings on leaderboard - winner has positive, loser negative
+      ✔ Should return full leaderboard with all players
+    Prize Distribution
+      ✔ Should distribute prizes correctly (2-player)
+      ✔ Should handle draw finals with co-winners
+    8-Player Tournament Full Flow
+      ✔ Should complete full 8-player bracket tournament (38ms)
+    Timeout Escalation Levels
+      ✔ Should track timeout escalation timestamps
+    Invalid Operations
+      ✔ Should reject invalid instance ID
+      ✔ Should reject enrollment in full tournament
+      ✔ Should reject force start when tournament already in progress
+    Tournament Reset and Cleanup
+      ✔ Should properly reset all state after tournament completion
+      ✔ Should allow re-enrollment after tournament reset
+    Entry Fee Distribution
+      ✔ Should correctly split fees (90% pool, 7.5% owner, 2.5% protocol)
+    Enrollment Timeout State
+      ✔ Should initialize enrollment timeout timestamps on first enrollment
+      ✔ Should track forfeit pool during enrollment
+    All-Draw Round Scenarios
+      ✔ Should handle finals draw with co-winners
+      ✔ Should handle 8-player tournament with multiple draws in first round
+    Advanced Tournament Progression
+      ✔ Should handle walkover when odd number of players in round
+
+========== FIRST TOURNAMENT ==========
+First Tournament Finalists: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+First Tournament Winner: 0x90F79bf6EB2c4f870365E785982E1f101E93b906
+
+========== SECOND TOURNAMENT ==========
+Second Tournament Semifinal 0 Players: 0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc 0x976EA74026E726554dB657fA54763abd0C3a0aa9
+Second Tournament Semifinal 0 Winner: 0x976EA74026E726554dB657fA54763abd0C3a0aa9
+Second Tournament Semifinal 1 Winner: 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f
+
+Second Tournament Finals after both semifinals:
+  player1: 0x976EA74026E726554dB657fA54763abd0C3a0aa9
+  player2: 0x23618e81E3f5cdF7f54C3d65f7FBc0aBf5B21E8f
+  status: 1n
+      ✔ Should NOT have stale finals data from previous tournament
+    Match Timeout State Tracking
+      ✔ Should update lastMoveTime after each move
+      ✔ Should allow timeout claim after move timeout elapses
+    Complete Tournament Flow with Mixed Results
+      ✔ Should complete 8-player tournament with wins and draws (39ms)
+    Escalation Victory and Prize Distribution
+      ✔ Should award full prize pool when timeout claim wins 2-player tournament
+      ✔ Should track forfeited amounts for eliminated players on escalation
+      ✔ Should correctly distribute prize pool after abandoned enrollment claim
+    playerPrizes and Leaderboard Consistency
+      ✔ Should have playerPrizes equal to prize amount for winner in 2-player tournament
+      ✔ Should have leaderboard earnings equal to (playerPrizes - entryFee) for winner
+      ✔ Should have consistent playerPrizes and leaderboard for 8-player tournament (51ms)
+      ✔ Should have consistent playerPrizes and leaderboard after timeout victory
+      ✔ Should have consistent playerPrizes and leaderboard for draw finals
+    Force Start with Odd Players
+      ✔ Should handle force start with 3 players (requires walkover)
+      ✔ Should handle force start with 5 players
+      ✔ Should handle force start with 7 players
+      ✔ Should complete tournament started with odd players
+    All-Draw Round Scenarios
+      ✔ Should handle all semi-finals drawing - all 4 players share prize
+      ✔ Should complete tournament when finals also draws (co-winners)
+    Prize Distribution Edge Cases
+      ✔ Should handle prize distribution with odd total (rounding)
+      ✔ Should distribute prizes correctly in 8-player tournament (40ms)
+    Multi-Tournament Player Scenarios
+      ✔ Should allow same player to enroll in different instances
+      ✔ Should allow same player in different tiers
+      ✔ Should correctly update earnings across multiple tournaments
+    Instance and Tier Boundary Cases
+      ✔ Should reject enrollment at max instanceId
+      ✔ Should reject enrollment in non-existent tier
+      ✔ Should handle enrollment at exact tier boundaries
+    getMatch Cache Fallback - Two-Person Tournament
+      ✔ Should clear finals immediately after tournament completion (ARCHITECTURE CHANGE)
+      ✔ Should return empty data for non-existent match
+      ✔ Should return active match data when match is still in progress
+    COMPREHENSIVE: Cross-Tournament Data Isolation
+
+========== FIRST TOURNAMENT: 3 PLAYERS - TESTING DRAW &amp; ML2 ==========
+Tournament 1 started with 3 players
+Round 0 has 1 matches
+
+Match 0: Testing DRAW
+  Result - status: 0, isDraw: false
+Tournament 1 final status: 0
+
+Tournament 1 Prize Distribution:
+  Player1: 1170000000000000
+  Player2: 1170000000000000
+  Player3: 1170000000000000
+
+First Tournament match data after completion:
+  player1: 0x0000000000000000000000000000000000000000
+
+========== SECOND TOURNAMENT: 7 PLAYERS - TEST WIN/DRAW/ML2/ML3 ==========
+Tournament 2 started with 7 players
+
+Second Tournament Initial State:
+  QF0 player1: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+  QF0 status: 1
+
+=== Testing Different Match Endings ===
+Total QF matches: 3
+
+Match 0: Testing NORMAL WIN
+  ✓ Winner: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
+Match 1: Testing DRAW
+  ✓ isDraw: true
+
+Match 2: Normal WIN
+
+=== Completing Remaining Matches ===
+  Playing R1M0
+  Playing R2M0
+  ✓ Tournament completed!
+
+Tournament 2 final status: 0
+
+========== DATA ISOLATION VERIFICATION ==========
+✓ Match data properly cleared after completion
+
+========== PRIZE DISTRIBUTION ==========
+
+========== EARNINGS VERIFICATION ==========
+0x70997970C51812dc3A010C7d01b50e0d17dc79C8 (returning): total=2340000000000000, T2 delta=1170000000000000
+0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC (returning): total=2340000000000000, T2 delta=1170000000000000
+0x90F79bf6EB2c4f870365E785982E1f101E93b906 (returning): total=2340000000000000, T2 delta=1170000000000000
+0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65 (new): total=0, T2 delta=0
+0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc (new): total=8190000000000000, T2 delta=8190000000000000
+0x976EA74026E726554dB657fA54763abd0C3a0aa9 (new): total=0, T2 delta=0
+0x14dC79964da2C08b23698B3D3cc7Ca32193d9955 (new): total=0, T2 delta=0
+
+Total T2 prize pool: 8190000000000000 wei
+
+========== THIRD TOURNAMENT: 8 PLAYERS - ML2 &amp; ML3 FOCUS ==========
+Tournament 3 started with full 8 players
+
+=== Quarterfinals: Testing ML2 &amp; ML3 ===
+
+QF Match 0: Normal WIN
+  ✓ Completed normally
+
+QF Match 1: ML2 TIMEOUT
+  Players: 0x90F79bf6... vs 0x15d34AAf...
+  Move made, now waiting for timeout...
+  ✓ ML2 claimed by non-timeout player 0x15d34AAf...
+  ✓ Winner: 0x15d34AAf... (timed out player lost)
+
+QF Match 2: Normal WIN
+  ✓ Completed normally
+
+QF Match 3: Normal WIN
+  ✓ Completed normally
+
+=== Semifinals: Normal Wins ===
+
+SF Match 0: Normal WIN
+  ✓ Completed normally
+
+SF Match 1: Normal WIN
+  ✓ Completed normally
+
+=== Finals: Normal Win ===
+
+Finals Match:
+  Finalists: 0x15d34AAf... vs 0x14dC7996...
+  ✓ Finals completed normally
+  ✓ Tournament winner: 0x15d34AAf...
+
+✓ Tournament 3 completed and reset
+
+=== Tournament 3 Prize Verification ===
+  0x70997970... earned 1170000000000000 wei in T3
+  0x3C44CdDd... earned 1170000000000000 wei in T3
+  0x90F79bf6... earned 1170000000000000 wei in T3
+  0x15d34AAf... earned 9360000000000000 wei in T3
+  0x9965507D... earned 8190000000000000 wei in T3
+  Total distributed: 21060000000000000 wei
+  Expected pool: 9360000000000000 wei
+✓ Prize distribution verified (at least some prizes distributed)
+✓ Finals match data cleared
+
+========== RECENT MATCHES VERIFICATION ==========
+Verifying recentMatches entries for all players across all tournaments...
+
+Tournament 1 Players:
+  0x70997970... has 3 recent matches
+  0x3C44CdDd... has 5 recent matches
+  0x90F79bf6... has 3 recent matches
+
+Tournament 2 Players:
+  0x70997970... (returning) has 3 recent matches
+  0x3C44CdDd... (returning) has 5 recent matches
+  0x90F79bf6... (returning) has 3 recent matches
+  0x15d34AAf... (new) has 4 recent matches
+  0x9965507D... (new) has 3 recent matches
+  0x976EA740... (new) has 3 recent matches
+  0x14dC7996... (new) has 4 recent matches
+
+Tournament 3 Players:
+  0x70997970... (all 3 tournaments) has 3 recent matches
+  0x3C44CdDd... (all 3 tournaments) has 5 recent matches
+  0x90F79bf6... (all 3 tournaments) has 3 recent matches
+  0x15d34AAf... (T2 &amp; T3) has 4 recent matches
+  0x9965507D... (T2 &amp; T3) has 3 recent matches
+  0x976EA740... (T2 &amp; T3) has 3 recent matches
+  0x14dC7996... (T2 &amp; T3) has 4 recent matches
+  0x23618e81... (T3 only) has 1 recent matches
+
+✓ All players have appropriate recentMatches entries
+✓ recentMatches data persists correctly across tournaments
+✓ Match entry data structures are valid
+
+========== COMPREHENSIVE TEST SUMMARY ==========
+✓ Tournament 1: 3 players with draw scenario
+✓ Tournament 2: 7 players (WIN, DRAW scenarios)
+✓ Tournament 3: 8 players (ML2 timeout tested)
+  • QF: 1 normal win, 1 ML2 timeout, 2 normal wins
+  • SF: 2 normal wins
+  • Finals: Normal win (ML3 testing skipped for now)
+✓ Match-ending scenarios tested: WIN, DRAW, ML2 (ML3 to be tested later)
+✓ Match data properly isolated across all 3 tournaments
+✓ Prize distribution verified for all tournaments
+✓ Earnings accumulation working correctly
+✓ Data cleanup confirmed after each tournament
+✓ RecentMatches entries verified for all players
+
+🎉 ALL COMPREHENSIVE CHECKS PASSED!
+      ✔ Should completely isolate data across tournaments with walkovers, draws, ML2/ML3, and prize distribution (145ms)
+
+  Transfer Event Tests
+    TicTacToe Reward Transfer Event
+      ✔ Should emit Transfer event with correct parameters for winner
+      ✔ Should emit Transfer events for all winners in all-draw scenario
+    Chess Transfer Event
+      - Should emit Transfer event with gameName=&#x27;Chess Reward&#x27; for winner
+    ConnectFour Reward Transfer Event
+      ✔ Should emit Transfer event with gameName=&#x27;ConnectFour Reward&#x27; for winner
+    Transfer Event Structure
+      ✔ Should have correct indexed parameters for MetaMask filtering
+      ✔ Should emit prize value matching actual prize distribution
+    Transfer Event - No Emission on Failure
+      ✔ Should not emit Transfer event when prize transfer fails
+
+  Enrollment Escalation - TournamentRecord Validation
+    EL1: Solo Enrollment Force Start
+      ✔ Should create TournamentRecord with SoloEnrollForceStart completion reason
+      ✔ Should handle EL1 correctly for different tier sizes
+      ✔ Should update player earnings correctly for EL1
+    EL2: Abandoned Tournament Claim
+      ✔ Should create TournamentRecord with AbandonedTournamentClaimed completion reason
+      ✔ Should handle EL2 with multiple abandoned players
+      ✔ Should update claimer earnings correctly for EL2
+      ✔ Should not allow EL2 claim before escalation2Start
+    EL1 vs EL2 Comparison
+      ✔ Should create different completion reasons for EL1 vs EL2
+    recentInstances Persistence
+      ✔ Should persist TournamentRecord across multiple tournament instances
+      ✔ Should maintain separate records for different tiers and instances
+    Edge Cases
+      ✔ Should handle recentInstances query for never-completed tournament
+      ✔ Should preserve TournamentRecord after subsequent enrollments
+
+  Enrollment Window Reset
+    Test 1: Successful Reset
+      ✔ Should allow solo player to reset enrollment window after expiry
+    Test 2: Reject if Tournament Not Enrolling
+      ✔ Should reject reset if tournament not enrolling
+    Test 3: Reject if Multiple Players Enrolled
+      ✔ Should reject reset if multiple players enrolled
+    Test 4: Reject if Caller Not Enrolled
+      ✔ Should reject reset if caller not enrolled
+    Test 5: Reject if Window Not Expired
+      ✔ Should reject reset if enrollment window not expired
+    Test 6: Reset Still Works After Escalation Level 2
+      ✔ Should allow reset even after escalation level 2 reached
+    Test 7: Second Player Can Enroll After Reset
+      ✔ Should allow second player to enroll after reset
+    Test 8: Multiple Resets Allowed
+      ✔ Should allow player to reset multiple times
+    Test 9: canResetEnrollmentWindow View Function Accuracy
+      ✔ Should accurately report reset eligibility via view function
+    Test 10: Reset Preserves forfeitPool
+      ✔ Should preserve forfeitPool amount after reset
+    Test 11: Reset Updates Escalation Timestamps
+      ✔ Should update escalation timestamps correctly on reset
+    Test 12: Cannot Reset After Force Start
+      ✔ Should not allow reset after force starting tournament
+
+  Escalation View Functions Tests
+    isMatchEscL2Available
+      ✔ Should return false when tournament status is not InProgress
+      ✔ Should return false when match is not active
+      ✔ Should return false when current player has not timed out
+      ✔ Should return false when timeout occurred but L2 delay has not passed
+      ✔ Should return true when timeout occurred and L2 delay has passed (not marked stalled)
+      ✔ Should return false exactly at the L2 delay boundary (edge case)
+    isMatchEscL3Available
+      ✔ Should return false when tournament status is not InProgress
+      ✔ Should return false when match is not active
+      ✔ Should return false when current player has not timed out
+      ✔ Should return false when timeout occurred but L3 delay has not passed
+      ✔ Should return true when timeout occurred and L3 delay has passed (not marked stalled)
+      ✔ Should return false exactly at the L3 delay boundary (edge case)
+      ✔ Should progress from L2 -&gt; L3 availability over time
+    Cross-level consistency checks
+      ✔ Should never have L3 available without L2 being available
+    Match completion invalidation
+      ✔ Should return false for all escalation levels after match is completed
+
+  Finals Data Persistence Bug (TDD)
+    Scenario 1: Finals Never Completed (InProgress)
+
+=== TEST: Incomplete Finals Data Persistence ===
+
+CYCLE 1: Creating tournament...
+Finals status: 1 (1=InProgress)
+✓ Finals completed, tournament reset
+✓ Tournament status: 0 (0=Enrolling)
+
+NEW CYCLE: Verifying immediate match data clearing...
+✓ FINALS CLEARED IMMEDIATELY ON RESET
+  - Security gap closed
+  - Historical data available via events
+✓ Player3 enrolled in new cycle
+✓ Finals remain cleared (as expected)
+
+=== TEST COMPLETE ===
+
+      ✔ Should clear incomplete finals match data on first enrollment in new cycle
+    Scenario 2: Double-Elimination Finals (winner = address(0))
+
+=== TEST: Double-Elimination Finals Data Persistence ===
+
+CYCLE 1: Creating 4-player tournament...
+✓ Semi-final 0 complete: winner=0x70997970...
+✓ Semi-final 1 complete: winner=0x15d34AAf...
+✓ Finals created: 0x70997970... vs 0x15d34AAf...
+Executing ML2 on finals...
+✓ ML2 executed - tournament completed and reset
+✓ Tournament status: 0 (0=Enrolling)
+
+NEW CYCLE: Verifying immediate match data clearing...
+✓ DOUBLE-ELIMINATION FINALS CLEARED IMMEDIATELY ON RESET
+  - winner=0x0 case handled properly
+  - Security gap closed
+✓ First enrollment in new cycle
+✓ Finals remain cleared (as expected)
+
+=== TEST COMPLETE ===
+
+      ✔ Should clear double-elimination finals on first enrollment in new cycle
+    Scenario 3: Exploit Attempt After Status Check Fix
+
+=== TEST: ML3 Exploit Prevention with Status Check ===
+
+CYCLE 1: Completing tournament...
+✓ Tournament completed normally
+✓ Tournament reset: status=0 (0=Enrolling)
+
+ATTACKER: Attempting ML3 on stale finals...
+✓ EXPLOIT BLOCKED: Tournament status check prevented ML3
+  - Error: VM Exception while processing transaction: reverted with reason string &#x27;Tournament not in progress&#x27;
+
+=== TEST COMPLETE ===
+
+      ✔ Should prevent ML3 claim on stale finals even if not cleared
+
+  TicTacChain - Constructor Initialization
+    ✔ Should have 3 tiers initialized after deployment
+    ✔ Should have valid tier configurations after deployment
+
+  L2/L3 Ordering Test
+Testing L2/L3 ordering:
+- Match time: 120 seconds
+- L2 delay: 120 seconds (starts after timeout)
+- L3 delay: 240 seconds (starts after timeout)
+
+=== BEFORE L2 delay completes ===
+✓ L3 claim correctly blocked before L2 delay passes
+
+=== AFTER L3 delay completes ===
+✓ L3 claim succeeds after L3 delay passes
+    ✔ Should ensure L3 escalation respects L2 -&gt; L3 ordering
+
+  ML2 (Force Eliminate) Comprehensive Tests
+    Advanced Player Detection
+
+=== TEST: Advanced Player Detection ===
+
+Enrolling 4 players...
+✓ 4 players enrolled
+Match 0: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 vs 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Match 1: 0x90F79bf6EB2c4f870365E785982E1f101E93b906 vs 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+
+Completing Match 0...
+Match 0 status: 2
+Match 0 winner: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Match 0 isDraw: false
+✓ Match 0 complete - Winner: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
+Checking finals assignment...
+Finals player1: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Finals player2: 0x0000000000000000000000000000000000000000
+Finals status: 0
+✓ Winner is in finals
+
+Checking isPlayerInAdvancedRound for round 0...
+Winner 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC isPlayerInAdvancedRound: true
+Loser 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 isPlayerInAdvancedRound: false
+✓ Advanced player detection working correctly
+      ✔ Should correctly identify player who won their match as advanced
+
+=== TEST: Advanced Player Detection After Caching ===
+
+Match 0 winner: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Match 0 isCached: false
+isPlayerInAdvancedRound (cached=false): true
+✓ Advanced player detection works with cached matches
+      ✔ Should detect advanced player even after match is cached
+    ML2 Execution
+
+=== TEST: ML2 Force Eliminate ===
+
+Advanced player: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+
+Stalling Match 1...
+✓ Match 1 stalled
+
+Advancing time for ML2...
+
+Verifying ML2 eligibility...
+Advanced player 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 isPlayerInAdvancedRound: true
+
+Executing ML2 force eliminate...
+✓ ML2 executed successfully
+✓ Match 1 double-eliminated
+      ✔ Should allow advanced player to force eliminate stalled match
+
+=== TEST: ML2 Rejection for Non-Advanced ===
+
+
+Attempting ML2 with non-advanced player...
+✓ Non-advanced player correctly rejected
+      ✔ Should reject ML2 from non-advanced player
+    Tournament Completion via ML2
+
+=== TEST: ML2 Tournament Completion (Finalist triggers ML2 on semi) ===
+
+✓ 4 players enrolled
+✓ Match 0 complete, finalist: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+✓ Finalist assigned to finals
+✓ Match 1 (semi-final) stalled
+
+Finalist using ML2 to eliminate stalled semi-final...
+✓ ML2 executed
+✓ Tournament completed and reset
+✓ Finalist received prize: 0.00252 ETH
+
+=== TEST COMPLETE ===
+
+      ✔ Should complete tournament when finalist uses ML2 on stalled semi-final
+
+=== TEST: ML2 on Finals (Double Elimination) ===
+
+✓ 2 players enrolled (immediate finals)
+✓ Finals match stalled
+
+(Switching to 4-player scenario for advanced player requirement)
+✓ Both semi-finals complete
+✓ Finals stalled
+
+Using ML2 on finals (will eliminate both players)...
+✓ ML2 executed on finals
+✓ Tournament completed and reset
+
+=== TEST COMPLETE ===
+
+      ✔ Should complete tournament when ML2 is used on finals (both eliminated) (85ms)
+    Escalation Timing Issues
+
+=== TEST: Escalation Timer Reset on Move ===
+
+✓ 4 players enrolled
+✓ Advanced player: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+✓ Match 1 - first move made
+
+Waiting for timeout (but not ML2 delay)...
+✓ Match 1 - second move made (should clear escalation state)
+
+Trying ML2 immediately after move (should fail)...
+✓ ML2 correctly rejected - escalation state was cleared
+
+Waiting for timeout + ML2 delay from NEW move...
+✓ ML2 successful after proper delay
+
+=== TEST COMPLETE ===
+
+      ✔ Should reset ML2 timer when a move is made after timeout
+    Edge Cases
+
+=== TEST: ML2 with Walkover Advancement ===
+
+(Test scenario: Player advances via auto-walkover, then uses ML2)
+⚠ Test skipped - requires walkover scenario setup
+      ✔ Should handle ML2 when advanced player won via walkover
+
+  ML2 Exact User Scenario
+
+=== EXACT USER SCENARIO TEST ===
+
+Step 1: Enrolling 4 players (A, B, C, D)...
+Match 0 (semi): 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 vs 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+Match 1 (semi): 0x90F79bf6EB2c4f870365E785982E1f101E93b906 vs 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+✓ Tournament started
+
+Step 2: Playing A vs B (A should win)...
+Winner of match 0: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+✓ A won and advanced to finals
+Finals: player1=0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, player2=0x0000000000000000000000000000000000000000
+
+Step 3: C vs D stalling (one move then timeout)...
+✓ One move made in C vs D, now waiting for stall...
+✓ Time advanced past ML2 threshold
+
+Step 4: State BEFORE ML2 trigger:
+  Tournament status: 1 (0=Enrolling, 1=InProgress, 2=Completed)
+  Enrolled count: 4
+  Prize pool: 0.00252 ETH
+  Is A advanced? true
+
+Step 5: A triggering ML2 on C vs D...
+✓ ML2 transaction successful
+
+Step 6: State AFTER ML2 trigger:
+  Tournament status: 0 (0=Enrolling, 1=InProgress, 2=Completed)
+  Enrolled count: 0
+  Prize pool: 0.0 ETH
+  Winner: 0x0000000000000000000000000000000000000000
+
+Step 7: Verifying tournament completion...
+✓ Tournament properly reset
+
+Step 8: Verifying prize distribution...
+  A&#x27;s prize: 0.00252 ETH
+✓ Prize distributed to A
+
+=== TEST COMPLETE ✅ ===
+
+    ✔ EXACT SCENARIO: A beats B, C vs D stalls, A triggers ML2 → should complete tournament
+
+  ML3 Finals Match Completion Bug Fix
+    ML3 Claim on Finals Match
+
+=== ML3 FINALS COMPLETION TEST ===
+
+Step 1: Enrolling 2 players...
+✓ Tournament started with 2 players (immediate finals)
+
+Step 2: Stalling finals match...
+✓ 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC made first move, now waiting for timeout...
+
+Step 3: Advancing time past ML3 threshold...
+✓ Time advanced past ML3 threshold
+Prize pool before ML3 claim: 0.00054 ETH
+
+Step 4: External player claiming ML3 on finals match...
+✓ ML3 claim transaction successful
+
+Step 5: Verifying tournament completion...
+✓ Tournament status is Enrolling (reset completed)
+✓ Winner cleared after reset
+✓ Enrolled count reset to 0
+✓ Prize pool reset to 0
+
+Step 6: Verifying prize distribution...
+✓ Outsider received prize: 0.00054 ETH
+Prize accuracy: 100% (difference: 0.0 ETH)
+
+Step 9: Verifying new tournament can start...
+✓ New player can enroll in reset tournament
+
+=== TEST COMPLETE ===
+
+      ✔ Should properly complete tournament, distribute prizes, and reset when ML3 is claimed on finals
+
+=== ADVANCED PLAYER CHECK TEST ===
+
+Step 1: Enrolling 4 players...
+✓ Tournament started with 4 players
+  Match 0: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 vs 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+  Match 1: 0x90F79bf6EB2c4f870365E785982E1f101E93b906 vs 0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65
+
+Step 2: Completing Match 0 (A vs B)...
+✓ Match 0 complete, winner: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+
+Step 3: Checking finals match...
+  Finals player1: 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC
+  Finals player2: 0x0000000000000000000000000000000000000000
+✓ Winner 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC is assigned to finals
+
+Step 4: Stalling Match 1 (C vs D)...
+✓ Match 1 stalled after first move
+
+Step 5: Checking isPlayerInAdvancedRound...
+✓ Winner 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC correctly identified as advanced player
+✓ Loser 0x70997970C51812dc3A010C7d01b50e0d17dc79C8 correctly NOT identified as advanced
+
+=== TEST COMPLETE ===
+
+      ✔ Should correctly identify advanced player for ML2 eligibility
+
+=== ML2 FINALS COMPLETION TEST ===
+
+Step 1: Enrolling 4 players...
+✓ Tournament started with 4 players
+
+Step 2: Completing semi-finals matches...
+✓ Semi-final 0 complete, winner: 0x70997970C51812dc3A010C7d01b50e0d17dc79C8
+✓ Semi-final 1 complete
+
+Step 3: Stalling finals match...
+✓ Finals match stalled after first move
+
+Step 4: Advancing time for ML2 and forcing elimination...
+✓ Time advanced past ML2 threshold
+Prize pool before ML2: 0.00252 ETH
+✓ ML2 force elimination successful
+
+Step 5: Verifying tournament completion...
+✓ Tournament properly reset after ML2 on finals
+
+=== TEST COMPLETE ===
+
+      ✔ Should also handle ML2 (force eliminate) on finals match properly
+
+  Match-Level Escalation (Anti-Stalling) Tests
+    Level 1: Normal Timeout Claim (Baseline)
+      ✔ Should allow opponent to claim timeout when player runs out of time
+      ✔ Should reflect ML1 timeout as CompletionReason.Timeout in recentInstances
+    Level 2: Advanced Player Force Elimination
+      ✔ Should mark match as stalled when player runs out of time
+      ✔ Should allow advanced player to force eliminate stalled match after escalation window
+      ✔ Should reject force elimination from non-advanced player
+      ✔ Should reject force elimination before escalation window
+    Level 3: External Player Replacement
+      ✔ Should allow external player to claim match slot after Level 3 escalation window
+      ✔ Should reject replacement claim before Level 3 window
+      ✔ Should reject replacement claim on non-stalled match
+    Escalation Integration with Tournament Progression
+Round 0 after enrollment: { initialized: true, totalMatches: 2n, completedMatches: 0n }
+Round 0 after Match 1 completes: { totalMatches: 2n, completedMatches: 1n }
+Tournament status after Match 1: 1n
+      ✔ Should allow tournament to progress after force elimination
+      ✔ Should allow replacement player to advance in tournament
+    Edge Cases and Security
+      ✔ Should not allow claiming already completed match
+      ✔ Should clear escalation state after match completion
+
+  Prize Distribution Failure Fallback
+    Prize Send Failure - Solo Winner
+      ✔ Should fallback to accumulatedProtocolShare when solo winner rejects prize
+    Prize Send Failure - Tournament Winner
+      ✔ Should fallback to accumulatedProtocolShare when winner address rejects
+    Accumulated Protocol Share Tracking
+      ✔ Should track accumulated protocol share from failed distributions
+    Tournament Completion with Failed Prize
+      ✔ Should complete tournament even if prize distribution fails
+    Multi-Player Tournament with Failed Prizes
+      ✔ Should handle multiple prize distributions in 4-player tournament (38ms)
+    Contract Balance Accounting
+      ✔ Should maintain correct contract balance with accumulated fees
+
+  Protocol Raffle System
+    getRaffleInfo() View Function
+      ✔ Should return correct raffle info when below threshold
+      ✔ Should return correct raffle info when at threshold with no players
+      - Should count enrolled players correctly (DEPRECATED - eligiblePlayerCount calculation changed)
+      ✔ Should return raffleIndex starting at 0
+      ✔ Should return correct threshold from _getRaffleThreshold()
+      ✔ Should return correct reserve from _getRaffleReserve()
+    Access Control
+      ✔ Should reject non-enrolled players when threshold not met
+      ✔ Should reject non-enrolled players even when threshold met
+      ✔ Should allow enrolled players to trigger raffle (Enrolling status)
+      ✔ Should allow enrolled players to trigger raffle (InProgress status)
+      ✔ Should reject players only enrolled in Completed tournaments
+    Raffle Mechanics (Integration with Failed Prizes)
+      ✔ Should accumulate protocol share from failed prize distributions
+      - Should handle multiple enrollment counts correctly (DEPRECATED - eligiblePlayerCount calculation changed)
+    Raffle Distribution
+      ✔ Should calculate 5% owner / 90% winner correctly
+      ✔ Should maintain 5% reserve after raffle
+    Edge Cases
+      ✔ Should handle exactly 3 ETH threshold
+      ✔ Should handle large amounts (10 ETH)
+      - Should handle single enrolled player (100% chance) (DEPRECATED - eligiblePlayerCount calculation changed)
+      - Should handle player enrolled in many tournaments (DEPRECATED - eligiblePlayerCount calculation changed)
+    Security Considerations
+      ✔ Should use nonReentrant modifier on executeProtocolRaffle
+      ✔ Should follow CEI pattern (Checks-Effects-Interactions)
+      ✔ Should handle failed owner send
+      ✔ Should handle failed winner send
+    Randomness Quality
+      ✔ Should use block.prevrandao for randomness
+      ✔ Should produce different results with different block data
+    Gas Efficiency
+      ✔ Should handle reasonable number of enrolled players
+      ✔ Should document max capacity (1000 players)
+    Integration with Prize Distribution
+      ✔ Should accumulate protocol share from entry fees (2.5%)
+      ✔ Should accumulate from both protocol fees AND failed prize distributions
+
+  Raffle Results Storage - Historic Data Validation
+    Single Raffle Execution Storage
+      - Should store complete raffle result data after execution
+      - Should store different winner when randomness changes
+      - Should handle weighted participants correctly when player enrolled in multiple tournaments
+    Multiple Consecutive Raffles Storage
+      - Should store separate results for 3 consecutive raffles with correct data
+      - Should maintain independent storage for each raffle index
+      - Should correctly track progressive threshold increases across raffles
+    Edge Cases and Data Integrity
+      - Should handle raffle with single participant
+      - Should ensure participants and weights arrays have same length
+      - Should preserve exact ETH amounts without rounding errors
+      - Should query non-existent raffle index safely
+    Storage Gas Costs
+      - Should document gas cost for storing raffle results
+      - Should handle storage for raffle with many participants
+
+  Basic Deployment Test
+Deploying modules...
+Core deployed
+Matches deployed
+Prizes deployed
+Raffle deployed
+Escalation deployed
+
+Deploying TicTacChain...
+TicTacChain deployed
+Tier count: 3
+    ✔ Should deploy all contracts successfully (119ms)
+
+  Test Delegatecall Direct
+TicTacChain deployed and initialized
+
+✅ Delegatecall via enrollment succeeded!
+    ✔ Should test delegatecall behavior via enrollment
+
+  Test ETour_Storage Access
+✅ tierCount: 3
+    ✔ Should access tierCount from ETour_Storage
+✅ owner: 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+    ✔ Should access owner from ETour_Storage
+✅ Contract initialized with 3 tiers
+    ✔ Should verify contract is initialized by checking tiers
+
+  Enrollment Debug Test
+Contract deployed successfully
+Tier count: 3
+Attempting to enroll with fee: 300000000000000
+Enrollment successful!
+    ✔ Should enroll player in tier 0
+
+  Test Player Activity Counts
+
+✅ Game initialized
+✅ Initial enrollment state: false
+✅ After enrollment: true
+    ✔ Should verify enrollment status works (replaces activity counts)
+
+  Test Simple Tracking
+
+✅ Game deployed and initialized
+Game address: 0x74303EC0fC495cb08FFA08783De17591b4e7B063
+✅ Player enrolled and tracking works
+    ✔ Should test that player tracking storage exists in game contract (144ms)
+
+  TicTacChain Enrollment Quick Test
+
+TicTacChain: 0xaB95e2145fDDc182a2AF4A0a3eecD2972Ec9b52b
+Initialized
+
+✅ Player1 enrolled! Gas: 253893
+    ✔ Should enroll player1
+✅ Player2 enrolled! Gas: 351960
+    ✔ Should enroll player2 and start
+
+  Time Bank System (Chess Clock) Tests
+    Time Bank Initialization
+      ✔ Should initialize both players with configured match time at match start
+    Time Bank Mechanics
+      ✔ Should deduct time from player&#x27;s bank after making a move
+      ✔ Should allow multiple moves with cumulative time deduction
+      ✔ Should NOT allow opponent to claim timeout before time runs out
+      ✔ Should allow opponent to claim timeout after time runs out
+      ✔ Should NOT allow player to claim timeout on their own turn
+      ✔ Should accurately track time after turn switches
+      ✔ Should handle time bank reaching exactly zero
+      ✔ Should NOT allow timeout claim while opponent still has time
+    Time Bank Edge Cases
+      ✔ Should handle rapid successive moves without time manipulation
+      ✔ Should correctly handle match completion before timeout
+    Tournament Integration with Time Banks
+      ✔ Should handle 4-player tournament with time banks properly
+      ✔ Should allow timeout claim in semifinal and winner advances to finals
+    Time Increment (Future Feature)
+      ✔ Should have zero increment by default
+
+  Tournament Reset - Basic 4-Player Tournaments
+    Basic Tournament Reset with Normal Gameplay
+
+=== FIRST TOURNAMENT (2 players, force start) ===
+Tournament 1 started with 2 players
+Round 0: 1 match(es)
+Match 0-0: 0x3C44 vs 0x7099
+0x3C44 wins match 0-0
+✓ Tournament 1 completed and reset
+
+=== SECOND TOURNAMENT (3 players, force start) ===
+Tournament 2 started with 3 players
+Debug - Round 0 initialized: true, totalMatches: 1
+
+Round 0: 1 matches
+Match 0-0: 0x9965 vs 0x90F7
+0x9965 wins match 0-0
+Tournament status still InProgress after round 0
+Next round (1) - initialized: true, totalMatches: 1
+
+Round 1: 1 matches
+Match 1-0: 0x15d3 vs 0x9965
+0x15d3 wins match 1-0
+Tournament status still InProgress after round 1
+Next round (2) - initialized: false, totalMatches: 0
+
+✓ Second tournament completed and reset successfully
+✓ All 2 tournaments validated: 2 players, 3 players
+✓ Round data properly cleared after reset
+
+✅ HTML report updated: test-report-2026.html
+      ✔ Should handle 2 consecutive 4-player tournaments with 2 and 3 players respectively
+
+  Tournament Reset and Enrollment Edge Cases
+    Tournament Reset State Management
+      ✔ Should allow enrollment after tournament completes and resets
+      ✔ Should clear all round data on tournament reset
+      ✔ Should clear player enrollment status on reset
+    Enrollment State Protection
+      ✔ Should reject enrollment during active tournament
+      ✔ Should reject duplicate enrollment in same tournament
+      ✔ Should allow same player in different instances
+      ✔ Should allow same player in different tiers
+    Prize Pool Reset
+      ✔ Should reset prize pool to zero after distribution
+      ✔ Should accumulate new prize pool for second tournament
+    CRITICAL BUG: Match Data Persistence Across Tournaments
+
+=== FIRST TOURNAMENT (4 players, force start) ===
+
+Round 0: 2 matches
+Match 0-0: 0x7099 vs 0x3C44
+0x7099 wins match 0-0
+Match 0-1: 0x90F7 vs 0x15d3
+0x90F7 wins match 0-1
+
+Round 1: 1 matches
+Match 1-0: 0x7099 vs 0x90F7
+0x7099 wins match 1-0
+
+=== SECOND TOURNAMENT (7 players with Draw and ML2) ===
+Round 0: 3 matches initialized
+Match 0-0: 0x3C44 vs 0x14dC
+Match 0-0 ended in DRAW
+Match 0-1: 0x15d3 vs 0x90F7
+0x15d3 wins match 0-1
+Match 0-2: 0x976E vs 0x9965
+0x976E wins match 0-2
+
+=== Round 1 (Semifinals) ===
+Round 1: 1 matches
+Match 1-0 will be stalled for ML2: 0x15d3 vs 0x976E
+One move made, now stalling...
+Advanced player 0x15d3 using ML2 to force eliminate
+✓ ML2 executed - both players eliminated
+Tournament 2 status: 0
+
+=== THIRD TOURNAMENT (8 players with ML3) ===
+Tournament 3 started with 8 players (full capacity)
+Round 0: 4 matches
+Semifinal 0-0: 0x7099 vs 0x3C44
+0x7099 wins semifinal 0-0
+Semifinal 0-2: 0x976E vs 0x9965
+0x976E wins semifinal 0-2
+Semifinal 0-3: 0x14dC vs 0x2361
+0x14dC wins semifinal 0-3
+Semifinal 0-1: 0x90F7 vs 0x15d3
+0x90F7 makes first move, then match stalls
+
+⏰ Advancing time to Level 3 escalation window...
+
+🔧 Using ML3 to end stalled match...
+Caller: 0xa0Ee (external player, not enrolled)
+✓ ML3 successfully ended stalled match
+Match 0-1 status after ML3: Completed
+Winner: 0xa0Ee
+
+✓ Round 0 completed with ML3
+
+Round 1: 2 matches
+Match 1-0: 0x7099 vs 0xa0Ee
+0x7099 wins match 1-0
+Match 1-1: 0x14dC vs 0x976E
+0x14dC wins match 1-1
+
+Round 2: 1 matches
+Match 2-0: 0x14dC vs 0x7099
+0x14dC wins match 2-0
+
+✓ Third tournament completed and reset successfully
+✓ All 3 tournaments validated: 4 players, 7 players (Draw+ML2), 8 players (ML3)
+
+✅ HTML report updated: test-report-2026.html
+      ✔ Should handle 3 consecutive 8-player tier tournaments with varying player counts and escalation scenarios (164ms)
+
+  View Functions - All Games
+    TicTacChain View Functions
+      isMatchEscL2Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L2 delay
+      isMatchEscL3Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L3 delay
+      isPlayerInAdvancedRound
+        ✔ Should return false for non-enrolled player
+        ✔ Should return false for enrolled player who hasn&#x27;t won any matches yet
+    ConnectFourOnChain View Functions
+      isMatchEscL2Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L2 delay
+      isMatchEscL3Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L3 delay
+      isPlayerInAdvancedRound
+        ✔ Should return false for non-enrolled player
+        ✔ Should return false for enrolled player who hasn&#x27;t won any matches yet
+    ChessOnChain View Functions
+      isMatchEscL2Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L2 delay
+      isMatchEscL3Available
+        ✔ Should return false for non-existent match
+        ✔ Should return false when player has not timed out
+        ✔ Should return true after timeout + L3 delay
+      isPlayerInAdvancedRound
+        ✔ Should return false for non-enrolled player
+        ✔ Should return false for enrolled player who hasn&#x27;t won any matches yet
+
+  Wei Precision and Rounding in Prize Distribution
+    Wei Rounding in Prize Splits
+      ✔ Should handle indivisible prize pool in finals draw (2 co-winners)
+      ✔ Should handle wei remainder in 4-way all-draw split
+      ✔ Should not lose wei in 8-player tournament prize distribution (44ms)
+    Contract Balance Verification
+      ✔ Should maintain zero contract balance after prize distribution
+      ✔ Should accumulate protocol fees correctly across multiple tournaments
+    Prize Distribution Precision
+      ✔ Should handle standard entry fee precision correctly
+      ✔ Should handle entry fee calculations with precision
+
+  Chess Checkmate &amp; Match Completion Tests
+    Checkmate Detection
+      ✔ Should detect Scholar&#x27;s Mate and mark match as completed (59ms)
+      ✔ Should detect Back Rank Mate
+      ✔ Should detect checkmate and emit MatchCompleted event (57ms)
+    Timeout Victory Match Completion
+      ✔ Should complete match after timeout claim
+      ✔ Should update player stats after timeout victory
+    4-Player Tournament Progression
+      ✔ Should advance winners to finals after round 0 completion (66ms)
+      ✔ Should complete tournament after finals match
+    Round Completion Logic
+      ✔ Should mark round as complete when all matches finish
+      ✔ Should increment completed matches count for each finished match
+
+  ChessOnChain 8-Tier System Tests
+    Tier Configuration Validation
+      ✔ Should have exactly 8 tiers configured
+    Boundary Tier Enrollment Tests
+      Tier 0 (Lowest Fee 2-Player)
+        ✔ Should accept correct entry fee
+        ✔ Should reject incorrect entry fee
+        ✔ Should auto-start when last slot fills
+        ✔ Should split entry fees correctly (90/7.5/2.5)
+      Tier 3 (Highest Fee 2-Player)
+        ✔ Should accept correct entry fee
+        ✔ Should reject incorrect entry fee
+        ✔ Should auto-start when last slot fills
+        ✔ Should split entry fees correctly (90/7.5/2.5)
+      Tier 4 (Lowest Fee 4-Player)
+        ✔ Should accept correct entry fee
+        ✔ Should reject incorrect entry fee
+        ✔ Should auto-start when last slot fills
+        ✔ Should split entry fees correctly (90/7.5/2.5)
+      Tier 7 (Highest Fee 4-Player)
+        ✔ Should accept correct entry fee
+        ✔ Should reject incorrect entry fee
+        ✔ Should auto-start when last slot fills
+        ✔ Should split entry fees correctly (90/7.5/2.5)
+    2-Player Tier Progression
+      ✔ Should complete Tier 0 tournament via checkmate (71ms)
+      ✔ Should complete Tier 3 tournament via checkmate (72ms)
+      ✔ Should complete Tier 0 tournament via timeout
+      ✔ Should complete Tier 3 tournament via timeout
+    4-Player Tier Progression
+      ✔ Should complete Tier 4 semi-finals and finals via checkmate (234ms)
+      ✔ Should complete Tier 7 semi-finals and finals via checkmate (238ms)
+      ✔ Should handle mixed completion methods (timeout + checkmate) (170ms)
+      ✔ Should handle Tier 7 mixed completion methods (127ms)
+    Prize Distribution Validation
+      ✔ Should distribute winner-takes-all correctly in Tier 0 (79ms)
+      ✔ Should distribute winner-takes-all correctly in Tier 3 (75ms)
+      ✔ Should distribute winner-takes-all correctly in Tier 4 (233ms)
+      ✔ Should distribute winner-takes-all correctly in Tier 7 (243ms)
+    Cross-Tier Independence
+      ✔ Should allow player to enroll in multiple tiers simultaneously
+      ✔ Should track prizes independently per tier (175ms)
+      ✔ Should allow player in different instances of same tier
+    Elite Matches Storage (Tier 3 and Tier 7)
+      ✔ Should store Tier 3 finals match in eliteMatches array (78ms)
+      ✔ Should store Tier 7 finals match in eliteMatches array (242ms)
+      ✔ Should NOT store non-elite tier matches (Tier 1) (77ms)
+      ✔ Should store complete move history in moves string for Tier 3 (75ms)
+      ✔ Should store multiple elite matches sequentially (326ms)
+      ✔ Should handle draw in elite finals correctly (79ms)
+
+  ChessOnChain Tests
+    Deployment
+      ✔ Should deploy successfully
+      ✔ Should have correct owner
+    Check Status Bug Fix
+      ✔ Should clear check status when player escapes check
+      ✔ Should correctly track check status throughout a game
+    Basic Game Flow
+      ✔ Should allow a basic game to start
+    1v1 Duel Match Initialization
+      ✔ Should start match immediately after 2 players enroll in 1v1 duel
+      ✔ Should allow immediate gameplay after match starts in 1v1 duel
+      ✔ Should return correct status from all view functions after 1v1 duel starts
+    Pawn Promotion
+      ✔ Should allow pawn promotion to Queen
+      ✔ Should reject promotion with PieceType.None
+    Castling
+      ✔ Should allow kingside castling
+    Timeout Claims
+      ✔ Should allow timeout claim after timeout period
+      ✔ Should reject early timeout claim
+      ✔ Should reject timeout claim on your own turn
+    View Functions
+      ✔ Should return chess match data
+    Scholar&#x27;s Mate (Checkmate)
+      ✔ Should detect checkmate (Scholar&#x27;s Mate) (54ms)
+    4-Player Tournament
+      ✔ Should handle 4-player tournament bracket
+
+  Chess Fifty-Move Rule
+    ChessRulesModule - Half-Move Clock Unit Tests
+      ✔ Should start with half-move clock at 0
+      ✔ Should increment half-move clock on non-pawn, non-capture moves
+      ✔ Should reset half-move clock on pawn moves
+      ✔ Should reset half-move clock on captures
+      ✔ Should return gameEnd=3 when half-move clock reaches 100
+      ✔ Should NOT trigger fifty-move rule at 99 half-moves
+    ChessOnChain - Fifty-Move Rule Integration Tests
+      ✔ Should track half-move clock during actual gameplay
+      ✔ Should end game as draw via threefold repetition before fifty-move (expected behavior) (210ms)
+      ✔ Should reset half-move clock on pawn move
+      ✔ Should verify fifty-move rule logic at module level with high clock value
+    Edge Cases
+      ✔ Should correctly handle half-move clock with promotions (pawn move resets)
+      ✔ Should handle en passant captures (both pawn move AND capture - resets clock)
+
+  Chess Threefold Repetition Rule
+    Position Tracking Basics
+      ✔ Should not trigger draw after first occurrence of position
+      ✔ Should not trigger draw after second occurrence of position
+      ✔ Should track different positions without false positives
+    Threefold Repetition Detection
+      ✔ Should trigger draw on third repetition of starting position
+      ✔ Should trigger draw on third repetition of non-starting position (39ms)
+      ✔ Should NOT trigger draw after only two repetitions
+    Position Hash Differentiation
+      ✔ Should distinguish positions by side to move
+      ✔ Should distinguish positions by castling rights
+    Edge Cases
+      ✔ Should handle rapid threefold with minimum moves
+      ✔ Should allow pawn moves without resetting position counts
+      ✔ Should correctly handle en passant affecting position uniqueness
+    Integration with Other Draw Conditions
+      ✔ Should prioritize checkmate over threefold repetition
+      ✔ Should correctly track positions alongside fifty-move clock
+
+  ConnectFour Edge Cases
+    Column Full Detection
+      ✔ Should reject move to column that is full (6 pieces)
+      ✔ Should allow moves to other columns when one column is full
+
+  ConnectFour Maximum Capacity Gas Estimation
+
+🚀 Initializing ConnectFour Maximum Capacity Gas Test...
+✅ Loaded 150 player accounts
+✅ ConnectFourOnChain deployed at 0x940Dc92F951B109520237686e4C4021C011024f6
+    Phase 1: Contract Saturation Setup
+
+📋 Enrolling players to saturate contract...
+
+  Tier 0 (2-player): Enrolling 24 players across 12 instances...
+    ✓ 3/12 instances filled
+    ✓ 6/12 instances filled
+    ✓ 9/12 instances filled
+    ✓ 12/12 instances filled
+  ✅ Tier 0 complete: 24 players enrolled
+
+  Tier 1 (4-player): Enrolling 40 players across 10 instances...
+    ✓ 3/10 instances filled
+    ✓ 6/10 instances filled
+    ✓ 9/10 instances filled
+  ✅ Tier 1 complete: 40 players enrolled
+
+  Tier 2 (8-player): Enrolling 64 players across 8 instances...
+    ✓ 2/8 instances filled
+    ✓ 4/8 instances filled
+    ✓ 6/8 instances filled
+    ✓ 8/8 instances filled
+  ✅ Tier 2 complete: 64 players enrolled
+
+✅ CONTRACT SATURATION COMPLETE
+   Total Players: 128 = 128 enrolled (Tier 3 removed)
+   Active Tournaments: 30
+      ✔ Should saturate contract with 128 players across all tiers (250ms)
+    Phase 2: Worst-Case Gas Measurement
+
+🎮 SCENARIO 1: Long Game (20+ moves)
+
+    📊 Playing long game (20 moves)
+      Move 5/20 complete - Gas: 76898
+      Move 10/20 complete - Gas: 79142
+      Move 15/20 complete - Gas: 79018
+      Move 20/20 complete - Gas: 78573
+    ✅ Long game complete - 20 moves played
+      ✔ Scenario 1: Long Game with Multiple Moves (42ms)
+
+🚀 SCENARIO 2: Tournament Auto-Start
+    Enrolling final player to trigger auto-start...
+
+    💎 AUTO-START GAS COST
+       Gas: 914,094
+       Cost: 0.000914094006398658 ETH ($2.74)
+      ✔ Scenario 2: Tournament Auto-Start at Capacity
+    Phase 3: Per-Player Cost Analysis
+
+📊 Calculating average player costs...
+
+    Players tracked: 136
+    Average gas per player: 260,394
+    Average cost @ 0.05 gwei: 0.0000130197 ETH
+      ✔ Should calculate average player cost across all scenarios
+
+🎯 Identifying maximum cost player...
+
+    Max cost player: 0x011bD5423C5F77b5a0789E27f922535fd76B688F
+    Total gas: 1,021,157
+    Transactions: 11
+
+    Top 5 expensive transactions:
+      1. Enrollment: Tier 2, Instance 1, Player 1: 236,673 gas
+      2. Move 18/20 (col 3): 81,107 gas
+      3. Move 16/20 (col 1): 80,357 gas
+      4. Move 10/20 (col 2): 79,142 gas
+      5. Move 12/20 (col 4): 79,142 gas
+      ✔ Should identify maximum cost player path
+
+💰 Network Cost Estimates at Various Gas Prices
+
+    Gas Prices (L2): 0.03, 0.1, 0.5, 1.0 gwei
+    ETH Price Assumption: $3,000
+
+    0.03 gwei:
+      Average: 0.00000781182 ETH ($0.02)
+      Maximum: 0.00003063471 ETH ($0.09)
+
+    0.1 gwei:
+      Average: 0.0000260394 ETH ($0.08)
+      Maximum: 0.0001021157 ETH ($0.31)
+
+    0.5 gwei:
+      Average: 0.000130197 ETH ($0.39)
+      Maximum: 0.0005105785 ETH ($1.53)
+
+    1 gwei:
+      Average: 0.000260394 ETH ($0.78)
+      Maximum: 0.001021157 ETH ($3.06)
+      ✔ Should display network cost estimates at various gas prices
+    Phase 4: Generate Comprehensive Report
+
+================================================================================
+CONNECTFOUR MAXIMUM CAPACITY GAS ESTIMATION REPORT
+================================================================================
+
+## Contract State at Test Time
+- Total Players Enrolled: 128
+- Active Tournament Instances: 30
+- Tier 0: 12 instances × 2 players = 24 players
+- Tier 1: 10 instances × 4 players = 40 players
+- Tier 2: 8 instances × 8 players = 64 players
+- Total: 128 players (Tier 3 removed in new architecture)
+- Estimated Concurrent Matches: ~62
+- Match Cache Utilization: moderate
+
+## Gas Costs by Operation (Top 20 Highest)
+
+1. Enrollment: Tier 2, Instance 5, Player 8
+   Gas Used: 914,112
+   Cost @ 0.05 gwei: 0.000914112006398784 ETH ($2.74)
+   Player: 0x11c9CFEc...
+
+2. Enrollment: Tier 2, Instance 2, Player 8
+   Gas Used: 914,094
+   Cost @ 0.05 gwei: 0.000914094006398658 ETH ($2.74)
+   Player: 0xE5D3ab68...
+
+3. Enrollment: Tier 2, Instance 4, Player 8
+   Gas Used: 914,094
+   Cost @ 0.05 gwei: 0.000914094006398658 ETH ($2.74)
+   Player: 0x9c793571...
+
+4. Enrollment: Tier 2, Instance 6, Player 8
+   Gas Used: 914,094
+   Cost @ 0.05 gwei: 0.000914094006398658 ETH ($2.74)
+   Player: 0xc9DB8bec...
+
+5. Enrollment: Tier 2, Instance 7, Player 8
+   Gas Used: 914,094
+   Cost @ 0.05 gwei: 0.000914094006398658 ETH ($2.74)
+   Player: 0x20a6250c...
+
+6. Auto-Start Trigger: Tier 2 enrollment (8th player)
+   Gas Used: 914,094
+   Cost @ 0.05 gwei: 0.000914094006398658 ETH ($2.74)
+   Player: 0x527601C7...
+
+7. Enrollment: Tier 2, Instance 1, Player 8
+   Gas Used: 914,076
+   Cost @ 0.05 gwei: 0.000914076006398532 ETH ($2.74)
+   Player: 0x586BA390...
+
+8. Enrollment: Tier 2, Instance 0, Player 8
+   Gas Used: 914,046
+   Cost @ 0.05 gwei: 0.000914046006398322 ETH ($2.74)
+   Player: 0xF0cE7BaB...
+
+9. Enrollment: Tier 2, Instance 3, Player 8
+   Gas Used: 914,040
+   Cost @ 0.05 gwei: 0.00091404000639828 ETH ($2.74)
+   Player: 0xBc5BdceE...
+
+10. Enrollment: Tier 1, Instance 4, Player 4
+   Gas Used: 538,274
+   Cost @ 0.05 gwei: 0.000538274003767918 ETH ($1.61)
+   Player: 0xC004e69C...
+
+11. Enrollment: Tier 1, Instance 6, Player 4
+   Gas Used: 538,274
+   Cost @ 0.05 gwei: 0.000538274003767918 ETH ($1.61)
+   Player: 0xD6A098Eb...
+
+12. Enrollment: Tier 1, Instance 7, Player 4
+   Gas Used: 538,274
+   Cost @ 0.05 gwei: 0.000538274003767918 ETH ($1.61)
+   Player: 0xAb707cb8...
+
+13. Enrollment: Tier 1, Instance 1, Player 4
+   Gas Used: 538,256
+   Cost @ 0.05 gwei: 0.000538256003767792 ETH ($1.61)
+   Player: 0xcF2d5b3c...
+
+14. Enrollment: Tier 1, Instance 2, Player 4
+   Gas Used: 538,256
+   Cost @ 0.05 gwei: 0.000538256003767792 ETH ($1.61)
+   Player: 0x1003ff39...
+
+15. Enrollment: Tier 1, Instance 3, Player 4
+   Gas Used: 538,256
+   Cost @ 0.05 gwei: 0.000538256003767792 ETH ($1.61)
+   Player: 0x9eF6c02F...
+
+16. Enrollment: Tier 1, Instance 8, Player 4
+   Gas Used: 538,256
+   Cost @ 0.05 gwei: 0.000538256003767792 ETH ($1.61)
+   Player: 0xC0543b0b...
+
+17. Enrollment: Tier 1, Instance 9, Player 4
+   Gas Used: 538,256
+   Cost @ 0.05 gwei: 0.000538256003767792 ETH ($1.61)
+   Player: 0x64492E25...
+
+18. Enrollment: Tier 1, Instance 0, Player 4
+   Gas Used: 538,244
+   Cost @ 0.05 gwei: 0.000538244003767708 ETH ($1.61)
+   Player: 0x40Fc963A...
+
+19. Enrollment: Tier 1, Instance 5, Player 4
+   Gas Used: 538,238
+   Cost @ 0.05 gwei: 0.000538238003767666 ETH ($1.61)
+   Player: 0x35304262...
+
+20. Enrollment: Tier 0, Instance 3, Player 2
+   Gas Used: 350,343
+   Cost @ 0.05 gwei: 0.000350343002452401 ETH ($1.05)
+   Player: 0x23618e81...
+
+## Average Player Cost Analysis
+- Players Tracked: 136
+- Total Gas (All Players): 35,413,591
+- Average Gas per Player: 260,394
+- Average Cost @ 0.05 gwei: 0.0000130197 ETH
+- Average Cost @ 0.05 gwei: $0.04
+
+## Maximum Cost Player
+- Player Address: 0x011bD5423C5F77b5a0789E27f922535fd76B688F
+- Total Gas Spent: 1,021,157
+- Total Transactions: 11
+- Cost @ 0.05 gwei: 0.00005105785 ETH
+- Cost @ 0.05 gwei: $0.15
+
+  Top 5 Most Expensive Transactions for Max Cost Player:
+    1. Enrollment: Tier 2, Instance 1, Player 1: 236,673 gas
+    2. Move 18/20 (col 3): 81,107 gas
+    3. Move 16/20 (col 1): 80,357 gas
+    4. Move 10/20 (col 2): 79,142 gas
+    5. Move 12/20 (col 4): 79,142 gas
+
+## Network Cost Estimates at Different Gas Prices (L2)
+
+┌────────────┬──────────────────┬──────────────────┐
+│ Gas Price  │ Avg Player Cost  │ Max Player Cost  │
+├────────────┼──────────────────┼──────────────────┤
+│ 0.03 gwei  │ 0.00000781182    │ 0.00003063471    │
+│            │ ($0.02         ) │ ($0.09         ) │
+│ 0.1 gwei   │ 0.0000260394     │ 0.0001021157     │
+│            │ ($0.08         ) │ ($0.31         ) │
+│ 0.5 gwei   │ 0.000130197      │ 0.0005105785     │
+│            │ ($0.39         ) │ ($1.53         ) │
+│ 1 gwei     │ 0.000260394      │ 0.001021157      │
+│            │ ($0.78         ) │ ($3.06         ) │
+└────────────┴──────────────────┴──────────────────┘
+
+## Operation Type Breakdown
+
+ENROLLMENTS:
+  Count: 1
+  Total Gas: 914,094
+  Average Gas: 914,094
+
+MOVES:
+  Count: 20
+  Total Gas: 1,604,046
+  Average Gas: 80,202
+
+================================================================================
+END OF REPORT
+================================================================================
+
+      ✔ Should print comprehensive gas analysis report
+
+  ConnectFourOnChain ETour Compatibility Tests
+    Deployment and Tier Configuration
+      ✔ Should deploy successfully as ETour implementation
+      ✔ Should have 3 tiers configured
+    Tournament Enrollment (ETour Integration)
+      ✔ Should allow player enrollment
+      ✔ Should auto-start 2-player tournament when full
+      ✔ Should correctly split entry fees (90% prize pool)
+      ✔ Should reject incorrect entry fee
+      ✔ Should reject duplicate enrollment
+    Match Creation (ETour Integration)
+      ✔ Should create match when tournament starts
+      ✔ Should initialize empty board
+      ✔ Should set random first player
+    Game Play (Connect Four Logic)
+      ✔ Should allow first player to make move
+      ✔ Should place piece at bottom of column (gravity)
+      ✔ Should stack pieces correctly
+      ✔ Should switch turns after each move
+      ✔ Should reject move when not your turn
+      ✔ Should reject move to full column
+      ✔ Should reject invalid column
+    Win Detection
+      ✔ Should detect horizontal win
+      ✔ Should detect vertical win
+    Tournament Completion (ETour Integration)
+      ✔ Should complete tournament and distribute prizes
+      ✔ Should update player stats after match
+    4-Player Tournament (Multi-Round)
+      ✔ Should handle 4-player tournament bracket
+    Timeout Functions (ETour Integration)
+      ✔ Should allow timeout claim after timeout period
+      ✔ Should reject early timeout claim
+    View Functions
+      ✔ Should return match data correctly
+    Round-Based Prize Distribution (8-Player Tournament)
+      ✔ Should start 8-player tournament with correct bracket structure
+      ✔ Should award 0% to semi-final losers (3rd and 4th place) (77ms)
+      ✔ Should award 0% to round 0 losers (5th-8th place) (74ms)
+    ABI Compatibility with ETour
+      ✔ Should have all ETour required functions
+      ✔ Should have Connect Four specific functions
+
+  PlayerMatches - Complete MatchRecord Tracking
+    Normal Win Scenario
+      ✔ Should create MatchRecords for both players on normal win
+    Timeout Win (ML1) Scenario
+      ✔ Should create MatchRecords for both players on timeout win
+    Draw Scenario
+      ✔ Should create MatchRecords for both players on draw
+    Force Elimination (ML2) Scenario
+      ✔ Should create MatchRecords for both eliminated players with no winner (38ms)
+    Replacement (ML3) Scenario
+      ✔ Should create MatchRecords for all 3 players (original p1, p2, and replacement)
+    Multi-Round Tracking
+      ✔ Should track all matches for a player across multiple rounds (60ms)
+
+  TicTacChain Progressive Raffle Thresholds
+    Progressive Threshold Configuration
+      ✔ Should have 0.001 ETH threshold for raffle #1 (index 0)
+      ✔ Should have 5% reserve for TicTacChain
+      ✔ Should calculate raffle amount correctly with 5% reserve
+    Threshold Progression
+      ✔ Should progress from 0.001 to 0.005 ETH after first raffle
+      ✔ Should cap at 1.0 ETH for raffle #8 and beyond
+    Raffle Index Tracking
+      ✔ Should start with currentRaffleIndex = 0
+      ✔ Should show raffleIndex in getRaffleInfo
+    Protocol Fee Accumulation with Low Threshold
+      ✔ Should accumulate protocol fees toward 0.001 ETH threshold
+      ✔ Should show accurate progress toward threshold
+    Distribution with 5% Reserve
+      ✔ Should calculate 95% distribution with 5% reserve
+    Comparison with Base ETour
+      ✔ TicTacChain should have lower threshold than base ETour default
+      ✔ Both should use 5% proportional reserve
+    Threshold Scaling Examples
+      ✔ Should document threshold and reserve progression
+
+
+  490 passing (5m)
+  17 pending
+
+  Threshold Scaling Examples
+      ✔ Should document threshold and reserve progression
+
+
+  490 passing (5m)
+  17 pending
+</pre>
+      </details>
+    </div>
+
+    <div class="footer">
+      <div class="footer-highlight">490 passing • 17 pending • 0 failing</div>
+      Generated from <code>test-output.txt</code>
+    </div>
+  </div>
+</body>
+</html>

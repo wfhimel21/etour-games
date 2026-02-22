@@ -1,0 +1,35 @@
+[dotenv@17.2.3] injecting env (0) from .env -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+
+Scientific Reporter initialized. Report will be generated at:
+/Users/karim/Documents/workspace/zero-trust/e-tour/test-report-scientific.html
+Incremental updates will be written after each test.
+
+Initializing StateTracker from reporter...
+Starting test execution with scientific reporting...
+
+  1/104: Should deploy successfully ✓
+  2/104: Should have correct owner ✓
+  3/104: Should have 3 tiers configured ✓
+  4/104: Should have correct tier 0 configuration (2-player) ✗
+  5/104: Should have correct tier 1 configuration (4-player) ✗
+  6/104: Should have correct tier 2 configuration (8-player) ✗
+  7/104: Should enroll players and auto-start when full (2-player) ✗
+  8/104: Should split entry fees correctly (90% prize pool, 10% owner) ✗
+  9/104: Should reject incorrect entry fee ✗
+  10/104: Should reject duplicate enrollment ✗
+  11/104: Should reject invalid tier ✗
+  12/104: Should initialize round with correct match count (8-player = 4 matches) ✗
+  13/104: Should handle force start after enrollment timeout ✗
+  14/104: Should allow players to make moves ✗
+  15/104: Should switch turns after each move ✗
+  16/104: Should reject move when not your turn ✗
+  17/104: Should reject move to occupied cell ✗
+  18/104: Should reject invalid cell index ✗
+  19/104: Should reject move from non-player ✗
+  20/104: Should detect horizontal win (top row) ✗
+  21/104: Should detect vertical win (left column) ✗
+  22/104: Should detect diagonal win (0, 4, 8) ✗
+  23/104: Should detect draw when board is full with no winner ✗
+  24/104: Should complete 2-player tournament and distribute prizes ✗
+  25/104: Should allow timeout claim after timeout period ✗
+  26/104: Should reject early timeout claim

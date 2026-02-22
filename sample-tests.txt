@@ -1,0 +1,100 @@
+✔ Should split prize equally for finals draw with standard prize pool
+✔ Should update tournament finalsWasDraw flag correctly
+✔ Should split prize among 4 players when both semi-finals draw
+✔ Should correctly set allDrawResolution and allDrawRound flags
+✔ Should split prize among 8 players if all round 0 matches draw (38ms)
+✔ Should handle one draw and three wins in 8-player tournament
+✔ Should update player stats correctly for all-draw tournament
+✔ Should measure gas costs across playerMatches storage growth (183854ms)
+✔ Should allow enrolled player to force start after enrollment timeout
+✔ Should reject force start before timeout
+✔ Should reject force start from non-enrolled player
+✔ Should complete tournament immediately if only one player enrolled and force starts
+✔ Should allow external player to claim abandoned enrollment pool after EL2 delay
+✔ Should reject claim before EL2 delay
+✔ Should forfeit all enrolled players when pool is claimed
+✔ Should allow new tournament to start after EL2 claim and reset
+✔ Should allow opponent to claim timeout after match timeout
+✔ Should complete 2-player tournament after ML1 timeout claim
+✔ Should reject timeout claim before timeout period
+✔ Should reject timeout claim on own turn
+✔ Should allow advanced player to force eliminate stalled semi-final (84ms)
+✔ Should reject ML2 from non-advanced player
+✔ Should complete tournament when finalist uses ML2 on stalled semi-final (56ms)
+✔ Should clear all player activity after ML2 tournament completion (57ms)
+✔ Should handle ML2 on finals match (both players eliminated) (108ms)
+✔ Should reject ML2 before escalation delay (59ms)
+✔ Should allow external player to replace stalled match player
+✔ Should complete 2-player tournament after ML3 claim
+✔ Should clear all player activity after ML3 tournament completion
+✔ Should allow ML3 claimer to advance in tournament (58ms)
+✔ Should reject ML3 before escalation delay
+✔ Should reject ML3 on non-stalled match
+✔ Should handle ML3 on finals match properly (105ms)
+✔ Should handle ML1 -> tournament completion -> reset -> new enrollment
+✔ Should handle ML2 in round 0 -> ML3 in finals (62ms)
+✔ Should handle EL2 with multiple enrollments -> complete reset
+✔ Should track forfeited amounts correctly across escalation types (61ms)
+✔ Should distribute correct prizes for EL1 solo force start
+✔ Should distribute correct prizes for EL2 abandoned claim
+✔ Should distribute correct prizes for ML1 timeout victory
+✔ Should distribute correct prizes for ML2 force eliminate victory (90ms)
+✔ Should distribute correct prizes for ML3 replacement victory
+✔ Should maintain zero contract balance after all escalation type completions
+✔ Should fully reset tournament state after EL2 completion
+✔ Should fully reset tournament state after ML2 completion (81ms)
+✔ Should fully reset tournament state after ML3 completion
+✔ Should handle tournament with normal wins, L2 eliminations, and L3 replacements
+✔ Should verify eliminated player can claim L3 in their own round
+✔ Should handle complex bracket with multiple escalation types
+✔ Should allow enrolled player to force start after enrollment timeout
+✔ Should reject force start before timeout
+✔ Should reject force start from non-enrolled player
+✔ Should complete tournament immediately if only one player enrolled and force starts
+✔ Should allow external player to claim abandoned enrollment pool after EL2 delay
+✔ Should reject claim before EL2 delay
+✔ Should forfeit all enrolled players when pool is claimed
+✔ Should allow new tournament to start after EL2 claim and reset
+✔ Should allow opponent to claim timeout after match timeout
+✔ Should complete 2-player tournament after ML1 timeout claim
+✔ Should reject timeout claim before timeout period
+✔ Should reject timeout claim on own turn
+✔ Should allow advanced player to force eliminate stalled semi-final
+✔ Should reject ML2 from non-advanced player
+✔ Should complete tournament when finalist uses ML2 on stalled semi-final
+✔ Should clear all player activity after ML2 tournament completion
+✔ Should handle ML2 on finals match (both players eliminated)
+✔ Should reject ML2 before escalation delay
+✔ Should allow external player to replace stalled match player
+✔ Should complete 2-player tournament after ML3 claim
+✔ Should clear all player activity after ML3 tournament completion
+✔ Should allow ML3 claimer to advance in tournament
+✔ Should reject ML3 before escalation delay
+✔ Should reject ML3 on non-stalled match
+✔ Should handle ML3 on finals match properly
+✔ Should handle ML1 -> tournament completion -> reset -> new enrollment
+✔ Should handle ML2 in round 0 -> ML3 in finals (81ms)
+✔ Should handle EL2 with multiple enrollments -> complete reset
+✔ Should track forfeited amounts correctly across escalation types
+✔ Should distribute correct prizes for EL1 solo force start
+✔ Should distribute correct prizes for EL2 abandoned claim
+✔ Should distribute correct prizes for ML1 timeout victory
+✔ Should distribute correct prizes for ML2 force eliminate victory
+✔ Should distribute correct prizes for ML3 replacement victory
+✔ Should maintain protocol and owner fees after all escalation type completions
+✔ Should fully reset tournament state after EL2 completion
+✔ Should fully reset tournament state after ML2 completion
+✔ Should fully reset tournament state after ML3 completion
+✔ Should deploy successfully
+✔ Should have correct owner
+✔ Should have 3 tiers configured
+✔ Should enroll players and auto-start when full (2-player)
+✔ Should split entry fees correctly (90% prize pool, 10% owner)
+✔ Should reject incorrect entry fee
+✔ Should reject duplicate enrollment
+✔ Should reject invalid tier
+✔ Should initialize round with correct match count (8-player = 4 matches)
+✔ Should handle force start after enrollment timeout
+✔ Should allow players to make moves
+✔ Should switch turns after each move
+✔ Should reject move when not your turn

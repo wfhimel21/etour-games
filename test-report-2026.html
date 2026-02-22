@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETour Test Report 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #141414;
+            border-bottom: 3px solid #2a2a2a;
+        }
+
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+            border: 1px solid #3a3a3a;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #8b9dff;
+            display: block;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card.passing .number {
+            color: #4caf50;
+        }
+
+        .stat-card.pending .number {
+            color: #ffb74d;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        h2 {
+            color: #8b9dff;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2a2a2a;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #b794f6;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        h4 {
+            color: #c0c0c0;
+            margin: 20px 0 10px 0;
+            font-size: 1.1em;
+        }
+
+        .test-suite {
+            margin-bottom: 30px;
+            background: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-category {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .test-case {
+            margin: 8px 0;
+            padding: 10px 15px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            border-left: 3px solid #4caf50;
+            display: flex;
+            align-items: center;
+            color: #e0e0e0;
+        }
+
+        .test-case.pending {
+            border-left-color: #ffb74d;
+            opacity: 0.7;
+        }
+
+        .test-case::before {
+            content: "✓";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .test-case.pending::before {
+            content: "⊝";
+            color: #ffb74d;
+        }
+
+        .scenario-section {
+            background: #1a2332;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .scenario-section h4 {
+            color: #5ca8ff;
+            margin-top: 0;
+        }
+
+        ul {
+            margin: 10px 0 10px 30px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .footer {
+            background: #141414;
+            padding: 20px;
+            text-align: center;
+            color: #888;
+            border-top: 3px solid #2a2a2a;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .badge.success {
+            background: #1b4d1e;
+            color: #4caf50;
+        }
+
+        .badge.warning {
+            background: #4a3a00;
+            color: #ffb74d;
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .summary-box h3 {
+            color: white;
+            margin-top: 0;
+        }
+
+        .summary-box ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .summary-box li::before {
+            content: "→";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        code {
+            background: #2a2a2a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ETour Protocol Test Report 2026</h1>
+            <p>Comprehensive Test Suite Execution Results</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Generated: January 21, 2026</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card passing">
+                <span class="number">511</span>
+                <span class="label">Passing Tests</span>
+            </div>
+            <div class="stat-card pending">
+                <span class="number">9</span>
+                <span class="label">Pending Tests</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">45+</span>
+                <span class="label">Test Suites</span>
+            </div>
+            <div class="stat-card">
+                <span class="number">~1m</span>
+                <span class="label">Execution Time</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="summary-box">
+                <h3>Executive Summary</h3>
+                <p>This report documents the complete test suite execution for the ETour Protocol, covering all three game implementations (TicTacChain, ChessOnChain, ConnectFourOnChain) and the core tournament infrastructure. All 511 tests passed successfully, validating the protocol's correctness, security, and gas efficiency.</p>
+            </div>
+
+            <h2>1. Core Protocol Features Tested</h2>
+
+            <div class="test-suite">
+                <h3>1.1 Tournament Lifecycle Management</h3>
+                <div class="test-category">
+                    <h4>Enrollment & Tournament Start</h4>
+                    <div class="test-case">Should enroll players and auto-start when full (2-player)</div>
+                    <div class="test-case">Should reject incorrect entry fee</div>
+                    <div class="test-case">Should reject duplicate enrollment</div>
+                    <div class="test-case">Should allow same player in different instances</div>
+                    <div class="test-case">Should allow same player in different tiers</div>
+                    <div class="test-case">Should handle force start after enrollment timeout</div>
+                    <div class="test-case">Should reject enrollment in full tournament</div>
+                    <div class="test-case">Should reject enrollment during active tournament</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Tournament Progression</h4>
+                    <div class="test-case">Should initialize round with correct match count (8-player = 4 matches)</div>
+                    <div class="test-case">Should complete full 8-player bracket tournament</div>
+                    <div class="test-case">Should handle walkover when odd number of players in round</div>
+                    <div class="test-case">Should advance winners to finals after round 0 completion</div>
+                    <div class="test-case">Should mark round as complete when all matches finish</div>
+                    <div class="test-case">Should keep players in active tournaments after winning semifinal</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Tournament Reset & State Management</h4>
+                    <div class="test-case">Should properly reset all state after tournament completion</div>
+                    <div class="test-case">Should allow re-enrollment after tournament reset</div>
+                    <div class="test-case">Should clear all round data on tournament reset</div>
+                    <div class="test-case">Should clear player enrollment status on reset</div>
+                    <div class="test-case">Should reset prize pool to zero after distribution</div>
+                    <div class="test-case">Should accumulate new prize pool for second tournament</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>1.2 Prize Distribution System</h3>
+                <div class="test-category">
+                    <h4>Standard Prize Distribution</h4>
+                    <div class="test-case">Should split entry fees correctly (90% prize pool, 7.5% owner, 2.5% protocol)</div>
+                    <div class="test-case">Should distribute prizes correctly (2-player)</div>
+                    <div class="test-case">Should distribute winner-takes-all correctly in all tiers</div>
+                    <div class="test-case">Should award 0% to semi-final losers (3rd and 4th place)</div>
+                    <div class="test-case">Should award 0% to round 0 losers (5th-8th place)</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Draw Scenarios</h4>
+                    <div class="test-case">Should split prize equally for finals draw with standard prize pool</div>
+                    <div class="test-case">Should handle draw finals with co-winners</div>
+                    <div class="test-case">Should split prize among 4 players when both semi-finals draw</div>
+                    <div class="test-case">Should split prize among 8 players if all round 0 matches draw</div>
+                    <div class="test-case">Should handle one draw and three wins in 8-player tournament</div>
+                    <div class="test-case">Should update tournament finalsWasDraw flag correctly</div>
+                    <div class="test-case">Should correctly set allDrawResolution and allDrawRound flags</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Wei Precision & Rounding</h4>
+                    <div class="test-case">Should handle indivisible prize pool in finals draw (2 co-winners)</div>
+                    <div class="test-case">Should handle wei remainder in 4-way all-draw split</div>
+                    <div class="test-case">Should not lose wei in 8-player tournament prize distribution</div>
+                    <div class="test-case">Should maintain zero contract balance after prize distribution</div>
+                    <div class="test-case">Should preserve exact ETH amounts without rounding errors</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Prize Distribution Failure Handling</h4>
+                    <div class="test-case">Should fallback to accumulatedProtocolShare when solo winner rejects prize</div>
+                    <div class="test-case">Should fallback to accumulatedProtocolShare when winner address rejects</div>
+                    <div class="test-case">Should track accumulated protocol share from failed distributions</div>
+                    <div class="test-case">Should complete tournament even if prize distribution fails</div>
+                    <div class="test-case">Should maintain correct contract balance with accumulated fees</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>1.3 Escalation System (Anti-Stalling Mechanisms)</h3>
+                <div class="test-category">
+                    <h4>EL1: Enrollment Force Start</h4>
+                    <div class="test-case">Should allow enrolled player to force start after enrollment timeout</div>
+                    <div class="test-case">Should reject force start before timeout</div>
+                    <div class="test-case">Should reject force start from non-enrolled player</div>
+                    <div class="test-case">Should complete tournament immediately if only one player enrolled and force starts</div>
+                    <div class="test-case">Should clear player activity after solo force start completion</div>
+                    <div class="test-case">Should handle single player force start with immediate win</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>EL2: Enrollment External Claim</h4>
+                    <div class="test-case">Should allow external player to claim abandoned enrollment pool after EL2 delay</div>
+                    <div class="test-case">Should reject claim before EL2 delay</div>
+                    <div class="test-case">Should forfeit all enrolled players when pool is claimed</div>
+                    <div class="test-case">Should clear all player activity entries after EL2 claim</div>
+                    <div class="test-case">Should allow new tournament to start after EL2 claim and reset</div>
+                    <div class="test-case">Should fully reset tournament state after EL2 completion</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ML1: Match Timeout Claim</h4>
+                    <div class="test-case">Should allow opponent to claim timeout after match timeout</div>
+                    <div class="test-case">Should complete 2-player tournament after ML1 timeout claim</div>
+                    <div class="test-case">Should clear player activity after ML1 tournament completion</div>
+                    <div class="test-case">Should reject timeout claim before timeout period</div>
+                    <div class="test-case">Should reject timeout claim on own turn</div>
+                    <div class="test-case">Should allow opponent to claim timeout when player runs out of time</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ML2: Advanced Player Force Eliminate</h4>
+                    <div class="test-case">Should allow advanced player to force eliminate stalled semi-final</div>
+                    <div class="test-case">Should reject ML2 from non-advanced player</div>
+                    <div class="test-case">Should complete tournament when finalist uses ML2 on stalled semi-final</div>
+                    <div class="test-case">Should clear all player activity after ML2 tournament completion</div>
+                    <div class="test-case">Should handle ML2 on finals match (both players eliminated)</div>
+                    <div class="test-case">Should reject ML2 before escalation delay</div>
+                    <div class="test-case">Should correctly identify player who won their match as advanced</div>
+                    <div class="test-case">Should handle ML2 when advanced player won via walkover</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ML3: External Player Replacement</h4>
+                    <div class="test-case">Should allow external player to replace stalled match player</div>
+                    <div class="test-case">Should complete 2-player tournament after ML3 claim</div>
+                    <div class="test-case">Should clear all player activity after ML3 tournament completion</div>
+                    <div class="test-case">Should allow ML3 claimer to advance in tournament</div>
+                    <div class="test-case">Should reject ML3 before escalation delay</div>
+                    <div class="test-case">Should reject ML3 on non-stalled match</div>
+                    <div class="test-case">Should handle ML3 on finals match properly</div>
+                    <div class="test-case">Should properly complete tournament when ML3 is claimed on finals</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Escalation Cascading & Complex Scenarios</h4>
+                    <div class="test-case">Should handle ML1 → tournament completion → reset → new enrollment</div>
+                    <div class="test-case">Should handle ML2 in round 0 → ML3 in finals</div>
+                    <div class="test-case">Should handle EL2 with multiple enrollments → complete reset</div>
+                    <div class="test-case">Should track forfeited amounts correctly across escalation types</div>
+                    <div class="test-case">Should handle tournament with normal wins, L2 eliminations, and L3 replacements</div>
+                    <div class="test-case">Should verify eliminated player can claim L3 in their own round</div>
+                    <div class="test-case">Should handle complex bracket with multiple escalation types</div>
+                    <div class="test-case">L2 NEVER EXPIRES - works even 5 minutes after L3 becomes active</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Escalation View Functions</h4>
+                    <div class="test-case">isMatchEscL2Available - returns correct status for various conditions</div>
+                    <div class="test-case">isMatchEscL3Available - returns correct status for various conditions</div>
+                    <div class="test-case">Should never have L3 available without L2 being available</div>
+                    <div class="test-case">Should return false for all escalation levels after match is completed</div>
+                    <div class="test-case">Should progress from L2 → L3 availability over time</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>1.4 Protocol Raffle System</h3>
+                <div class="test-category">
+                    <h4>Raffle Configuration & Mechanics</h4>
+                    <div class="test-case">Should return correct raffle info when below threshold</div>
+                    <div class="test-case">Should return correct threshold from _getRaffleThreshold()</div>
+                    <div class="test-case">Should return correct reserve from _getRaffleReserve()</div>
+                    <div class="test-case">Should accumulate protocol share from failed prize distributions</div>
+                    <div class="test-case">Should accumulate from both protocol fees AND failed prize distributions</div>
+                    <div class="test-case">Should calculate 5% owner / 90% winner correctly</div>
+                    <div class="test-case">Should maintain 5% reserve after raffle</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Progressive Threshold System (TicTacChain)</h4>
+                    <div class="test-case">Should have 0.001 ETH threshold for raffle #1 (index 0)</div>
+                    <div class="test-case">Should progress from 0.001 to 0.005 ETH after first raffle</div>
+                    <div class="test-case">Should cap at 1.0 ETH for raffle #8 and beyond</div>
+                    <div class="test-case">Should start with currentRaffleIndex = 0</div>
+                    <div class="test-case">Should have lower threshold than base ETour default</div>
+                    <div class="test-case">Both should use 5% proportional reserve</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Raffle Results Storage & Historical Data</h4>
+                    <div class="test-case">Should store complete raffle result data after execution</div>
+                    <div class="test-case">Should store different winner when randomness changes</div>
+                    <div class="test-case">Should store separate results for 3 consecutive raffles with correct data</div>
+                    <div class="test-case">Should maintain independent storage for each raffle index</div>
+                    <div class="test-case">Should correctly track progressive threshold increases across raffles</div>
+                    <div class="test-case">Should ensure participants and weights arrays have same length</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Access Control & Security</h4>
+                    <div class="test-case">Should reject non-enrolled players when threshold not met</div>
+                    <div class="test-case">Should allow enrolled players to trigger raffle (Enrolling status)</div>
+                    <div class="test-case">Should allow enrolled players to trigger raffle (InProgress status)</div>
+                    <div class="test-case">Should use nonReentrant modifier on executeProtocolRaffle</div>
+                    <div class="test-case">Should follow CEI pattern (Checks-Effects-Interactions)</div>
+                    <div class="test-case">Should handle failed owner send</div>
+                    <div class="test-case">Should handle failed winner send</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>1.5 Enrollment Window Management</h3>
+                <div class="test-category">
+                    <div class="test-case">Should allow solo player to reset enrollment window after expiry</div>
+                    <div class="test-case">Should reject reset if tournament not enrolling</div>
+                    <div class="test-case">Should reject reset if multiple players enrolled</div>
+                    <div class="test-case">Should reject reset if caller not enrolled</div>
+                    <div class="test-case">Should reject reset if enrollment window not expired</div>
+                    <div class="test-case">Should allow reset even after escalation level 2 reached</div>
+                    <div class="test-case">Should allow second player to enroll after reset</div>
+                    <div class="test-case">Should allow player to reset multiple times</div>
+                    <div class="test-case">Should accurately report reset eligibility via view function</div>
+                    <div class="test-case">Should preserve forfeitPool amount after reset</div>
+                    <div class="test-case">Should update escalation timestamps correctly on reset</div>
+                    <div class="test-case">Should not allow reset after force starting tournament</div>
+                </div>
+            </div>
+
+            <h2>2. Game-Specific Tests</h2>
+
+            <div class="test-suite">
+                <h3>2.1 TicTacChain (Tic-Tac-Toe)</h3>
+                <div class="test-category">
+                    <h4>Game Logic</h4>
+                    <div class="test-case">Should allow players to make moves</div>
+                    <div class="test-case">Should switch turns after each move</div>
+                    <div class="test-case">Should reject move when not your turn</div>
+                    <div class="test-case">Should reject move to occupied cell</div>
+                    <div class="test-case">Should reject invalid cell index</div>
+                    <div class="test-case">Should reject move from non-player</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Win Detection</h4>
+                    <div class="test-case">Should detect horizontal win (top row)</div>
+                    <div class="test-case">Should detect vertical win (left column)</div>
+                    <div class="test-case">Should detect diagonal win (0, 4, 8)</div>
+                    <div class="test-case">Should detect draw when board is full with no winner</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Tournament Integration</h4>
+                    <div class="test-case">Should have 3 tiers configured</div>
+                    <div class="test-case">Should complete 2-player tournament and distribute prizes</div>
+                    <div class="test-case">Should complete full 8-player bracket tournament</div>
+                    <div class="test-case">Should complete 8-player tournament with wins and draws</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>2.2 ChessOnChain</h3>
+                <div class="test-category">
+                    <h4>Core Chess Mechanics</h4>
+                    <div class="test-case">Should allow a basic game to start</div>
+                    <div class="test-case">Should allow immediate gameplay after match starts in 1v1 duel</div>
+                    <div class="test-case">Should allow pawn promotion to Queen</div>
+                    <div class="test-case">Should reject promotion with PieceType.None</div>
+                    <div class="test-case">Should allow kingside castling</div>
+                    <div class="test-case">Should clear check status when player escapes check</div>
+                    <div class="test-case">Should correctly track check status throughout a game</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Checkmate Detection</h4>
+                    <div class="test-case">Should detect Scholar's Mate and mark match as completed</div>
+                    <div class="test-case">Should detect Back Rank Mate</div>
+                    <div class="test-case">Should detect checkmate and emit MatchCompleted event</div>
+                    <div class="test-case">Should prioritize checkmate over threefold repetition</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Advanced Chess Rules</h4>
+                    <div class="test-case">Should start with half-move clock at 0</div>
+                    <div class="test-case">Should increment half-move clock on non-pawn, non-capture moves</div>
+                    <div class="test-case">Should reset half-move clock on pawn moves</div>
+                    <div class="test-case">Should reset half-move clock on captures</div>
+                    <div class="test-case">Should return gameEnd=3 when half-move clock reaches 100</div>
+                    <div class="test-case">Should NOT trigger fifty-move rule at 99 half-moves</div>
+                    <div class="test-case">Should handle en passant captures (both pawn move AND capture - resets clock)</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Threefold Repetition</h4>
+                    <div class="test-case">Should not trigger draw after first occurrence of position</div>
+                    <div class="test-case">Should not trigger draw after second occurrence of position</div>
+                    <div class="test-case">Should trigger draw on third repetition of starting position</div>
+                    <div class="test-case">Should trigger draw on third repetition of non-starting position</div>
+                    <div class="test-case">Should distinguish positions by side to move</div>
+                    <div class="test-case">Should distinguish positions by castling rights</div>
+                    <div class="test-case">Should correctly handle en passant affecting position uniqueness</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>8-Tier System</h4>
+                    <div class="test-case">Should have exactly 8 tiers configured</div>
+                    <div class="test-case">Should complete Tier 0 tournament via checkmate</div>
+                    <div class="test-case">Should complete Tier 3 tournament via checkmate</div>
+                    <div class="test-case">Should complete Tier 4 semi-finals and finals via checkmate</div>
+                    <div class="test-case">Should complete Tier 7 semi-finals and finals via checkmate</div>
+                    <div class="test-case">Should distribute winner-takes-all correctly in all tiers</div>
+                    <div class="test-case">Should allow player to enroll in multiple tiers simultaneously</div>
+                    <div class="test-case">Should track prizes independently per tier</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Elite Matches Storage</h4>
+                    <div class="test-case">Should store Tier 3 finals match in eliteMatches array</div>
+                    <div class="test-case">Should store Tier 7 finals match in eliteMatches array</div>
+                    <div class="test-case">Should NOT store non-elite tier matches (Tier 1)</div>
+                    <div class="test-case">Should store complete move history in moves string for Tier 3</div>
+                    <div class="test-case">Should store multiple elite matches sequentially</div>
+                    <div class="test-case">Should handle draw in elite finals correctly</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>2.3 ConnectFourOnChain</h3>
+                <div class="test-category">
+                    <h4>Game Logic</h4>
+                    <div class="test-case">Should allow first player to make move</div>
+                    <div class="test-case">Should place piece at bottom of column (gravity)</div>
+                    <div class="test-case">Should stack pieces correctly</div>
+                    <div class="test-case">Should switch turns after each move</div>
+                    <div class="test-case">Should reject move when not your turn</div>
+                    <div class="test-case">Should reject move to full column</div>
+                    <div class="test-case">Should reject invalid column</div>
+                    <div class="test-case">Should reject move to column that is full (6 pieces)</div>
+                    <div class="test-case">Should allow moves to other columns when one column is full</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Win Detection</h4>
+                    <div class="test-case">Should detect horizontal win</div>
+                    <div class="test-case">Should detect vertical win</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ETour Integration</h4>
+                    <div class="test-case">Should deploy successfully as ETour implementation</div>
+                    <div class="test-case">Should have 3 tiers configured</div>
+                    <div class="test-case">Should complete tournament and distribute prizes</div>
+                    <div class="test-case">Should handle 4-player tournament bracket</div>
+                    <div class="test-case">Should have all ETour required functions</div>
+                    <div class="test-case">Should have Connect Four specific functions</div>
+                </div>
+            </div>
+
+            <h2>3. Time Bank System (Chess Clock)</h2>
+
+            <div class="test-suite">
+                <div class="test-category">
+                    <h4>Time Bank Initialization & Mechanics</h4>
+                    <div class="test-case">Should initialize both players with configured match time at match start</div>
+                    <div class="test-case">Should deduct time from player's bank after making a move</div>
+                    <div class="test-case">Should allow multiple moves with cumulative time deduction</div>
+                    <div class="test-case">Should NOT allow opponent to claim timeout before time runs out</div>
+                    <div class="test-case">Should allow opponent to claim timeout after time runs out</div>
+                    <div class="test-case">Should NOT allow player to claim timeout on their own turn</div>
+                    <div class="test-case">Should accurately track time after turn switches</div>
+                    <div class="test-case">Should handle time bank reaching exactly zero</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Tournament Integration</h4>
+                    <div class="test-case">Should handle 4-player tournament with time banks properly</div>
+                    <div class="test-case">Should allow timeout claim in semifinal and winner advances to finals</div>
+                    <div class="test-case">Should update lastMoveTime after each move</div>
+                    <div class="test-case">Should allow timeout claim after move timeout elapses</div>
+                </div>
+            </div>
+
+            <h2>4. Event Verification</h2>
+
+            <div class="test-suite">
+                <h3>4.1 CompletionReason Events (All Games)</h3>
+                <div class="test-category">
+                    <h4>TicTacChain Events</h4>
+                    <div class="test-case">Should emit MatchCompleted with NormalWin when player wins by regular gameplay</div>
+                    <div class="test-case">Should emit TournamentCompleted with NormalWin when tournament ends normally</div>
+                    <div class="test-case">Should emit MatchCompleted with Timeout when opponent claims timeout victory</div>
+                    <div class="test-case">Should emit MatchCompleted with Draw when match ends in a draw</div>
+                    <div class="test-case">Should emit TournamentCompleted with Draw when finals ends in a draw</div>
+                    <div class="test-case">Should emit MatchCompleted with ForceElimination when ML2 is executed</div>
+                    <div class="test-case">Should emit MatchCompleted with Replacement when ML3 is executed</div>
+                    <div class="test-case">Should emit TournamentCompleted with Replacement when finals is won via ML3</div>
+                    <div class="test-case">Should emit TournamentCompleted with AllDrawScenario when all matches in a round draw</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ChessOnChain Events</h4>
+                    <div class="test-case">Should emit MatchCompleted with NormalWin when player achieves checkmate</div>
+                    <div class="test-case">Should emit MatchCompleted with Timeout when opponent claims timeout victory</div>
+                    <div class="test-case">Should emit MatchCompleted with ForceElimination when ML2 is executed</div>
+                    <div class="test-case">Should emit MatchCompleted with Replacement when ML3 is executed</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ConnectFourOnChain Events</h4>
+                    <div class="test-case">Should emit MatchCompleted with NormalWin on horizontal win</div>
+                    <div class="test-case">Should emit MatchCompleted with NormalWin on vertical win</div>
+                    <div class="test-case">Should emit MatchCompleted with Timeout when opponent claims timeout victory</div>
+                    <div class="test-case">Should emit MatchCompleted with ForceElimination when ML2 is executed</div>
+                    <div class="test-case">Should emit MatchCompleted with Replacement when ML3 is executed</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>4.2 Transfer Events (Prize Distribution)</h3>
+                <div class="test-category">
+                    <div class="test-case">Should emit Transfer event with correct parameters for winner (TicTacToe Reward)</div>
+                    <div class="test-case">Should emit Transfer events for all winners in all-draw scenario</div>
+                    <div class="test-case">Should emit Transfer event with gameName='ConnectFour Reward' for winner</div>
+                    <div class="test-case">Should have correct indexed parameters for MetaMask filtering</div>
+                    <div class="test-case">Should emit prize value matching actual prize distribution</div>
+                    <div class="test-case">Should not emit Transfer event when prize transfer fails</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>4.3 Protocol Raffle Events</h3>
+                <div class="test-category">
+                    <div class="test-case">Should emit ProtocolRaffleExecuted with correct data</div>
+                    <div class="test-case">Should use block.prevrandao for randomness</div>
+                    <div class="test-case">Should produce different results with different block data</div>
+                </div>
+            </div>
+
+            <h2>5. Gas Optimization & Performance</h2>
+
+            <div class="test-suite">
+                <h3>5.1 Gas Cost Analysis</h3>
+                <div class="test-category">
+                    <h4>TicTacChain Gas Costs</h4>
+                    <div class="test-case">Should have reasonable gas costs for enrollment</div>
+                    <div class="test-case">Should have reasonable gas costs for making a move</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>ConnectFour Maximum Capacity Testing</h4>
+                    <div class="test-case">Should saturate contract with 128 players across all tiers</div>
+                    <div class="test-case">Should handle long game with multiple moves</div>
+                    <div class="test-case">Should handle tournament auto-start at capacity</div>
+                    <div class="test-case">Should calculate average player cost across all scenarios</div>
+                    <div class="test-case">Should identify maximum cost player path (Max: 1,850,698 gas)</div>
+                    <div class="test-case">Average gas per player: 429,666 gas</div>
+                    <div class="test-case">Average cost @ 0.05 gwei: 0.0000214833 ETH</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Raffle System Gas Efficiency</h4>
+                    <div class="test-case">Should handle reasonable number of enrolled players</div>
+                    <div class="test-case">Should document max capacity (1000 players)</div>
+                    <div class="test-case">Should document gas cost for storing raffle results</div>
+                    <div class="test-case">Should handle storage for raffle with many participants</div>
+                </div>
+            </div>
+
+            <h2>6. Bug Fixes & Edge Cases Validated</h2>
+
+            <div class="test-suite">
+                <h3>6.1 Known Bug Fixes</h3>
+                <div class="test-category">
+                    <div class="test-case">Finals Data Persistence Bug - Should clear incomplete finals match data on first enrollment</div>
+                    <div class="test-case">Finals Data Persistence Bug - Should clear double-elimination finals on first enrollment</div>
+                    <div class="test-case">Finals Data Persistence Bug - Should prevent ML3 claim on stale finals</div>
+                    <div class="test-case">ML3 Finals Completion - Should properly complete tournament when ML3 is claimed on finals</div>
+                    <div class="test-case">Check Status Bug - Should clear check status when player escapes check</div>
+                    <div class="test-case">getMatch Cache Fallback - Should clear finals immediately after tournament completion</div>
+                </div>
+            </div>
+
+            <div class="test-suite">
+                <h3>6.2 Edge Cases Covered</h3>
+                <div class="test-category">
+                    <div class="test-case">Should handle force start with odd players (3, 5, 7 players)</div>
+                    <div class="test-case">Should handle prize distribution with odd total (rounding)</div>
+                    <div class="test-case">Should handle enrollment at exact tier boundaries</div>
+                    <div class="test-case">Should reject enrollment at max instanceId</div>
+                    <div class="test-case">Should handle exactly 3 ETH threshold for raffle</div>
+                    <div class="test-case">Should handle large amounts (10 ETH) for raffle</div>
+                    <div class="test-case">Should handle rapid successive moves without time manipulation</div>
+                    <div class="test-case">Should correctly handle match completion before timeout</div>
+                </div>
+            </div>
+
+            <h2>7. View Functions & Data Integrity</h2>
+
+            <div class="test-suite">
+                <div class="test-category">
+                    <h4>Tournament Information</h4>
+                    <div class="test-case">Should return correct tournament info via getTournamentInfo</div>
+                    <div class="test-case">Should return round info correctly</div>
+                    <div class="test-case">Should return match data correctly (all games)</div>
+                    <div class="test-case">Should return board state (ChessOnChain)</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Player Statistics</h4>
+                    <div class="test-case">Should return player stats correctly</div>
+                    <div class="test-case">Should track player earnings on leaderboard - winner has positive, loser negative</div>
+                    <div class="test-case">Should return full leaderboard with all players</div>
+                    <div class="test-case">Should have playerPrizes equal to prize amount for winner</div>
+                    <div class="test-case">Should have leaderboard earnings equal to (playerPrizes - entryFee)</div>
+                    <div class="test-case">Should update player stats correctly for all-draw tournament</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Player Activity Tracking</h4>
+                    <div class="test-case">Should track complete 8-player tournament with escalations</div>
+                    <div class="test-case">Should keep players in active tournaments after winning semifinal</div>
+                    <div class="test-case">Should clear player activity after various completion scenarios</div>
+                </div>
+            </div>
+
+            <h2>8. Security & Access Control</h2>
+
+            <div class="test-suite">
+                <div class="test-category">
+                    <h4>Reentrancy Protection</h4>
+                    <div class="test-case">Should use nonReentrant modifier on executeProtocolRaffle</div>
+                    <div class="test-case">Should follow CEI pattern (Checks-Effects-Interactions)</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>Permission Checks</h4>
+                    <div class="test-case">Should reject move from non-player</div>
+                    <div class="test-case">Should reject timeout claim on your own turn</div>
+                    <div class="test-case">Should reject ML2 from non-advanced player</div>
+                    <div class="test-case">Should reject non-enrolled players from triggering raffle</div>
+                    <div class="test-case">Should reject force start from non-enrolled player</div>
+                </div>
+
+                <div class="test-category">
+                    <h4>State Validation</h4>
+                    <div class="test-case">Should not allow claiming already completed match</div>
+                    <div class="test-case">Should clear escalation state after match completion</div>
+                    <div class="test-case">Should reject enrollment in full tournament</div>
+                    <div class="test-case">Should reject enrollment during active tournament</div>
+                </div>
+            </div>
+
+            <h2>9. End-to-End Tournament Scenarios</h2>
+
+            <div class="scenario-section">
+                <h4>Scenario 1: Complete 8-Player Tournament (Normal Flow)</h4>
+                <ul>
+                    <li>8 players enroll in Tier 2 (8-player tournament)</li>
+                    <li>Tournament auto-starts when full</li>
+                    <li>Round 0: 4 matches played simultaneously (8 → 4 players)</li>
+                    <li>Round 1: 2 semi-final matches (4 → 2 players)</li>
+                    <li>Round 2: Finals match determines winner</li>
+                    <li>Winner receives entire prize pool (90% of total entry fees)</li>
+                    <li>Owner receives 7.5%, protocol receives 2.5%</li>
+                    <li>Tournament resets, ready for new enrollments</li>
+                    <li>All player activity tracking cleared</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 2: Mixed Escalation Tournament</h4>
+                <ul>
+                    <li>8 players enroll, tournament starts</li>
+                    <li>Match 0: Completes normally via gameplay</li>
+                    <li>Match 1: Stalls → Advanced player uses ML2 (force eliminate)</li>
+                    <li>Match 2: Stalls → External player uses ML3 (replacement)</li>
+                    <li>Match 3: Stalls → ML2 still works 5 minutes after ML3 available (ML2 never expires)</li>
+                    <li>Semi-finals proceed with mixed winner types</li>
+                    <li>Finals completes tournament</li>
+                    <li>Prize distribution accounts for forfeited amounts</li>
+                    <li>All activity tracking correctly updated</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 3: All-Draw Tournament Resolution</h4>
+                <ul>
+                    <li>8 players enroll in tournament</li>
+                    <li>All 4 Round 0 matches end in draws</li>
+                    <li>System detects all-draw scenario</li>
+                    <li>Prize pool split equally among all 8 players</li>
+                    <li>Tournament marked with allDrawResolution flag</li>
+                    <li>Event emitted: CompletionReason.AllDrawScenario</li>
+                    <li>Wei precision maintained (no funds lost to rounding)</li>
+                    <li>Tournament resets for next cycle</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 4: Abandoned Enrollment Recovery</h4>
+                <ul>
+                    <li>Player enrolls in tournament, no other players join</li>
+                    <li>Enrollment timeout expires (EL1 window)</li>
+                    <li>Player can force start → instant win, refund entry fee</li>
+                    <li>OR: Wait for EL2 window (escalation level 2)</li>
+                    <li>External player claims abandoned pool after EL2</li>
+                    <li>Original enrolled player forfeited</li>
+                    <li>External player receives prize pool</li>
+                    <li>Tournament fully resets</li>
+                    <li>System ready for new enrollments</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 5: Protocol Raffle Execution</h4>
+                <ul>
+                    <li>Protocol fees accumulate to 3 ETH threshold</li>
+                    <li>Any enrolled player triggers executeProtocolRaffle()</li>
+                    <li>System calculates eligible players (enrolled in active or in-progress tournaments)</li>
+                    <li>Players weighted by number of tournaments enrolled in</li>
+                    <li>Random winner selected using block.prevrandao</li>
+                    <li>Distribution: 90% to winner, 5% to owner, 5% reserve</li>
+                    <li>Raffle results stored permanently (participants, weights, amounts, winner, timestamp)</li>
+                    <li>Threshold increases for next raffle (TicTacChain: 0.001 → 0.005 → 0.01 → ... → 1.0 ETH cap)</li>
+                    <li>System continues accumulating fees for next raffle</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 6: ChessOnChain Elite Match Storage</h4>
+                <ul>
+                    <li>Player enrolls in Tier 3 or Tier 7 (elite tiers)</li>
+                    <li>Tournament progresses through rounds</li>
+                    <li>Finals match begins with complete move tracking</li>
+                    <li>Every move stored in string format (e.g., "e2e4,e7e5,g1f3,...")</li>
+                    <li>Match completes via checkmate or draw</li>
+                    <li>Complete match data stored in eliteMatches array:
+                        <ul>
+                            <li>Tournament ID (tier + instance)</li>
+                            <li>Both player addresses</li>
+                            <li>Complete move history string</li>
+                            <li>Winner address</li>
+                            <li>Timestamp</li>
+                        </ul>
+                    </li>
+                    <li>Non-elite tiers (0-2, 4-6) do NOT store match history</li>
+                    <li>Elite matches queryable for replay/analysis</li>
+                </ul>
+            </div>
+
+            <div class="scenario-section">
+                <h4>Scenario 7: Time Bank (Chess Clock) Timeout</h4>
+                <ul>
+                    <li>2 players start chess match with time banks (e.g., 10 minutes each)</li>
+                    <li>Player A makes move after 2 minutes → time bank: 8 minutes remaining</li>
+                    <li>Player B makes move after 1 minute → time bank: 9 minutes remaining</li>
+                    <li>Player A makes move after 5 minutes → time bank: 3 minutes remaining</li>
+                    <li>Player A continues, time bank depletes to 0</li>
+                    <li>Player B claims timeout victory (ML1)</li>
+                    <li>Match completes, Player B advances/wins</li>
+                    <li>Event emitted: CompletionReason.Timeout</li>
+                    <li>Prize distribution proceeds normally</li>
+                </ul>
+            </div>
+
+            <h2>10. Pending Tests</h2>
+
+            <div class="test-suite">
+                <div class="test-category">
+                    <h4>Tests Marked as Pending (Future Implementation)</h4>
+                    <div class="test-case pending">Chess: Should emit MatchCompleted with Draw on stalemate</div>
+                    <div class="test-case pending">Chess: Should emit MatchCompleted with Draw on insufficient material</div>
+                    <div class="test-case pending">Chess: Should emit Transfer event with gameName='Chess Reward' for winner</div>
+                    <div class="test-case pending">ConnectFour: Should emit MatchCompleted with NormalWin on diagonal win</div>
+                    <div class="test-case pending">ConnectFour: Should emit MatchCompleted with Draw when board is full</div>
+                    <div class="test-case pending">Protocol Raffle: Should count enrolled players correctly (DEPRECATED)</div>
+                    <div class="test-case pending">Protocol Raffle: Should handle multiple enrollment counts correctly (DEPRECATED)</div>
+                    <div class="test-case pending">Protocol Raffle: Should handle single enrolled player (DEPRECATED)</div>
+                    <div class="test-case pending">Protocol Raffle: Should handle player enrolled in many tournaments (DEPRECATED)</div>
+                </div>
+            </div>
+
+            <h2>11. Test Coverage Summary</h2>
+
+            <div class="summary-box">
+                <h3>Key Features Validated</h3>
+                <ul>
+                    <li>Multi-tier tournament system (2, 4, 8-player brackets)</li>
+                    <li>Complete game logic for TicTacToe, Chess (with advanced rules), and ConnectFour</li>
+                    <li>5-level escalation system (EL1, EL2, ML1, ML2, ML3) preventing all forms of griefing</li>
+                    <li>Prize distribution with wei precision (no rounding errors)</li>
+                    <li>Draw handling (finals, semi-finals, all-draw scenarios)</li>
+                    <li>Protocol raffle system with progressive thresholds and permanent result storage</li>
+                    <li>Time bank (chess clock) system for match timeout enforcement</li>
+                    <li>Player activity tracking across multiple tournaments and instances</li>
+                    <li>Elite match storage for high-tier chess games</li>
+                    <li>Event emission for all completion types and prize distributions</li>
+                    <li>Gas optimization validated (max player cost: 1.85M gas)</li>
+                    <li>Security: reentrancy protection, access control, state validation</li>
+                    <li>Edge cases: odd player counts, failed prize transfers, exact boundary conditions</li>
+                </ul>
+            </div>
+
+            <h2>12. Test Execution Details</h2>
+
+            <div class="test-suite">
+                <h3>Execution Environment</h3>
+                <ul>
+                    <li><strong>Framework:</strong> Hardhat Test Suite</li>
+                    <li><strong>Network:</strong> Hardhat Local Network (EVM)</li>
+                    <li><strong>Test Files:</strong> 45+ test files covering all aspects</li>
+                    <li><strong>Total Execution Time:</strong> ~1 minute</li>
+                    <li><strong>Scientific Reporting:</strong> State tracking enabled for detailed analysis</li>
+                    <li><strong>Test Organization:</strong>
+                        <ul>
+                            <li>Core protocol tests in root /test directory</li>
+                            <li>Game-specific tests in /test/chess, /test/connectfour, /test/tictac</li>
+                            <li>Integration tests covering cross-game functionality</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h2>Conclusion</h2>
+
+            <p style="margin: 20px 0; font-size: 1.1em; line-height: 1.8;">
+                The ETour Protocol test suite demonstrates comprehensive coverage of all core functionality,
+                game logic, escalation mechanisms, prize distribution, and edge cases. With <strong>511 passing tests</strong>
+                and only 9 pending tests (mostly deprecated or future enhancements), the protocol is thoroughly validated
+                for production deployment. The test suite covers normal operation flows, complex escalation scenarios,
+                security considerations, gas optimization, and data integrity across all three game implementations.
+            </p>
+
+            <p style="margin: 20px 0; font-size: 1.1em; line-height: 1.8;">
+                Key achievements validated by this test suite:
+            </p>
+
+            <ul style="margin: 20px 0; font-size: 1.05em; line-height: 1.8;">
+                <li><strong>Anti-griefing:</strong> All escalation paths tested and working correctly</li>
+                <li><strong>Economic integrity:</strong> Wei-level precision maintained in all prize distributions</li>
+                <li><strong>Game correctness:</strong> Advanced chess rules (fifty-move, threefold repetition) implemented correctly</li>
+                <li><strong>Gas efficiency:</strong> Average per-player cost documented and optimized</li>
+                <li><strong>Protocol raffle:</strong> Fair distribution with permanent result storage</li>
+                <li><strong>Security:</strong> Reentrancy protection, access control, and state validation throughout</li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <h2>Tournament Reset Edge Cases - Detailed Match Visualization</h2>
+            <p style="margin: 20px 0; font-size: 1.1em;">
+                This section documents the detailed progression of all matches across 3 consecutive tournaments,
+                demonstrating proper tournament reset, state management, and ML3 escalation mechanics.
+            </p>
+
+            
+                <div class="test-suite">
+                    <h3>Tournament 1 (3-player Force Start)</h3>
+
+                    
+                        <div class="test-category">
+                            <h4>Round 0 (Semifinals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-0:</strong>
+                                        <code>0x7099</code> vs <code>0x3C44</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x3C44</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x7099</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-1:</strong>
+                                        <code>0x90F7</code> vs <code>0x15d3</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x90F7</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x15d3</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="test-category">
+                            <h4>Round 1 (Finals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 1-0:</strong>
+                                        <code>0x3C44</code> vs <code>0x90F7</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x90F7</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x3C44</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                </div>
+                
+                <div class="test-suite">
+                    <h3>Tournament 2 (7-player Force Start)</h3>
+
+                    
+                        <div class="test-category">
+                            <h4>Round 0 (Semifinals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1f2d3d; border-left: 4px solid #5ca8ff;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-0:</strong>
+                                        <code>0x7099</code> vs <code>0x14dC</code>
+                                        <br><span style="color: #5ca8ff; font-weight: bold; font-size: 0.95em; margin-top: 5px; display: inline-block;">⚖️ DRAW - No Winner</span>
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge info">Draw</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #888;">No Winner (Draw/Both Eliminated)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-1:</strong>
+                                        <code>0x90F7</code> vs <code>0x15d3</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x90F7</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x15d3</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-2:</strong>
+                                        <code>0x9965</code> vs <code>0x976E</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x9965</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x976E</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="test-category">
+                            <h4>Round 1 (Finals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #3d2d1f; border-left: 4px solid #ffb74d;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 1-0:</strong>
+                                        <code>0x90F7</code> vs <code>0x9965</code>
+                                        
+                                        <br><span style="color: #ffb74d; font-weight: bold; font-size: 0.95em; margin-top: 5px; display: inline-block;">⚡ ML2 - Force Elimination by Advanced Player</span>
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge warning">ML2 Force Elimination</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #888;">No Winner (Draw/Both Eliminated)</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                </div>
+                
+                <div class="test-suite">
+                    <h3>Tournament 3 (8-player Full Capacity with ML3)</h3>
+
+                    
+                        <div class="test-category">
+                            <h4>Round 0 (Semifinals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-0:</strong>
+                                        <code>0x7099</code> vs <code>0x3C44</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x3C44</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x7099</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-2:</strong>
+                                        <code>0x9965</code> vs <code>0x976E</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x976E</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x9965</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-3:</strong>
+                                        <code>0x14dC</code> vs <code>0x2361</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x14dC</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x2361</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #2d1f3d; border-left: 4px solid #b794f6;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 0-1:</strong>
+                                        <code>0x90F7</code> vs <code>0x15d3</code>
+                                        
+                                        
+                                        <br><span style="color: #b794f6; font-weight: bold; font-size: 0.95em; margin-top: 5px; display: inline-block;">🔄 ML3 - External Player Replacement</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge warning">ML3 Replacement (stalled match)</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0xa0Ee</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x90F7</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="test-category">
+                            <h4>Round 1 (Finals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 1-0:</strong>
+                                        <code>0x3C44</code> vs <code>0xa0Ee</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x3C44</code><br><strong style="color: #f44336;">Loser:</strong> <code>0xa0Ee</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 1-1:</strong>
+                                        <code>0x976E</code> vs <code>0x14dC</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x976E</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x14dC</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                        <div class="test-category">
+                            <h4>Round 2 (Finals)</h4>
+                            
+                            <div class="scenario-section" style="margin: 10px 0; padding: 15px; background: #1a2f1a; border-left: 4px solid #4caf50;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="flex: 1;">
+                                        <strong>Match 2-0:</strong>
+                                        <code>0x3C44</code> vs <code>0x976E</code>
+                                        
+                                        
+                                        
+                                    </div>
+                                    <div style="flex: 1; text-align: center;">
+                                        <span class="badge success">Normal gameplay</span>
+                                    </div>
+                                    <div style="flex: 1; text-align: right;">
+                                        <strong style="color: #4caf50;">Winner:</strong> <code>0x3C44</code><br><strong style="color: #f44336;">Loser:</strong> <code>0x976E</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                </div>
+                
+
+            <div class="summary-box">
+                <h3>Player Match History Across All 3 Tournaments (from Contract getPlayerMatches)</h3>
+                <p>Complete match data fetched directly from the contract for every player who participated:</p>
+            </div>
+
+            <div style="margin: 20px 0;">
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x7099</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 3
+                        <br>
+                        <strong>Wins:</strong> 0
+                        <br>
+                        <strong>Losses:</strong> 2
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x3C44</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1f2d3d; border-left: 3px solid #5ca8ff; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x14dC</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge info">DRAW</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #5ca8ff; font-weight: bold;">⚖️ DRAW</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R0-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x3C44</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x3C44</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 5
+                        <br>
+                        <strong>Wins:</strong> 4
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x7099</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R0-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x7099</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>4.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0xa0Ee</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>5.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x976E</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x90F7</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 5
+                        <br>
+                        <strong>Wins:</strong> 3
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x15d3</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x3C44</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x15d3</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d2d1f; border-left: 3px solid #ffb74d; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>4.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x9965</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #ffb74d; font-weight: bold;">⚡ ML2: Force Elimination</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x0000</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #2d1f3d; border-left: 3px solid #b794f6; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>5.</strong> T2-I1-R0-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x15d3</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b794f6; font-weight: bold;">🔄 ML3: Replacement</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0xa0Ee</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x15d3</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 3
+                        <br>
+                        <strong>Wins:</strong> 0
+                        <br>
+                        <strong>Losses:</strong> 3
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x90F7</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #2d1f3d; border-left: 3px solid #b794f6; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R0-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b794f6; font-weight: bold;">🔄 ML3: Replacement</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0xa0Ee</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x14dC</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 3
+                        <br>
+                        <strong>Wins:</strong> 1
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1f2d3d; border-left: 3px solid #5ca8ff; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x7099</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge info">DRAW</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #5ca8ff; font-weight: bold;">⚖️ DRAW</span>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R0-M3
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x2361</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x14dC</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x976E</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x976E</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x9965</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 3
+                        <br>
+                        <strong>Wins:</strong> 1
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M2
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x976E</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x9965</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d2d1f; border-left: 3px solid #ffb74d; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #ffb74d; font-weight: bold;">⚡ ML2: Force Elimination</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x0000</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R0-M2
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x976E</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x976E</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x976E</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 4
+                        <br>
+                        <strong>Wins:</strong> 2
+                        <br>
+                        <strong>Losses:</strong> 2
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R1-M2
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x9965</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x9965</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R0-M2
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x9965</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x976E</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #1b3d1b; border-left: 3px solid #4caf50; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>3.</strong> T2-I1-R1-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x14dC</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x976E</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>4.</strong> T2-I1-R2-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x3C44</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0x2361</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 1
+                        <br>
+                        <strong>Wins:</strong> 0
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R0-M3
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x14dC</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x14dC</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="test-suite" style="padding: 20px; margin-bottom: 20px; width: 100%;">
+                    <h4 style="color: #8b9dff; margin-top: 0; font-size: 1.2em;">Player: <code style="font-size: 1.1em;">0xa0Ee</code></h4>
+                    <div style="font-size: 0.95em;">
+                        <strong>Total Matches (from contract):</strong> 2
+                        <br>
+                        <strong>Wins:</strong> 1
+                        <br>
+                        <strong>Losses:</strong> 1
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <strong>Recent Matches (from Contract getPlayerMatches):</strong>
+                        
+                        <div style="margin-top: 10px;">
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #2d1f3d; border-left: 3px solid #b794f6; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>1.</strong> T2-I1-R0-M1
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x90F7</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge success">WIN</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b794f6; font-weight: bold;">🔄 ML3: Replacement</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0xa0Ee</code></span>
+                                </div>
+                            </div>
+                            
+                            <div style="margin: 5px 0; padding: 10px; background: #3d1b1b; border-left: 3px solid #f44336; border-radius: 4px; font-size: 0.9em;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="flex: 1;">
+                                        <strong>2.</strong> T2-I1-R1-M0
+                                        <br>
+                                        <span style="font-size: 0.85em; margin-top: 3px; display: inline-block;">vs <code>0x3C44</code></span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <span class="badge warning">LOSS</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 5px; font-size: 0.85em;">
+                                    <span style="color: #b0b0b0; font-weight: normal;">Normal Win</span>
+                                    <br><span style="color: #888; font-size: 0.9em;">Winner: <code>0x3C44</code></span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="summary-box">
+                <h3>Key Insights</h3>
+                <ul>
+                    <li><strong>Tournament 1 (4 players):</strong> Tests force start with half capacity, demonstrates basic bracket completion</li>
+                    <li><strong>Tournament 2 (7 players):</strong> Tests force start with near-full capacity, validates complex bracket with Draw and ML2 (Force Elimination) scenarios</li>
+                    <li><strong>Tournament 3 (8 players):</strong> Full capacity tournament testing ML3 (External Replacement) escalation where external player replaces stalled match players</li>
+                    <li><strong>Escalation Coverage:</strong> Includes Draw, ML2 (Force Elimination by advanced player), and ML3 (External replacement) scenarios</li>
+                    <li><strong>State Management:</strong> All matches tracked correctly across tournament resets with no data persistence issues</li>
+                    <li><strong>Player Activity:</strong> Complete match history maintained for all 9 participants across 8-player tier</li>
+                </ul>
+            </div>
+        </div>
+<div class="footer">
+            <p>ETour Protocol - Universal Tournament Protocol</p>
+            <p>Test Report Generated: January 21, 2026</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">All tests executed on Hardhat local network with full state tracking enabled</p>
+        </div>
+    </div>
+</body>
+</html>

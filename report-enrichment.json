@@ -1,0 +1,1252 @@
+{
+  "suiteRows": [
+    {
+      "name": "isMatchEscL3Available",
+      "total": 16,
+      "passing": 16,
+      "pending": 0
+    },
+    {
+      "name": "isMatchEscL2Available",
+      "total": 15,
+      "passing": 15,
+      "pending": 0
+    },
+    {
+      "name": "ML3: External Player Replacement",
+      "total": 14,
+      "passing": 14,
+      "pending": 0
+    },
+    {
+      "name": "Edge Cases",
+      "total": 12,
+      "passing": 10,
+      "pending": 2
+    },
+    {
+      "name": "ML2: Advanced Player Force Eliminate",
+      "total": 12,
+      "passing": 12,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution Verification Across Escalation Types",
+      "total": 12,
+      "passing": 12,
+      "pending": 0
+    },
+    {
+      "name": "Player: 0x15d34AAf...",
+      "total": 10,
+      "passing": 0,
+      "pending": 10
+    },
+    {
+      "name": "Cascading Effects: Multi-Level Escalation",
+      "total": 8,
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "EL1: Enrollment Force Start",
+      "total": 8,
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "EL2: Enrollment External Claim",
+      "total": 8,
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "ML1: Match Timeout Claim",
+      "total": 8,
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "Phase 4: Generate Comprehensive Report",
+      "total": 8,
+      "passing": 0,
+      "pending": 8
+    },
+    {
+      "name": "Time Bank Mechanics",
+      "total": 8,
+      "passing": 8,
+      "pending": 0
+    },
+    {
+      "name": "Game Play (Connect Four Logic)",
+      "total": 7,
+      "passing": 7,
+      "pending": 0
+    },
+    {
+      "name": "ChessRulesModule - Half-Move Clock Unit Tests",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "Elite Matches Storage (Tier 3 and Tier 7)",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "Game Play",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Reset Verification",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "Win Detection",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "getRaffleInfo() View Function",
+      "total": 6,
+      "passing": 5,
+      "pending": 1
+    },
+    {
+      "name": "isPlayerInAdvancedRound",
+      "total": 6,
+      "passing": 6,
+      "pending": 0
+    },
+    {
+      "name": "8-Player Tournament with Mixed Escalation Scenarios",
+      "total": 5,
+      "passing": 2,
+      "pending": 3
+    },
+    {
+      "name": "Access Control",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "Deployment",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Enrollment",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Enrollment (ETour Integration)",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "View Functions Coverage",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "playerPrizes and Leaderboard Consistency",
+      "total": 5,
+      "passing": 5,
+      "pending": 0
+    },
+    {
+      "name": "2-Player Tier Progression",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "4-Player Tier Progression",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Abandoned Enrollment Pool Claims",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "All-Draw Round Scenarios",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "ChessOnChain - Fifty-Move Rule Integration Tests",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "EL2: Abandoned Tournament Claim",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Edge Cases and Data Integrity",
+      "total": 4,
+      "passing": 0,
+      "pending": 4
+    },
+    {
+      "name": "Enrollment State Protection",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Force Start with Odd Players",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "L2/L3 Ordering Test",
+      "total": 4,
+      "passing": 1,
+      "pending": 3
+    },
+    {
+      "name": "Level 2: Advanced Player Force Elimination",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution Validation",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Security Considerations",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Tier 0 (Lowest Fee 2-Player)",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Tier 3 (Highest Fee 2-Player)",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Tier 4 (Lowest Fee 4-Player)",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "Tier 7 (Highest Fee 4-Player)",
+      "total": 4,
+      "passing": 4,
+      "pending": 0
+    },
+    {
+      "name": "1v1 Duel Match Initialization",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Checkmate Detection",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Cross-Tier Independence",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "EL1: Solo Enrollment Force Start",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Escalation Victory and Prize Distribution",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Instance and Tier Boundary Cases",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Invalid Operations",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Level 3: External Player Replacement",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Match Creation (ETour Integration)",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Multi-Tournament Player Scenarios",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Multiple Consecutive Raffles Storage",
+      "total": 3,
+      "passing": 0,
+      "pending": 3
+    },
+    {
+      "name": "Position Tracking Basics",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Progressive Threshold Configuration",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Round-Based Prize Distribution (8-Player Tournament)",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Scenario 1: Finals Never Completed (InProgress)",
+      "total": 3,
+      "passing": 1,
+      "pending": 2
+    },
+    {
+      "name": "Scenario 2: Double-Elimination Finals (winner = address(0))",
+      "total": 3,
+      "passing": 1,
+      "pending": 2
+    },
+    {
+      "name": "Single Raffle Execution Storage",
+      "total": 3,
+      "passing": 0,
+      "pending": 3
+    },
+    {
+      "name": "Test ETour_Storage Access",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Threefold Repetition Detection",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Claims",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Functions",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Reset State Management",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "View Functions",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "Wei Rounding in Prize Splits",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "getMatch Cache Fallback - Two-Person Tournament",
+      "total": 3,
+      "passing": 3,
+      "pending": 0
+    },
+    {
+      "name": "4-Player Tournament Progression",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "ABI Compatibility with ETour",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Advanced Player Detection",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Check Status Bug Fix",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Column Full Detection",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Comparison with Base ETour",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Contract Balance Verification",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Deployment and Tier Configuration",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Edge Cases and Security",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Enrollment Timeout State",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Escalation Integration with Tournament Progression",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Finals Draw Scenarios",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Finals player2: 0x0000000000000000000000000000000000000000",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Force Start Edge Cases",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Gas Efficiency",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Integration with Other Draw Conditions",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Integration with Prize Distribution",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Level 1: Normal Timeout Claim (Baseline)",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "ML2 Execution",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Match Timeout State Tracking",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Pawn Promotion",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Position Hash Differentiation",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution Edge Cases",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Prize Distribution Precision",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Prize Pool Reset",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Protocol Fee Accumulation with Low Threshold",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Raffle Distribution",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Raffle Index Tracking",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Raffle Mechanics (Integration with Failed Prizes)",
+      "total": 2,
+      "passing": 1,
+      "pending": 1
+    },
+    {
+      "name": "Randomness Quality",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Round Completion Logic",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Scenario 3: Exploit Attempt After Status Check Fix",
+      "total": 2,
+      "passing": 1,
+      "pending": 1
+    },
+    {
+      "name": "Semi-Finals All-Draw Scenarios",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Storage Gas Costs",
+      "total": 2,
+      "passing": 0,
+      "pending": 2
+    },
+    {
+      "name": "Threshold Progression",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "TicTacChain - Constructor Initialization",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "TicTacChain Enrollment Quick Test",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "TicTacToe Reward Transfer Event",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Time Bank Edge Cases",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Functions (ETour Integration)",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Victory Match Completion",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Completion (ETour Integration)",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Completion via ML2",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Integration with Time Banks",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Logic",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Reset and Cleanup",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "Transfer Event Structure",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "recentInstances Persistence",
+      "total": 2,
+      "passing": 2,
+      "pending": 0
+    },
+    {
+      "name": "4-Player Tournament",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "4-Player Tournament (Multi-Round)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "5. Move 9/20 (col 1): 79,142 gas",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "8-Player All-Draw Round 0 Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "8-Player Tournament Full Flow",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "A's prize: 0.00252 ETH",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Accumulated Protocol Share Tracking",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Active Tournaments: 30",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Advanced Tournament Progression",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Arbitrum Storage Gas Cost Analysis - playerMatches Growth",
+      "total": 1,
+      "passing": 0,
+      "pending": 1
+    },
+    {
+      "name": "Average Gas: 80,202",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Average cost @ 0.05 gwei: 0.0000130196 ETH",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Basic Deployment Test",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Basic Game Flow",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Basic Tournament Reset with Normal Gameplay",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "CRITICAL BUG: Match Data Persistence Across Tournaments",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Castling",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Chess Transfer Event",
+      "total": 1,
+      "passing": 0,
+      "pending": 1
+    },
+    {
+      "name": "Complete Tournament Flow with Mixed Results",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "ConnectFour Reward Transfer Event",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Contract Balance Accounting",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Cost: 0.000914058006398406 ETH ($2.74)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Cross-level consistency checks",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Distribution with 5% Reserve",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Draw Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "EL1 vs EL2 Comparison",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Enrollment Debug Test",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Entry Fee Distribution",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Escalation Timing Issues",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Force Elimination (ML2) Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Gas used for enrollment: 253905",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Gas used for move: 103427",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "ML3 Claim on Finals Match",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Match 3: L3 replacement \u2713",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Match completion invalidation",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Maximum: 0.001055675 ETH ($3.17)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Mixed Results Scenarios",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Multi-Player Tournament with Failed Prizes",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Multi-Round Tracking",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Normal Win Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Player Stats for All-Draw Scenarios",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Prize Send Failure - Solo Winner",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Prize Send Failure - Tournament Winner",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Replacement (ML3) Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Scholar's Mate (Checkmate)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 10: Reset Preserves forfeitPool",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 11: Reset Updates Escalation Timestamps",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 12: Cannot Reset After Force Start",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 1: Successful Reset",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 2: Reject if Tournament Not Enrolling",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 3: Reject if Multiple Players Enrolled",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 4: Reject if Caller Not Enrolled",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 5: Reject if Window Not Expired",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 6: Reset Still Works After Escalation Level 2",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 7: Second Player Can Enroll After Reset",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 8: Multiple Resets Allowed",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test 9: canResetEnrollmentWindow View Function Accuracy",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Delegatecall Direct",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Player Activity Counts",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Test Simple Tracking",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Threshold Scaling Examples",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Tier Configuration Validation",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Time Bank Initialization",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Time Increment (Future Feature)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Escalation Levels",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Timeout Win (ML1) Scenario",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Completion",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Tournament Completion with Failed Prize",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "Transfer Event - No Emission on Failure",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "status: 1n",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "\u2022 Finals: Normal win (ML3 testing skipped for now)",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    },
+    {
+      "name": "\u2705 Long game complete - 20 moves played",
+      "total": 1,
+      "passing": 1,
+      "pending": 0
+    }
+  ],
+  "slowTests": [
+    {
+      "name": "Should store multiple elite matches sequentially",
+      "ms": 366,
+      "suite": "Elite Matches Storage (Tier 3 and Tier 7)"
+    },
+    {
+      "name": "Should complete Tier 7 semi-finals and finals via checkmate",
+      "ms": 301,
+      "suite": "4-Player Tier Progression"
+    },
+    {
+      "name": "Should complete Tier 4 semi-finals and finals via checkmate",
+      "ms": 281,
+      "suite": "4-Player Tier Progression"
+    },
+    {
+      "name": "Should distribute winner-takes-all correctly in Tier 7",
+      "ms": 255,
+      "suite": "Prize Distribution Validation"
+    },
+    {
+      "name": "Should store Tier 7 finals match in eliteMatches array",
+      "ms": 255,
+      "suite": "Elite Matches Storage (Tier 3 and Tier 7)"
+    },
+    {
+      "name": "Should distribute winner-takes-all correctly in Tier 4",
+      "ms": 239,
+      "suite": "Prize Distribution Validation"
+    },
+    {
+      "name": "Should completely isolate data across tournaments with walkovers, draws, ML2/ML3, and prize distribution",
+      "ms": 230,
+      "suite": "\u2022 Finals: Normal win (ML3 testing skipped for now)"
+    },
+    {
+      "name": "Should handle 3 consecutive 8-player tier tournaments with varying player counts and escalation scenarios",
+      "ms": 196,
+      "suite": "CRITICAL BUG: Match Data Persistence Across Tournaments"
+    },
+    {
+      "name": "Should saturate contract with 128 players across all tiers",
+      "ms": 195,
+      "suite": "Active Tournaments: 30"
+    },
+    {
+      "name": "Should test that player tracking storage exists in game contract",
+      "ms": 189,
+      "suite": "Test Simple Tracking"
+    },
+    {
+      "name": "Should track prizes independently per tier",
+      "ms": 178,
+      "suite": "Cross-Tier Independence"
+    },
+    {
+      "name": "Should deploy all contracts successfully",
+      "ms": 166,
+      "suite": "Basic Deployment Test"
+    },
+    {
+      "name": "Should handle mixed completion methods (timeout + checkmate)",
+      "ms": 166,
+      "suite": "4-Player Tier Progression"
+    },
+    {
+      "name": "Should handle ML2 on finals match (both players eliminated)",
+      "ms": 152,
+      "suite": "ML2: Advanced Player Force Eliminate"
+    },
+    {
+      "name": "Should handle Tier 7 mixed completion methods",
+      "ms": 136,
+      "suite": "4-Player Tier Progression"
+    },
+    {
+      "name": "Should handle ML3 on finals match properly",
+      "ms": 123,
+      "suite": "ML3: External Player Replacement"
+    },
+    {
+      "name": "Should complete Tier 3 tournament via checkmate",
+      "ms": 102,
+      "suite": "2-Player Tier Progression"
+    },
+    {
+      "name": "Should distribute prizes correctly in 8-player tournament",
+      "ms": 94,
+      "suite": "Prize Distribution Edge Cases"
+    },
+    {
+      "name": "Should complete Tier 0 tournament via checkmate",
+      "ms": 89,
+      "suite": "2-Player Tier Progression"
+    },
+    {
+      "name": "Should store complete move history in moves string for Tier 3",
+      "ms": 89,
+      "suite": "Elite Matches Storage (Tier 3 and Tier 7)"
+    }
+  ]
+}
