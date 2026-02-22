@@ -1,4 +1,4 @@
-# ETOUR
+# ETOUR.games
 ### Tournament Infrastructure for Skill-Based Competition
 
 ---
