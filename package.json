@@ -1,0 +1,48 @@
+{
+  "name": "e-tour",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "test:report": "SCIENTIFIC_REPORT=true hardhat test",
+    "compile": "hardhat compile",
+    "deploy:all": "hardhat run scripts/deploy-all.js --network localhost",
+    "deploy:tictacchain": "hardhat run scripts/deploy-tictacchain.js --network localhost",
+    "deploy:chess": "hardhat run scripts/deploy-chessonchain.js --network localhost",
+    "deploy:connectfour": "hardhat run scripts/deploy-connectfour.js --network localhost",
+    "sync:abis": "node scripts/sync-abis.js",
+    "node": "hardhat node",
+    "reset": "hardhat run scripts/reset.js --network localhost",
+    "arbitrum:start": "docker compose up -d nitro-devnode",
+    "arbitrum:stop": "docker compose down",
+    "arbitrum:logs": "docker compose logs -f nitro-devnode",
+    "arbitrum:check": "node scripts/check-arbitrum-local.js",
+    "arbitrum:deploy": "hardhat run scripts/deploy-arbitrum-local.js --network arbitrumLocal",
+    "arbitrum:restart": "docker compose restart nitro-devnode",
+    "arbitrum:wallets": "node scripts/view-dummy-wallets.js",
+    "check:eip4844": "node scripts/check-eip4844.js",
+    "check:gas": "node scripts/check-gas-costs.js"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "etour",
+    "tournament",
+    "protocol",
+    "tic-tac-toe",
+    "game",
+    "smart-contract"
+  ],
+  "author": "",
+  "license": "MIT",
+  "description": "ETour universal tournament protocol with TicTacChain, ChessOnChain, and ConnectFourOnChain games",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.3"
+  }
+}

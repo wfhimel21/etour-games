@@ -1,0 +1,116 @@
+[dotenv@17.2.3] injecting env (1) from .env -- tip: 🔐 prevent building .env in docker: https://dotenvx.com/prebuild
+
+
+  Arbitrum Storage Gas Cost Analysis - playerMatches Growth
+
+==========================================
+ARBITRUM STORAGE GAS COST ANALYSIS
+🚨 EXTREME STRESS TEST 🚨
+==========================================
+Wallets: 200
+Matches per wallet: 10,000
+Total matches: 2,000,000
+Total MatchRecords: 4,000,000 (2 per match)
+
+⚠️  WARNING: This test will take HOURS to complete!
+⚠️  Each wallet will accumulate 10,000 MatchRecords
+⚠️  Testing unbounded array growth at extreme scale
+==========================================
+
+✓ Loaded 200 wallets
+
+Deploying modules...
+✓ Modules deployed
+
+Deploying ChessOnChain...
+✓ ChessOnChain deployed
+
+    - Should measure gas costs across 2,000,000 matches with extreme playerMatches storage growth
+
+==========================================
+GAS ANALYSIS REPORT
+==========================================
+
+Average Gas Costs by Match Number (across all wallets):
+
+Match# | Enrollment | Move 1  | Move 2  | Move 3  | Move 4* | Total   | Δ from 1st
+-------|------------|---------|---------|---------|---------|---------|------------
+     1 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+    10 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+    25 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+    50 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+   100 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+   250 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+   500 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+   750 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  1000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  2000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  3000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  4000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  5000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  6000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  7000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  8000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+  9000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+ 10000 |        NaN |     NaN |     NaN |     NaN |     NaN |     NaN |        NaN (NaN%)
+
+* Move 4 includes MatchRecord creation for both players
+
+==========================================
+SUMMARY
+==========================================
+First match avg gas:     NaN
+10000th match avg gas:   NaN
+Absolute increase:       NaN gas
+Percentage increase:     NaN%
+
+
+Move 4 Analysis (MatchRecord creation):
+First match Move 4:      NaN gas
+10000th match Move 4:    NaN gas
+Increase:                NaN gas (NaN%)
+
+
+Interpretation:
+✓ Gas costs actually decreased (likely due to warm storage)
+
+==========================================
+CONTRACT STORAGE SIZE ANALYSIS
+==========================================
+
+playerMatches Storage Breakdown:
+  Total MatchRecords:        4,000,000
+  Bytes per MatchRecord:     ~256 bytes (8 storage slots)
+  Array length overhead:     6,400 bytes (200 wallets × 32 bytes)
+
+Total Storage Size:
+  Bytes:     1,024,006,400 bytes
+  Kilobytes: 1,000,006.25 KB
+  Megabytes: 976.57 MB
+
+Arbitrum L2 Storage Notes:
+  • Arbitrum uses calldata compression for L1 storage
+  • playerMatches data is only stored on L2 (not posted to L1)
+  • Storage is cheap on L2, but grows linearly with MatchRecords
+  • 10,000 matches = ~2500.0 KB per player
+
+Per-Player Storage:
+  10,000 matches = 2,560,000 bytes
+                     = 2500.00 KB
+                     = 2.441 MB
+
+Scaling Projections:
+  1,000 players × 10,000 matches:
+    Storage: 4.77 GB (20,000,000 records)
+  10,000 players × 10,000 matches:
+    Storage: 47.68 GB (200,000,000 records)
+  100,000 players × 10,000 matches:
+    Storage: 476.84 GB (2,000,000,000 records)
+
+==========================================
+
+
+
+  0 passing (3s)
+  1 pending
+
