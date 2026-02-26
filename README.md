@@ -7,6 +7,9 @@
 [![Chainlink VRF](https://img.shields.io/badge/Chainlink-VRF-375BD2?logo=chainlink)](https://chain.link/)
 [![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://react.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Deployment Status](https://img.shields.io/badge/Deployment-Live-brightgreen)](https://etour.games/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/wfhimel21/etour-games)
+[![LinkedIn](https://img.shields.io/badge/Connect-LinkedIn-blue)](https://www.linkedin.com/in/himel-poddar)
 
 ## Abstract
 [Watch the demo video](https://github.com/wfhimel21/etour-games/raw/main/PcQZCMnJ7fkR5h8v_2wWh.mp4)
