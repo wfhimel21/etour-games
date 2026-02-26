@@ -1,16 +1,12 @@
-# ETOUR.games
-### Tournament Infrastructure for Skill-Based Competition
-
+# Etour.games
+### A Blockchain Gaming Ecosystem
 ---
 
 ## Abstract
 
 ETour is EVM freeware for on-chain competitive play. 
-
 Every move is a transaction. Every outcome is immutable. The smart contract handles matchmaking, brackets, timeouts, and prize distribution. 
-
 Developers inherit this infrastructure by implementing a simple abstract contract. Players just connect and compete.
-
 <strong> ETH in ETH out. No servers, no admins to trust, no way to cheat.</strong>
 
 ---
@@ -164,9 +160,7 @@ These criteria eliminate entire categories of games. Poker requires hidden cards
 
 Tic-tac-toe serves as the accessible entry point to ETour. Everyone knows the rules. Games complete quickly. The low stakes allow new players to experience the platform mechanics without significant risk.
 
-> But tic-tac-toe is solved, perfect play always draws.
-
-Exactly! And that's the point. Tic-tac-toe's high draw rate makes it the perfect demonstration of ETour's draw economics. When a match ends in a draw, both players receive most of their entry fee back. On a $3 entry, approximately $2.50 returns to each player. The draw essentially costs each player $0.50, a fee for playing a fair, verified game.
+Tic-tac-toe's high draw rate makes it the perfect demonstration of ETour's draw economics. When a match ends in a draw, both players receive most of their entry fee back. On a $3 entry, approximately $2.50 returns to each player. The draw essentially costs each player $0.50, a fee for playing a fair, verified game.
 
 This transforms tic-tac-toe's "flaw" into a feature:
 
