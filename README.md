@@ -9,6 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Abstract
+[Watch the demo video](https://github.com/wfhimel21/etour-games/raw/main/PcQZCMnJ7fkR5h8v_2wWh.mp4)
 
 ETour is EVM freeware for on-chain competitive play. 
 Every move is a transaction. Every outcome is immutable. The smart contract handles matchmaking, brackets, timeouts, and prize distribution. 
