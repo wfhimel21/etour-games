@@ -1,6 +1,13 @@
 # Etour.games
-### A Blockchain Gaming Ecosystem
+
+> **A Blockchain Gaming Ecosystem**
 ---
+
+[![Arbitrum](https://img.shields.io/badge/Arbitrum-Sepolia-blue?logo=ethereum)](https://sepolia.arbiscan.io/)
+[![Chainlink VRF](https://img.shields.io/badge/Chainlink-VRF-375BD2?logo=chainlink)](https://chain.link/)
+[![Foundry](https://img.shields.io/badge/Built%20with-Foundry-red)](https://getfoundry.sh/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://react.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Abstract
 
