@@ -1435,9 +1435,9 @@ At scale, operational revenue provides significant runway for development, audit
 ---
 
 **Contract Addresses:** [To be added upon deployment]  
-**Source Code:** [GitHub repository]  
-**Frontend:** [etour.games]  
-**RW3 Manifesto:** [reclaimweb3.com]
+[Source Code:](https://github.com/wfhimel21/etour-games) 
+[Frontend](https://etour.games)
+[RW3 Manifesto](https://reclaimweb3.com)
 
 ---
 
