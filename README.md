@@ -2,6 +2,9 @@
 
 > **A Blockchain Gaming Ecosystem**
 ---
+> **The first platform with every transaction ever made, transparent and public for all.
+> No secrets. No blind trust and gaming the system.**
+---
 
 [![Arbitrum](https://img.shields.io/badge/Arbitrum-Sepolia-blue?logo=ethereum)](https://sepolia.arbiscan.io/)
 [![Chainlink VRF](https://img.shields.io/badge/Chainlink-VRF-375BD2?logo=chainlink)](https://chain.link/)
